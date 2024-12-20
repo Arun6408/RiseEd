@@ -1,0 +1,41 @@
+A Complete Schooling App 
+-> Principals
+-> Teachers
+-> Students
+
+Common Routes: 
+-> Landing Page
+-> Events
+-> Fee Structure
+
+-> Sign In
+-> Sign Up
+
+Students Routes:
+-> Dashboard
+-> Courses
+-> Doubts
+-> Student Scores(incresed based on thier watching videos )
+-> Self Analysing (Attendance ,Watched Videos)
+-> E books (can read download)
+-> Fee payments and Dues
+
+Teacher Routes:
+-> Dashboard
+-> Courses Updates and Editing
+-> E books (can upload read delete download)
+-> Doubts Clarification
+-> Salaries 
+-> Students Status (including pass fail based on performance)
+
+Principal Routes:
+-> Dashboard
+-> Teacher Stats Courses
+-> E books 
+-> Salaries & Fee Structures
+-> Student Fee Dues 
+-> Events Creation
+
+Properties:
+for Student:
+-> Name, SchoolId(generated Automatically), Age(less than 18), Class(Eg: 5th Sec A),   
