@@ -1,4 +1,4 @@
 /eduflow/node_modules/
-/eduflow/.env
+/eduflow/.env.local
 /Server/node_modules/
 /Server/.env

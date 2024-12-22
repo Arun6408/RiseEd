@@ -2,6 +2,8 @@ const {connectDb, getDb} = require("./db/connectDb");
 const dotenv = require("dotenv");
 dotenv.config();
 
+// checking github uploading
+
 const populate = () =>{
     connectDb();
     const db = getDb();
