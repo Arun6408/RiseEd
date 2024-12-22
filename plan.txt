@@ -1,0 +1,90 @@
+A Complete Schooling App a comprehensive platform for principals, teachers, and students to manage school-related activities. It includes features like event creation, fee payments, course management, and real-time attendance tracking. Additionally, it supports e-books, doubt resolution, and performance analysis for students and teachers.
+-> Principals
+-> Teachers
+-> Students
+
+https://docs.google.com/document/d/1HCStt7H13ZkDtxpw6l9fuzZiRDqhNFg0v3sJEtPF0to/edit?usp=sharing
+
+Common Routes: 
+-> Landing Page
+-> Events
+-> Fee Structure
+
+-> Sign In
+-> Sign Up
+
+Super Admin Route:
+-> Super Login Route
+
+Students Routes:
+-> Dashboard
+-> Courses
+-> Doubts
+-> Student Scores(incresed based on thier watching videos )
+-> Self Analysing (Attendance ,Watched Videos)
+-> E books (can read download)
+-> Fee payments and Dues
+
+Teacher Routes:
+-> Dashboard
+-> Courses Updates and Editing
+-> E books (can upload read delete download)
+-> Doubts Clarification
+-> Salaries 
+-> Students Status (including pass fail based on performance)
+
+Principal Routes:
+-> Dashboard
+-> Teacher Stats Courses
+-> E books 
+-> Salaries & Fee Structures
+-> Student and Teacher Registrations and creating their credentials
+-> Student Fee Dues 
+-> Events Creation
+
+Required Tables:
+
+AllUsers:
+-> Id (Unique), Name, UserName, Password, role, Age, Phone, Email
+
+Principal:
+-> id (Unique), user_id (from AllUsers), salary, other_money_benefits
+
+Teachers:
+-> Teacher Id (Unique), Department, Classes Taught (Eg: Class 1 to Class 5), user_id (from AllUsers), Salary, Other Money Benefits
+
+Students:
+-> Student Id (Unique), Class, Discount in Fee, user_id (from AllUsers)
+
+Courses:
+-> Course Id (Unique), Lesson No (combination of Course Id and lesson is unique), Description, PDFs (if any), Video_url (if any)
+
+Fee Structure:
+-> Class (Unique), Tuition_fee, Lab Fee, Sports_fee, Transport_fee, Miscellaneous_fee
+
+Attendance:
+-> id (Unique), student_id (from Students), date, status (Present, Absent, Late)
+
+Doubts:
+-> id (Unique), student_id (from Students), teacher_id (from Teachers), course_id (from Courses), doubt_text, status (Unresolved, Resolved), resolution_text (if resolved)
+
+Student Scores:
+-> id (Unique), student_id (from Students), course_id (from Courses), score, video_watched (Boolean)
+
+Fee Payments:
+-> id (Unique), student_id (from Students), amount, payment_date, payment_method (Cash, Card, Online, Cheque), status (Paid, Pending, Failed)
+
+Events:
+-> id (Unique), event_name, event_date, description, created_by (Principal -> id)
+
+E-books:
+-> id (Unique), title, file_url, uploaded_by (from AllUsers), role (Teacher, Principal, Student), created_at
+
+Salary Payments:
+-> id (Unique), teacher_id (from Teachers), salary_amount, payment_date, payment_status (Paid, Pending)
+
+Registration History:
+-> id (Unique), user_id (from AllUsers), registration_type (Student, Teacher, Principal), registration_date
+
+Teacher-Student Feedback:
+-> id (Unique), student_id (from Students), teacher_id (from Teachers), feedback_text, rating (1 to 5), feedback_date
