@@ -56,21 +56,8 @@ const register = () => {
         const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, body);
         const data = response.data;
         console.log(data);
-        if(data.status === "error") {
+        if(data.status !== "success") {
             setError(data.message);
-        }
-        if(data.token) {
-            const bearerToken = `Bearer ${data.token}`;
-            localStorage.setItem("token", bearerToken);
-        }
-        if(role === 'head_master') {
-            Router.push("/head_master");
-        }
-        if(role === 'teacher') {
-            Router.push("/teacher");
-        }
-        if(role === 'student') {
-            Router.push("/student");
         }
         
 

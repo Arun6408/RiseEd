@@ -7,9 +7,9 @@ const {
 } = require("../middleware/validationMiddleware");
 const verifyToken = require("../middleware/authMiddleware");
 
-const loginRouter = express.Router();
+const authRouter = express.Router();
 
-loginRouter.route("/login").post(validateLogin, validate, login);
-loginRouter
-  .route("/register")
-  .post(verifyToken, validateRegister, validate, register);
+authRouter.route("/login").post(validateLogin, validate, login);
+authRouter.route("/register").post(verifyToken, validateRegister, validate, register);
+
+module.exports = authRouter;

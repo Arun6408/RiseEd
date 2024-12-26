@@ -1,95 +1,190 @@
 const { getDb } = require("../db/connectDb");
+const jwt = require("jsonwebtoken");
 
 const login = (req, res) => {
-    const db = getDb();
-    const { username, password } = req.body;
-    const query = `SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`;
-    db.query(query, (err, result) => {
-        if (err) {
-            res.status(500).send("Error while fetching data from the database");
-            return;
-        }
-        
-        if (result.length > 0) {
-            res.status(200).json({
-                status: "success",
-                message: "Login successfull",
-                data: result
-            });
-        }
-         else {
-            res.status(401).send("Invalid username or password");
-        }
-    });
-}
+  const db = getDb();
+  const { username, email, password } = req.body;
 
-const register = (req, res) => {
-
-    const user = req.user;
-
-    if (!(user.role === 'super_admin' || user.role === 'principal' || user.role === 'head_master')) {
-        res.status(403).send("Access denied. You are not authorized to create a new user");
-        return;
+  const query = `SELECT * FROM allusers WHERE (username = ? OR email = ?) AND password = ?`;
+  db.query(query, [username, email, password], (err, result) => {
+    if (err) {
+      return res.status(500).json({
+        status: "failed",
+        message: "Error while fetching data from the database",
+        error: err.message,
+      });
     }
 
-    const db = getDb();
-    const { username, password, role, age, phone, email} = req.body;
+    if (result.length > 0) {
+      const user = {
+        name: result[0].name,
+        userId: result[0].id,
+        username: result[0].username,
+        role: result[0].role,
+      };
 
-    const usernameCheckQuery = `SELECT * FROM all_users WHERE username = '${username}'`;
+      const token = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: "1d" });
 
-    db.query(usernameCheckQuery, (err, result) => {
-        if (err) {
-            res.status(500).send("Error while fetching data from the database");
-            return;
-        }
-        if (result.length > 0) {
-            res.status(409).send("Username already exists");
-            return;
-        }
-        
-        
-        if(role === 'super_admin'){
-            res.status(403).send("Access denied. No one can create a user with super_admin role");
-            return;
-        }
-        
-        if((role === 'principal' && user.role !== 'super_admin') || (role === 'head_master' && (user.role !== 'super_admin' && user.role !== 'principal'))){
-            res.status(403).send(`Access denied. ${user.role} is not authorized to create a user with ${role} role`);
-            return;
-        }
-        
-        const userCreateQuery = `INSERT INTO all_users (username, password, role, age, phone, email) VALUES ('${username}', '${password}','${role}', '${age}','${phone}', '${email}')`;
-        
-        if(role === 'principal'){
-            const { salary, otherMoneyBenifits } = req.body;
-            userCreateQuery += `INSERT INTO principals (user_id, salary, otherMoneyBenifits) VALUES ((SELECT id from all_users where username = '${username}'), '${salary}', '${otherMoneyBenifits}')`;
-        }
-        if(role === 'head_master'){
-            const { salary, department, assignedClasses, otherMoneyBenifits } = req.body;
-            userCreateQuery += `INSERT INTO head_masters (user_id, salary, department, assignedClasses, otherMoneyBenifits) VALUES ((SELECT id from all_users where username = '${username}'), '${salary}', '${department}', '${assignedClasses}', '${otherMoneyBenifits}')`;
-        }
-        if(role === 'teacher'){
-            const { salary, department, assignedClasses, otherMoneyBenifits } = req.body;
-            userCreateQuery += `INSERT INTO teachers (user_id, salary, department, assignedClasses, otherMoneyBenifits) VALUES ((SELECT id from all_users where username = '${username}'), '${salary}', '${department}', '${assignedClasses}', '${otherMoneyBenifits}')`;
-        }
-        if(role === 'student'){
-            const { class:studentClass, scholarshipAmount, score } = req.body;
-            userCreateQuery += `INSERT INTO students (user_id, class, scholarshipAmount, score) VALUES ((SELECT id from all_users where username = '${username}'), '${studentClass}', '${scholarshipAmount}', '${score}')`;
-        }
-        
-        console.log(userCreateQuery);
-        
-        
-        db.query(userCreateQuery, (err, result) => {
-            if (err) {
-                res.status(500).send("Error while inserting data into the database");
-                return;
-            }
-            res.status(201).json({
-                status: "success",
-                message: "User created successfully"
-            });
-        });
+      return res.status(200).json({
+        status: "success",
+        message: "Login successful",
+        user,
+        token,
+      });
+    }
+
+    return res.status(401).json({
+      status: "failed",
+      message: "Invalid username or password",
     });
-}
+  });
+};
+
+const register = (req, res) => {
+  const user = req.user;
+
+  if (
+    !(
+      user.role === "superAdmin" ||
+      user.role === "principal" ||
+      user.role === "headMaster"
+    )
+  ) {
+    return res.status(403).json({
+      status: "failed",
+      message: "Access denied. You are not authorized to create a new user",
+    });
+  }
+
+  const db = getDb();
+  const {
+    username,
+    password,
+    role,
+    age,
+    phone,
+    email,
+    class: studentClass,
+    scholarshipAmount,
+    score,
+    salary,
+    department,
+    assignedClasses,
+    otherMoneyBenifits,
+  } = req.body;
+
+  const usernameCheckQuery = `SELECT * FROM AllUsers WHERE username = ? OR email = ?`;
+
+  db.query(usernameCheckQuery, [username, email], (err, result) => {
+    if (err) {
+      return res.status(500).json({
+        status: "failed",
+        message: "Error while checking for existing username or email",
+        error: err.message,
+      });
+    }
+
+    if (result.length > 0) {
+      return res.status(409).json({
+        status: "failed",
+        message: "Username or email already exists",
+      });
+    }
+
+    if (role === "superAdmin") {
+      return res.status(403).json({
+        status: "failed",
+        message: "Access denied. Cannot create a user with superAdmin role",
+      });
+    }
+
+    if (
+      (role === "principal" && user.role !== "superAdmin") ||
+      (role === "headMaster" &&
+        user.role !== "superAdmin" &&
+        user.role !== "principal")
+    ) {
+      return res.status(403).json({
+        status: "failed",
+        message: `Access denied. ${user.role} is not authorized to create a user with ${role} role`,
+      });
+    }
+
+    const userCreateQuery = `INSERT INTO AllUsers (username, password, role, age, phone, email) VALUES (?, ?, ?, ?, ?, ?)`;
+
+    db.query(
+      userCreateQuery,
+      [username, password, role, age, phone, email],
+      (err, result) => {
+        if (err) {
+          return res.status(500).json({
+            status: "failed",
+            message: "Error while creating user in the database",
+            error: err.message,
+          });
+        }
+
+        const userIdQuery = `SELECT id FROM AllUsers WHERE username = ?`;
+        db.query(userIdQuery, [username], (err, result) => {
+          if (err) {
+            return res.status(500).json({
+              status: "failed",
+              message: "Error while retrieving user ID",
+              error: err.message,
+            });
+          }
+
+          const userId = result[0].id;
+          let roleInsertQuery = "";
+
+          if (role === "principal") {
+            roleInsertQuery = `INSERT INTO Principals (userId, salary, otherMoneyBenefits) VALUES (?, ?, ?)`;
+          } else if (role === "headMaster") {
+            roleInsertQuery = `INSERT INTO HeadMasters (userId, salary, department, assignedClasses, otherMoneyBenefits) VALUES (?, ?, ?, ?, ?)`;
+          } else if (role === "teacher") {
+            roleInsertQuery = `INSERT INTO Teachers (userId, salary, department, assignedClasses, otherMoneyBenefits) VALUES (?, ?, ?, ?, ?)`;
+          } else if (role === "student") {
+            roleInsertQuery = `INSERT INTO Students (userId, class, scholarshipAmount, score) VALUES (?, ?, ?, ?)`;
+          }
+
+          if (roleInsertQuery) {
+            const roleParams =
+              role === "principal"
+                ? [userId, salary, JSON.stringify(otherMoneyBenifits)]
+                : role === "headMaster" || role === "teacher"
+                ? [
+                    userId,
+                    salary,
+                    department,
+                    assignedClasses,
+                    JSON.stringify(otherMoneyBenifits),
+                  ]
+                : [userId, studentClass, scholarshipAmount, score];
+
+            db.query(roleInsertQuery, roleParams, (err) => {
+              if (err) {
+                return res.status(500).json({
+                  status: "failed",
+                  message: "Error while assigning role to the user",
+                  error: err.message,
+                });
+              }
+
+              return res.status(201).json({
+                status: "success",
+                message: `${role} role created successfully. Please login to continue`,
+              });
+            });
+          } else {
+            return res.status(201).json({
+              status: "success",
+              message: `${role} role created successfully`,
+            });
+          }
+        });
+      }
+    );
+  });
+};
+
 module.exports = { login, register };

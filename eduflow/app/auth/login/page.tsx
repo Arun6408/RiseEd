@@ -18,15 +18,16 @@ const Login = () => {
         password,
       });
       const data = response.data;
-      if(data.status === "error") {
+      if(data.status !== "success") {
         console.error(data.message);
       }
       
       if(data.token) {
         const bearerToken = `Bearer ${data.token}`;
         localStorage.setItem("token", bearerToken);
+        localStorage.setItem("user", JSON.stringify(data.user));
       }
-      const user = data.data[0];
+      const user = data.user;
       if(user.role === "super_admin") {
         Router.push("/super_admin");
       } else if(user.role === "principal") {
