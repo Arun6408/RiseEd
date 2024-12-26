@@ -47,11 +47,6 @@ const register = () => {
             body['scholarshipAmount'] = scholarshipAmount;
             body['score'] = studentScore;
         }
-
-        const bearerToken = localStorage.getItem('token');
-        if (bearerToken) {
-            axios.defaults.headers.common['Authorization'] = bearerToken;
-        }
         
         const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, body);
         const data = response.data;

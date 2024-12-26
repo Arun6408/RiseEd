@@ -5,7 +5,7 @@ const getAllTopics = async (req, res) => {
   const db = getDb();
   const { chapterId } = req.params;
   const query = `
-    SELECT topicId, title, topicType 
+    SELECT topicId, title, topicType, chapterId 
     FROM Topics
     WHERE chapterId = ?
   `;
