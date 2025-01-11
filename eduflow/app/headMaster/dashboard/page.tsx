@@ -3,7 +3,7 @@ import React from 'react'
 const page = () => {
   return (
     <div>
-      Head Master   Dashboard
+      Head Master Dashboard
     </div>
   )
 }

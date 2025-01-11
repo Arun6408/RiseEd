@@ -6,6 +6,7 @@ dotevn.config();
 const {connectDb} = require("./db/connectDb");
 const authRouter = require("./routes/authRoutes");
 const courseRouter = require("./routes/courseRoutes");
+const quizRouter = require('./routes/quizRoutes');
 const verifyToken = require("./middleware/authMiddleware");
 
 const app = express();
@@ -22,6 +23,7 @@ app.use('/api/auth',authRouter);
 //only verified users can access the other routes 
 app.use(verifyToken);
 app.use('/api/courses', courseRouter);
+app.use('/api/quiz',quizRouter); 
 
 const port = process.env.PORT || 5000;
 
@@ -36,5 +38,5 @@ const start = () =>{
         console.log(err);
     }
 }
-    
+
 start();

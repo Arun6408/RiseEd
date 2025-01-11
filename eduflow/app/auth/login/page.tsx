@@ -1,88 +1,100 @@
-'use client';
-import axios from 'axios';
-import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+"use client";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import cookie from "cookie";
+import styles from "./login.module.css";
+import { FaEyeSlash } from "react-icons/fa";
+import { FaEye } from "react-icons/fa";
 
 const Login = () => {
   const Router = useRouter();
-  const [email, setEmail] = useState('superadmin@example.com');
-  const [password, setPassword] = useState('admin123');
+  const [email, setEmail] = useState("superadmin@example.com");
+  const [password, setPassword] = useState("admin123");
+  const [showPassword, setShowPassword] = useState(false); // State for toggling password visibility
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
-        email,
-        password,
-      });
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
+        { email, password }
+      );
       const data = response.data;
-      if (data.status !== 'success') {
+      if (data.status !== "success") {
         console.error(data.message);
       }
-
       if (data.token) {
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('token', data.token);
-          document.cookie = cookie.serialize("user", JSON.stringify(data.user), {
-            maxAge: 60 * 60 * 24 , 
-            path: "/",
-          });
+        if (typeof window !== "undefined") {
+          localStorage.setItem("token", data.token);
+          document.cookie = cookie.serialize(
+            "user",
+            JSON.stringify(data.user),
+            { maxAge: 60 * 60 * 24, path: "/" }
+          );
         }
-        console.log(axios.defaults.headers.common['Authorization']);
       }
-      setTimeout(() => {
-        console.log("This message is displayed after 5 seconds");
-      }, 5000); 
-
       const user = data.user;
-      if (user.role === 'superAdmin') {
-        Router.push('/superAdmin');
-      } else if (user.role === 'principal') {
-        Router.push('/principal');
-      } else if (user.role === 'headMaster') {
-        Router.push('/head_master');
-      } else if (user.role === 'teacher') {
-        Router.push('/teacher');
-      } else if (user.role === 'student') {
-        Router.push('/student');
-      }
+      if (user.role === "superAdmin") Router.push("/superAdmin");
+      else if (user.role === "principal") Router.push("/principal");
+      else if (user.role === "headMaster") Router.push("/head_master");
+      else if (user.role === "teacher") Router.push("/teacher");
+      else if (user.role === "student") Router.push("/student");
     } catch (error) {
-      console.error('Login failed:', error);
+      console.error("Login failed:", error);
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm">
-        <h2 className="text-2xl font-semibold text-center mb-6">Login</h2>
-        <form onSubmit={(e) => handleSubmit(e)} className="space-y-4">
-          <div>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email"
-              className="w-full p-3 border bg-white border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          <div>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-              className="w-full p-3 border bg-white border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          <button
-            type="submit"
-            className="w-full py-3 mt-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+    <div
+      className={`flex justify-start w-full items-center min-h-screen ${styles.background}`}
+    >
+      <div className="flex w-1/2 relative justify-center items-center">
+        <div className="absolute rounded-full bg-purple-400 w-36 aspect-square z-10 top-5 left-[30%]"></div>
+        <div className="absolute rounded-full bg-pink-400 w-20 aspect-square z-10 bottom-10 right-[30%]"></div>
+        <div className="absolute rounded-full bg-orange-400 w-20 aspect-square z-10 top-25 right-[30%]"></div>
+        <div className="flex flex-col bg-white/10 px-12 py-20 z-20 rounded-lg shadow-lg max-w-sm backdrop-blur-md border border-white/20">
+          <h2
+            className="text-3xl font-semibold text-center mb-6 text-slate-900"
+            style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)" }}
           >
             Login
-          </button>
-        </form>
+          </h2>
+
+          <form onSubmit={(e) => handleSubmit(e)} className="space-y-4">
+            <div>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email"
+                className="w-full px-8 h-12 border bg-white border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"} // Toggle type
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"
+                className="w-full px-8 h-12 border bg-white border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)} // Toggle visibility
+                className="absolute right-[5%] top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
+            <button
+              type="submit"
+              className="w-full py-3 mt-4 bg-gradient-to-tr from-blue-400 via-cyan-400 to-green-400 font-bold text-xl text-white rounded-md hover:bg-gradient-to-bl focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              Login
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );

@@ -187,4 +187,83 @@ const register = (req, res) => {
   });
 };
 
-module.exports = { login, register };
+const getAllUsers = (req, res) => {
+  const user = req.user;
+
+  if(user.role !== "superAdmin"){
+    return res.status(403).json({
+      status: "failed",
+      message: "Access denied. You are not authorized to access this endpoint.",
+    });
+  }
+
+  const db = getDb();
+  const query = `SELECT id, username, role, name, email FROM allusers where role != 'superAdmin'`; 
+
+  db.query(query, (err, result) => {
+    if (err) {
+      return res.status(500).json({
+        status: "failed",
+        message: "Error while fetching data from the database",
+        error: err.message,
+      });
+    }
+    res.status(200).json({
+      status: "success",
+      results: result.length,
+      data: {
+        users: result,
+      },
+    });
+  });
+};
+
+
+const superAdminLogin = (req, res) => {
+  const user = req.user;
+  const db = getDb();
+
+  if(user.role !== "superAdmin"){
+    return res.status(403).json({
+      status: "failed",
+      message: "Access denied. You are not authorized to access this endpoint.",
+    });
+  }
+  const { username } = req.body;
+  const query = `SELECT * FROM allusers WHERE username = ?`;
+  
+  db.query(query, [username], (err, result) => {
+    if (err) {
+      return res.status(500).json({
+        status: "failed",
+        message: "Error while fetching data from the database",
+        error: err.message,
+      });
+    }
+
+    if (result.length > 0) {
+      const user = {
+        name: result[0].name,
+        userId: result[0].id,
+        username: result[0].username,
+        role: result[0].role,
+      };
+
+      const token = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: "1d" });
+
+      return res.status(200).json({
+        status: "success",
+        message: "Login successful",
+        user,
+        token,
+      });
+    }
+
+    return res.status(401).json({
+      status: "failed",
+      message: "Invalid username",
+    });
+  });
+}
+
+module.exports = { login, register , getAllUsers, superAdminLogin};

@@ -1,6 +1,6 @@
 const express = require("express");
 const { getAllCourses, createCourse, getCourse, deleteCourse } = require("../controllers/courses/courseController");
-const { validateCreateChapter, validateCreateCourse, validate } = require("../middleware/validationMiddleware");
+const { validateCreateChapter, validateCreateCourse, validate, validateCreateTopic } = require("../middleware/validationMiddleware");
 const { getAllChapters, createChapter, getChapter, deleteChapter } = require("../controllers/courses/chapterController");
 const { getAllTopics, createTopic, getTopic, deleteTopic } = require("../controllers/courses/topicController");
 const courseRouter = express.Router();
@@ -14,7 +14,7 @@ courseRouter.route('/:courseId/chapters').get(getAllChapters).post(validateCreat
 courseRouter.route('/:courseId/chapters/:chapterId').get(getChapter).delete(deleteChapter);
 
 //topic routes
-courseRouter.route('/:courseId/chapters/:chapterId/topics').get(getAllTopics).post(validateCreateChapter,validate,createTopic);
+courseRouter.route('/:courseId/chapters/:chapterId/topics').get(getAllTopics).post(validateCreateTopic,validate,createTopic);
 courseRouter.route('/:courseId/chapters/:chapterId/topics/:topicId').get(getTopic).delete(deleteTopic);
 
 

@@ -7,6 +7,10 @@ const validateLogin = [
   body("password").notEmpty().withMessage("Password is required"),
 ];
 
+const validateSuperLogin = [
+  body("username").notEmpty().withMessage("Username is required"),
+];
+
 const validateRegister = [
   body("name").notEmpty().withMessage("Name is required"),
   body("username").notEmpty().withMessage("Username is required"),
@@ -108,6 +112,7 @@ const validateCreateCourse = [
     .withMessage("Content is required"),
 ];
 
+
 const validateCreateChapter = [
   body("title")
     .trim()
@@ -158,6 +163,22 @@ const validateCreateTopic = [
     .withMessage("Question and Answers must be a string if provided."),
 ];
 
+const createQuizValidator = [
+  body('quizTitle').notEmpty().withMessage('Quiz title is required').isString().withMessage('Quiz title must be a string'),
+  body('quizDescription').notEmpty().withMessage('Quiz description is required').isString().withMessage('Quiz description must be a string'),
+  body('quizCourseId').isInt().withMessage('Course ID must be a valid integer'),
+  body('createdByUserId').isInt().withMessage('Created by User ID must be a valid integer'),
+  body('assignedClasses').notEmpty().withMessage('Assigned classes are required').isString().withMessage('Assigned classes must be a string'),
+  body('questions').isArray({ min: 1 }).withMessage('At least one question is required').custom((questions) => {
+    questions.forEach((q) => {
+      if (!q.question || !q.optionA || !q.optionB || !q.optionC || !q.optionD || !q.correctAnswer || !q.difficulty) {
+        throw new Error('Each question must have all fields: question, options, correctAnswer, difficulty');
+      }
+    });
+    return true;
+  })
+];
+
 const validate = (req, res, next) => {
   const errors = validationResult(req);
   if (errors.isEmpty()) {
@@ -177,5 +198,8 @@ module.exports = {
   validateRegister,
   validateCreateCourse,
   validateCreateChapter,
+  validateCreateTopic,
+  createQuizValidator,
+  validateSuperLogin,
   validate,
 };

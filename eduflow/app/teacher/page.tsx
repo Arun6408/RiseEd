@@ -1,10 +1,12 @@
+import TeacherLayout from "./TeacherLayout";
 
-import React from 'react'
-
-const page = () => {
+const Page = () => {
   return (
-    <div>Teacher page</div>
-  )
-}
+    <TeacherLayout activeLink="/teacher">
+      <h1>Welcome to Teacher's Dashboard</h1>
+      <p>Here you can manage your courses, e-books, and other resources.</p>
+    </TeacherLayout>
+  );
+};
 
-export default page
+export default Page;

@@ -1,6 +1,7 @@
 'use client';
 
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export function clearCookies() {
@@ -39,7 +40,7 @@ export async function getCourses(courseId: number | null) {
 
 export async function getChapters({
   courseId,
-  chapterId,
+  chapterId
 }: {
   courseId: number;
   chapterId: number | null;
@@ -81,3 +82,9 @@ export async function getTopics({courseId,chapterId,topicId}:{
     return [];
   }
 }
+
+export async function getAllUsers() {
+  setToken();
+  
+}
+
