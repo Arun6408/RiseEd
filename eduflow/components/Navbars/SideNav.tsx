@@ -1,6 +1,7 @@
 'use client';
 import { useRouter } from "next/navigation";
 import Logo from "../utils/Logo";
+import useNameOfUser from "../hooks/useName";
 
 interface NavLinks {
   link: string;
@@ -25,7 +26,7 @@ const SideNav = ({
   score: Score;
 }) => {
   const router = useRouter();
-
+  const {name} = useNameOfUser();
   const handleNavLinkClick = (link: string) => {
     router.push(link);
   };
@@ -57,6 +58,7 @@ const SideNav = ({
       </div>
       <div className="w-full bg-cyan-500 rounded-xl ">
         <div className="flex flex-col justify-between items-center gap-1 px-2 py-2">
+          <p className="text-lg text-white font-semibold">{name}</p>
           <p className="text-sm font-semibold">{score.text}</p>
           <p className="text-lg font-medium">
             {score.points}/{score.totalPoints}

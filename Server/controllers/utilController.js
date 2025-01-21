@@ -9,6 +9,26 @@ const restrictUsers = (res, restrictingRoles, currRole, message) => {
   return false;
 };
 
+const allowUsers = (res,allowingRoles,currRole,message) => {
+  if (!allowingRoles.includes(currRole)) {
+    res.status(403).json({
+      status: "error",
+      message: `Access Denied. You are not authorized ${message}. Please contact your administrator.`,
+    });
+    return true;
+  }
+  return false;
+
+}
+
+const getUserId = (req) => {
+  return req.user.userId;
+}
+
+
+
 module.exports = {
   restrictUsers,
+  allowUsers,
+  getUserId,
 };

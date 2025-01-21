@@ -19,7 +19,6 @@ const TeacherLayout: React.FC<TeacherLayoutProps> = ({
     text: "Excellent performance",
     rating: 4.5,
   };
-  console.log(activeLink);
 
   return (
       <div className="w-full h-screen flex">

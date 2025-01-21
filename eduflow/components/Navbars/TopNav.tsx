@@ -2,10 +2,10 @@
 import { userLogoBgColors } from "@/constants";
 import UserLogo from "../utils/UserLogo";
 import { useRef } from "react";
+import useNameOfUser from "../hooks/useName";
 
 const TopNav = () => {
-  const name = "Arun Pavani";
-  const color = userLogoBgColors[name.length % userLogoBgColors.length];
+  const {name} = useNameOfUser();
   const inputRef = useRef(null);
 
   const handleDivClick = () => {
@@ -26,6 +26,7 @@ const TopNav = () => {
           className="focus:outline-none"
           name=""
           id=""
+          placeholder="Search..."
           ref={inputRef}
         />
       </div>
@@ -34,7 +35,7 @@ const TopNav = () => {
         <p className="px-4 py-1 bg-orange-600 text-lg rounded-full text-white">
           <span className="mr-2">🔥</span>Explore our new content!!
         </p>
-        <UserLogo name={name} color={color} />
+        <UserLogo name={name} className="" />
       </div>
     </div>
   );

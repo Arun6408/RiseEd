@@ -27,6 +27,7 @@ const Login = () => {
       if (data.token) {
         if (typeof window !== "undefined") {
           localStorage.setItem("token", data.token);
+          localStorage.setItem("user", JSON.stringify(data.user));
           document.cookie = cookie.serialize(
             "user",
             JSON.stringify(data.user),

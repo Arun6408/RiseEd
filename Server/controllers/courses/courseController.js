@@ -2,182 +2,199 @@ const { getDb } = require("../../db/connectDb");
 const { restrictUsers } = require("../utilController");
 
 const getAllCourses = async (req, res) => {
-  const db = getDb();
+  const db = await getDb(); // Ensure the connection is established
   const query = `
-  SELECT courseId, title, class, description, name as taughtBy 
-  FROM courses as c 
-  JOIN allusers as au on c.userId = au.id
+    SELECT c.courseId, c.title, c.class, c.description, au.name AS taughtBy
+    FROM courses AS c
+    JOIN allusers AS au ON c.userId = au.id
   `;
-  db.query(query, (err, result) => {
-    if (err) {
-      res.status(500).json({
-        status: "error",
-        message: "Error while fetching courses",
-        error: err,
-      });
-      return;
-    }
+
+  try {
+    const result = await db.query(query);
+
+    // Manually map keys to camelCase
+    const formattedRows = result.rows.map((row) => ({
+      courseId: row.courseid,
+      title: row.title,
+      class: row.class,
+      description: row.description,
+      taughtBy: row.taughtby,
+    }));
+
     res.status(200).json({
       status: "success",
-      results: result.length,
+      results: formattedRows.length,
       data: {
-        courses: result,
+        courses: formattedRows,
       },
     });
-  });
+  } catch (err) {
+    res.status(500).json({
+      status: "error",
+      message: "Error while fetching courses",
+      error: err.message,
+    });
+  }
 };
 
+
 const createCourse = async (req, res) => {
-  const db = getDb();
+  const db = await getDb();
   const { title, description, class: courseClasses, content } = req.body;
   const role = req.user.role;
 
-  if (restrictUsers(res, ["student", "principal"], role, "create a new course")) {
+  if (restrictUsers(res, ["student", "parent"], role, "create a new course")) {
     return;
   }
 
-  db.query(`SELECT * FROM courses WHERE title = ?`, [title], (err, result) => {
-    if (err) {
-      res.status(500).json({
-        status: "error",
-        message: "Error while checking for existing courses",
-        error: err,
-      });
-      return;
-    }
-    if (result.length > 0) {
-      res.status(409).json({
+  try {
+    // Check for duplicate course title
+    const duplicateCheckQuery = `SELECT * FROM courses WHERE title = $1`;
+    const duplicateResult = await db.query(duplicateCheckQuery, [title]);
+
+    if (duplicateResult.rows.length > 0) {
+      return res.status(409).json({
         status: "error",
         message: "Course with the same title already exists",
       });
-      return;
     }
 
+    // Fetch assigned classes and department for the user
     const userId = req.user.userId;
     const assignedClassesQuery = `
       SELECT assignedClasses, department 
-      FROM teachers WHERE userId = ? 
+      FROM teachers WHERE userId = $1
       UNION 
       SELECT assignedClasses, department 
-      FROM HeadMasters WHERE userId = ?
+      FROM HeadMasters WHERE userId = $1
     `;
-    db.query(assignedClassesQuery, [userId, userId], (err, result) => {
-      if (err) {
-        res.status(500).json({
-          status: "error",
-          message: "Error while fetching assigned classes",
-          error: err,
-        });
-        return;
-      }
-      if (!result.length) {
-        res.status(403).json({
-          status: "error",
-          message: "You are not authorized to create a course in the selected classes",
-        });
-        return;
-      }
+    const assignedResult = await db.query(assignedClassesQuery, [userId]);
 
-      const department = result[0].department;
-      const assignedClasses = result[0].assignedClasses
-        .split(",")
-        .map((c) => parseInt(c))
-        .filter((c) => courseClasses.includes(c))
-        .join(",");
+    if (assignedResult.rows.length === 0) {
+      return res.status(403).json({
+        status: "error",
+        message:
+          "You are not authorized to create a course in the selected classes",
+      });
+    }
 
-      if (!assignedClasses.length) {
-        res.status(403).json({
-          status: "error",
-          message: "No matching classes found to create a course",
-        });
-        return;
-      }
+    const department = assignedResult.rows[0].department;
+    const assignedClasses = assignedResult.rows[0].assignedclasses
+      .split(",")
+      .map((c) => parseInt(c))
+      .filter((c) => courseClasses.includes(c))
+      .join(",");
 
-      const query = `INSERT INTO Courses (title, description, content, class, department, userId) VALUES (?, ?, ?, ?, ?, ?)`;
-      db.query(
-        query,
-        [title, description, content, assignedClasses, department, userId],
-        (err, result) => {
-          if (err) {
-            res.status(500).json({
-              status: "error",
-              message: "Error while creating the course",
-              error: err,
-            });
-            return;
-          }
-          res.status(201).json({
-            status: "success",
-            message: `${title} Course created successfully`,
-          });
-        }
-      );
+    if (!assignedClasses.length) {
+      return res.status(403).json({
+        status: "error",
+        message: "No matching classes found to create a course",
+      });
+    }
+
+    // Insert the new course
+    const createCourseQuery = `
+      INSERT INTO Courses (title, description, content, class, department, userId) 
+      VALUES ($1, $2, $3, $4, $5, $6) RETURNING courseId
+    `;
+    const createResult = await db.query(createCourseQuery, [
+      title,
+      description,
+      content,
+      assignedClasses,
+      department,
+      userId,
+    ]);
+
+    res.status(201).json({
+      status: "success",
+      message: `${title} Course created successfully`,
+      courseId: createResult.rows[0].courseid,
     });
-  });
+  } catch (err) {
+    res.status(500).json({
+      status: "error",
+      message: "Error while creating the course",
+      error: err.message,
+    });
+  }
 };
 
 const getCourse = async (req, res) => {
   const { courseId } = req.params;
-  const db = getDb();
+  const db = await getDb();
+
   const query = `
-    SELECT courseId, title, class, description, name as taughtBy 
-    FROM courses as c 
+    SELECT courseId, title, class, description, name as taughtBy
+    FROM courses as c
     JOIN allusers as au on c.userId = au.id
-    WHERE courseId = ?
+    WHERE courseId = $1
   `;
-  db.query(query, [courseId], (err, result) => {
-    if (err) {
-      res.status(500).json({
-        status: "error",
-        message: "Error while fetching the course",
-        error: err,
-      });
-      return;
-    }
-    if (result.length === 0) {
-      res.status(404).json({
+
+  try {
+    const result = await db.query(query, [courseId]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
         status: "error",
         message: "Course not found",
       });
-      return;
     }
+
+    // Manually map keys to camelCase
+    const course = {
+      courseId: result.rows[0].courseid,
+      title: result.rows[0].title,
+      class: result.rows[0].class,
+      description: result.rows[0].description,
+      taughtBy: result.rows[0].taughtby,
+    };
+
     res.status(200).json({
       status: "success",
-      data: result[0],
+      data: course,
     });
-  });
+  } catch (err) {
+    res.status(500).json({
+      status: "error",
+      message: "Error while fetching the course",
+      error: err.message,
+    });
+  }
 };
 
-const deleteCourse = (req, res) => {
-  const db = getDb();
+
+const deleteCourse = async (req, res) => {
+  const db = await getDb();
   const { courseId } = req.params;
 
   if (restrictUsers(res, ["student"], req.user.role, "delete a course")) {
     return;
   }
 
-  const deleteCourseQuery = `DELETE FROM Courses WHERE courseId = ?`;
-  db.query(deleteCourseQuery, [courseId], (err, result) => {
-    if (err) {
-      res.status(500).json({
-        status: "error",
-        message: "Error while deleting the course",
-        error: err,
-      });
-      return;
-    }
-    if (result.affectedRows === 0) {
-      res.status(404).json({
+  const deleteCourseQuery = `DELETE FROM Courses WHERE courseId = $1`;
+
+  try {
+    const result = await db.query(deleteCourseQuery, [courseId]);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({
         status: "error",
         message: "Course not found",
       });
-      return;
     }
+
     res.status(200).json({
       status: "success",
       message: "Course deleted successfully",
     });
-  });
+  } catch (err) {
+    res.status(500).json({
+      status: "error",
+      message: "Error while deleting the course",
+      error: err.message,
+    });
+  }
 };
 
 module.exports = {

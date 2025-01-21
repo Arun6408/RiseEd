@@ -63,7 +63,20 @@ module.exports = {
       },
     },
   },
-  plugins: [addVariablesForColors],
+  plugins: [addVariablesForColors,
+    //@ts-ignore
+    function ({ addUtilities }) {
+      addUtilities({
+        '.scrollbar-hide': {
+          '-ms-overflow-style': 'none', // Hide scrollbar for IE and Edge
+          'scrollbar-width': 'none',   // Hide scrollbar for Firefox
+          '&::-webkit-scrollbar': {
+            display: 'none',           // Hide scrollbar for Chrome, Safari, and Opera
+          },
+        },
+      });
+    },
+  ],
 };
 
 //@ts-ignore

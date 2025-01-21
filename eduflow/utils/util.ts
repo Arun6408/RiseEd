@@ -1,8 +1,10 @@
 'use client';
 
 import axios from "axios";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { format } from "date-fns";
+import { toZonedTime } from "date-fns-tz";
+
 
 export function clearCookies() {
   const cookies = document.cookie.split(";");
@@ -19,13 +21,19 @@ export function setToken(){
   axios.defaults.headers.common['Authorization'] = bearerToken;
 }
 
+export const getUserId = () => {
+  if (typeof window !== 'undefined') {
+    return JSON.parse(localStorage.getItem('user') ||'{}').userId;
+  }
+  return null; 
+};
+
 export async function getCourses(courseId: number | null) {
   try {
     setToken(); 
     if (courseId) {
       console.log(process.env.NEXT_PUBLIC_API_URL);
       const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/courses/${courseId}`);
-      console.log(res.data.data);
       return res.data.data;
     }
     
@@ -71,7 +79,6 @@ export async function getTopics({courseId,chapterId,topicId}:{
     setToken(); 
     if (topicId) {
       const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/courses/${courseId}/chapters/${chapterId}/topics/${topicId}`);
-      console.log(res.data.data);
       return res.data.data;
     }
     
@@ -83,8 +90,68 @@ export async function getTopics({courseId,chapterId,topicId}:{
   }
 }
 
-export async function getAllUsers() {
-  setToken();
-  
+
+
+export const handleUpload = async (file: File, fileType: string | null) => {
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append(
+    "upload_preset",
+    process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME!
+  );
+  let url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/auto/upload`;
+
+  if (fileType === "pdf") {
+    url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/raw/upload`;
+  }
+
+  const response = await fetch(url, {
+    method: "POST",
+    body: formData,
+  });
+
+  const data = await response.json();
+
+  return data.secure_url;
+};
+
+
+export const getCookie = (name: string): string | undefined => {
+  if (typeof document === "undefined") return undefined; // Ensure this runs only in the browser
+  const cookieString = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith(`${name}=`));
+  return cookieString ? decodeURIComponent(cookieString.split("=")[1]) : undefined;
+};
+
+
+export function convertCamelToName(camelName:string){
+  return camelName.replace(/([A-Z])/g, " $1").trim().replace(/^./, function(str){ return str.toUpperCase(); });
 }
 
+
+export function formatCustomDate(date:string){
+  date = date.replace(',','');
+  return date;
+}
+
+//@ts-ignore
+export const parseCreatedAt = (createdAt) => {
+  console.log(createdAt);
+  const [date, time, period] = createdAt.split(" ");
+  const [day, month, year] = date.split("/");
+  const [hour, minute] = time.split(":");
+  const adjustedHour =
+    period.toLowerCase() === "pm" && hour !== "12"
+      ? parseInt(hour, 10) + 12
+      : period.toLowerCase() === "am" && hour === "12"
+      ? 0
+      : parseInt(hour, 10);
+
+      console.log(`${year}-${month}-${day}T${String(adjustedHour).padStart(2, "0")}:${minute}:00`);
+  return new Date(
+    `${year}-${month}-${day}T${String(adjustedHour).padStart(2, "0")}:${minute}:00`
+  );
+};

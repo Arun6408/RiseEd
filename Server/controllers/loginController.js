@@ -1,12 +1,13 @@
-const { getDb } = require("../db/connectDb");
 const jwt = require("jsonwebtoken");
+const { getDb } = require("../db/connectDb");
+const { restrictUsers, allowUsers } = require("./utilController");
 
-const login = (req, res) => {
+const login = async (req, res) => {
   const db = getDb();
   const { username, email, password } = req.body;
 
-  const query = `SELECT * FROM allusers WHERE (username = ? OR email = ?) AND password = ?`;
-  db.query(query, [username, email, password], (err, result) => {
+  const query = `SELECT * FROM allusers WHERE (username = $1 OR email = $2) AND password = $3`;
+  await db.query(query, [username, email, password], (err, result) => {
     if (err) {
       return res.status(500).json({
         status: "failed",
@@ -14,13 +15,14 @@ const login = (req, res) => {
         error: err.message,
       });
     }
+    const userRes = result.rows;
 
-    if (result.length > 0) {
+    if (userRes.length > 0) {
       const user = {
-        name: result[0].name,
-        userId: result[0].id,
-        username: result[0].username,
-        role: result[0].role,
+        name: userRes[0].name,
+        userId: userRes[0].id,
+        username: userRes[0].username,
+        role: userRes[0].role,
       };
 
       const token = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: "1d" });
@@ -40,23 +42,12 @@ const login = (req, res) => {
   });
 };
 
-const register = (req, res) => {
+const register = async (req, res) => {
   const user = req.user;
 
-  if (
-    !(
-      user.role === "superAdmin" ||
-      user.role === "principal" ||
-      user.role === "headMaster"
-    )
-  ) {
-    return res.status(403).json({
-      status: "failed",
-      message: "Access denied. You are not authorized to create a new user",
-    });
-  }
+  restrictUsers(res,['student','parent','teacher'],user.role,'to create a new user')
 
-  const db = getDb();
+  const db = await getDb();
   const {
     username,
     password,
@@ -73,18 +64,15 @@ const register = (req, res) => {
     otherMoneyBenifits,
   } = req.body;
 
-  const usernameCheckQuery = `SELECT * FROM AllUsers WHERE username = ? OR email = ?`;
+  const usernameCheckQuery = `SELECT * FROM AllUsers WHERE username = $1 OR email = $2`;
 
-  db.query(usernameCheckQuery, [username, email], (err, result) => {
-    if (err) {
-      return res.status(500).json({
-        status: "failed",
-        message: "Error while checking for existing username or email",
-        error: err.message,
-      });
-    }
+  try {
+    const usernameCheckResult = await db.query(usernameCheckQuery, [
+      username,
+      email,
+    ]);
 
-    if (result.length > 0) {
+    if (usernameCheckResult.rows.length > 0) {
       return res.status(409).json({
         status: "failed",
         message: "Username or email already exists",
@@ -110,97 +98,80 @@ const register = (req, res) => {
       });
     }
 
-    const userCreateQuery = `INSERT INTO AllUsers (username, password, role, age, phone, email) VALUES (?, ?, ?, ?, ?, ?)`;
+    const userCreateQuery = `INSERT INTO AllUsers (username, password, role, age, phone, email) 
+                             VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`;
 
-    db.query(
-      userCreateQuery,
-      [username, password, role, age, phone, email],
-      (err, result) => {
-        if (err) {
-          return res.status(500).json({
-            status: "failed",
-            message: "Error while creating user in the database",
-            error: err.message,
-          });
-        }
+    const userRes = await db.query(userCreateQuery, [
+      username,
+      password,
+      role,
+      age,
+      phone,
+      email,
+    ]);
 
-        const userIdQuery = `SELECT id FROM AllUsers WHERE username = ?`;
-        db.query(userIdQuery, [username], (err, result) => {
-          if (err) {
-            return res.status(500).json({
-              status: "failed",
-              message: "Error while retrieving user ID",
-              error: err.message,
-            });
-          }
+    const userId = userRes.rows[0].id; // Get userId from the query result
 
-          const userId = result[0].id;
-          let roleInsertQuery = "";
+    let roleInsertQuery = "";
+    let roleParams = [];
 
-          if (role === "principal") {
-            roleInsertQuery = `INSERT INTO Principals (userId, salary, otherMoneyBenefits) VALUES (?, ?, ?)`;
-          } else if (role === "headMaster") {
-            roleInsertQuery = `INSERT INTO HeadMasters (userId, salary, department, assignedClasses, otherMoneyBenefits) VALUES (?, ?, ?, ?, ?)`;
-          } else if (role === "teacher") {
-            roleInsertQuery = `INSERT INTO Teachers (userId, salary, department, assignedClasses, otherMoneyBenefits) VALUES (?, ?, ?, ?, ?)`;
-          } else if (role === "student") {
-            roleInsertQuery = `INSERT INTO Students (userId, class, scholarshipAmount, score) VALUES (?, ?, ?, ?)`;
-          }
+    if (role === "principal") {
+      roleInsertQuery = `INSERT INTO Principals (userId, salary, otherMoneyBenefits) 
+                         VALUES ($1, $2, $3)`;
+      roleParams = [userId, salary, JSON.stringify(otherMoneyBenifits)];
+    } else if (role === "headMaster") {
+      roleInsertQuery = `INSERT INTO HeadMasters (userId, salary, department, assignedClasses, otherMoneyBenefits) 
+                         VALUES ($1, $2, $3, $4, $5)`;
+      roleParams = [
+        userId,
+        salary,
+        department,
+        assignedClasses,
+        JSON.stringify(otherMoneyBenifits),
+      ];
+    } else if (role === "teacher") {
+      roleInsertQuery = `INSERT INTO Teachers (userId, salary, department, assignedClasses, otherMoneyBenefits) 
+                         VALUES ($1, $2, $3, $4, $5)`;
+      roleParams = [
+        userId,
+        salary,
+        department,
+        assignedClasses,
+        JSON.stringify(otherMoneyBenifits),
+      ];
+    } else if (role === "student") {
+      roleInsertQuery = `INSERT INTO Students (userId, class, scholarshipAmount, score) 
+                         VALUES ($1, $2, $3, $4)`;
+      roleParams = [userId, studentClass, scholarshipAmount, score];
+    }
 
-          if (roleInsertQuery) {
-            const roleParams =
-              role === "principal"
-                ? [userId, salary, JSON.stringify(otherMoneyBenifits)]
-                : role === "headMaster" || role === "teacher"
-                ? [
-                    userId,
-                    salary,
-                    department,
-                    assignedClasses,
-                    JSON.stringify(otherMoneyBenifits),
-                  ]
-                : [userId, studentClass, scholarshipAmount, score];
+    if (roleInsertQuery) {
+      await db.query(roleInsertQuery, roleParams);
+    }
 
-            db.query(roleInsertQuery, roleParams, (err) => {
-              if (err) {
-                return res.status(500).json({
-                  status: "failed",
-                  message: "Error while assigning role to the user",
-                  error: err.message,
-                });
-              }
-
-              return res.status(201).json({
-                status: "success",
-                message: `${role} role created successfully. Please login to continue`,
-              });
-            });
-          } else {
-            return res.status(201).json({
-              status: "success",
-              message: `${role} role created successfully`,
-            });
-          }
-        });
-      }
-    );
-  });
-};
-
-const getAllUsers = (req, res) => {
-  const user = req.user;
-
-  if(user.role !== "superAdmin"){
-    return res.status(403).json({
+    return res.status(201).json({
+      status: "success",
+      message: `${role} role created successfully`,
+    });
+  } catch (err) {
+    console.error("Error:", err);
+    return res.status(500).json({
       status: "failed",
-      message: "Access denied. You are not authorized to access this endpoint.",
+      message: "Error while creating user in the database",
+      error: err.message,
     });
   }
+};
 
-  const db = getDb();
-  const query = `SELECT id, username, role, name, email FROM allusers where role != 'superAdmin'`; 
+const getAllUsers = async (req, res) => {
+  const user = req.user;
 
-  db.query(query, (err, result) => {
+  allowUsers(res,['superAdmin'],user.role,'to get all users')
+
+  const db = await getDb();
+  const query = `SELECT id, username, role, name, email FROM allusers where role != 'superAdmin'`;
+
+  await db.query(query, (err, dbRes) => {
     if (err) {
       return res.status(500).json({
         status: "failed",
@@ -208,9 +179,11 @@ const getAllUsers = (req, res) => {
         error: err.message,
       });
     }
+    const result = dbRes.rows;
+
     res.status(200).json({
       status: "success",
-      results: result.length,
+      message: "Successfully fetched users",
       data: {
         users: result,
       },
@@ -218,21 +191,17 @@ const getAllUsers = (req, res) => {
   });
 };
 
-
-const superAdminLogin = (req, res) => {
+const superAdminLogin = async (req, res) => {
   const user = req.user;
-  const db = getDb();
+  const db = await getDb();
 
-  if(user.role !== "superAdmin"){
-    return res.status(403).json({
-      status: "failed",
-      message: "Access denied. You are not authorized to access this endpoint.",
-    });
-  }
-  const { username } = req.body;
-  const query = `SELECT * FROM allusers WHERE username = ?`;
+  allowUsers(res,['superAdmin'],user.role,'');
+
   
-  db.query(query, [username], (err, result) => {
+  const { username } = req.body;
+  const query = `SELECT * FROM allusers WHERE username = $1`;
+
+  await db.query(query, [username], (err, dbRes) => {
     if (err) {
       return res.status(500).json({
         status: "failed",
@@ -240,6 +209,7 @@ const superAdminLogin = (req, res) => {
         error: err.message,
       });
     }
+    const result = dbRes.rows;
 
     if (result.length > 0) {
       const user = {
@@ -264,6 +234,6 @@ const superAdminLogin = (req, res) => {
       message: "Invalid username",
     });
   });
-}
+};
 
-module.exports = { login, register , getAllUsers, superAdminLogin};
+module.exports = { login, register, getAllUsers, superAdminLogin };

@@ -19,9 +19,9 @@ const validateRegister = [
     .notEmpty()
     .withMessage("Role is required")
     .isIn([
-      "super_admin",
+      "superAdmin",
       "principal",
-      "head_master",
+      "headMaster",
       "teacher",
       "student",
       "parent",
@@ -149,24 +149,11 @@ const validateCreateTopic = [
     .withMessage(
       "Invalid topic type. Allowed values are 'video', 'content', 'pdf', 'questionAndAnswers'."
     ),
-  body("videoUrl")
-    .optional()
-    .isURL()
-    .withMessage("Video URL must be a valid URL if provided."),
-  body("pdfUrl")
-    .optional()
-    .isURL()
-    .withMessage("PDF URL must be a valid URL if provided."),
-  body("questionAndAnswers")
-    .optional()
-    .isString()
-    .withMessage("Question and Answers must be a string if provided."),
 ];
 
 const createQuizValidator = [
   body('quizTitle').notEmpty().withMessage('Quiz title is required').isString().withMessage('Quiz title must be a string'),
   body('quizDescription').notEmpty().withMessage('Quiz description is required').isString().withMessage('Quiz description must be a string'),
-  body('quizCourseId').isInt().withMessage('Course ID must be a valid integer'),
   body('createdByUserId').isInt().withMessage('Created by User ID must be a valid integer'),
   body('assignedClasses').notEmpty().withMessage('Assigned classes are required').isString().withMessage('Assigned classes must be a string'),
   body('questions').isArray({ min: 1 }).withMessage('At least one question is required').custom((questions) => {
@@ -178,6 +165,45 @@ const createQuizValidator = [
     return true;
   })
 ];
+
+const validateCreateEbook = [
+  body('title').notEmpty().withMessage('Ebook title is required').isString().withMessage('Ebook title must be a string'),
+  body('description').notEmpty().withMessage('Ebook description is required').isString().withMessage('Ebook description must be a string'),
+  body("genre")
+  .notEmpty()
+  .withMessage("Ebook genre is required")
+  .isIn([
+    "Fiction",
+    "Non-Fiction",
+    "Science",
+    "Technology",
+    "Cooking",
+    "Health",
+    "Education",
+    "Biography",
+    "Travel",
+    "History",
+  ])
+  .withMessage("Invalid genre"),
+  body('fileUrl').notEmpty().withMessage('fileUrl is required').isString().withMessage('fileUrl must be a string'),
+]
+
+
+
+const validateCreateMessage = (data) => {
+  const errors = [];
+  if (!data.receiverId) errors.push("Receiver ID is required.");
+  if (!data.message && !data.fileUrl) errors.push("Message content or File is required.");
+  if (!data.fileType) errors.push("File type is required.");
+  return errors;
+};
+
+const validateSeenMessage = (data) => {
+  const errors = [];
+  if (!data.receiverId) errors.push("Receiver ID is required.");
+  if (!data.senderId) errors.push("Sender ID is required.");
+  return errors;
+};
 
 const validate = (req, res, next) => {
   const errors = validationResult(req);
@@ -201,5 +227,8 @@ module.exports = {
   validateCreateTopic,
   createQuizValidator,
   validateSuperLogin,
+  validateCreateEbook,
+  validateCreateMessage,
+  validateSeenMessage,
   validate,
 };

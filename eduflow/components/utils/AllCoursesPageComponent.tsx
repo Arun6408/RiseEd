@@ -25,6 +25,10 @@ const AllCoursesPageComponent = ({ role }: { role: string }) => {
     router.push(`/${role}/courses/course/${courseId}`);
   };
 
+  const handleAddCourse = ()=>{
+    router.push(`/${role}/courses/upload`);
+  }
+
   return (
     <div>
       {/* Hero Section */}
@@ -60,7 +64,7 @@ const AllCoursesPageComponent = ({ role }: { role: string }) => {
       {/* Courses Section */}
       <div className="mt-12 px-6 relative">
         {role !== "student" && role !== "parent" && (
-          <button className="absolute top-0 right-5 px-4 py-2 bg-teal-700 text-white rounded-xl hover:bg-teal-800 transition">
+          <button className="absolute top-0 right-5 px-4 py-2 bg-teal-700 text-white rounded-xl hover:bg-teal-800 transition" onClick={()=>{handleAddCourse()}}>
             + New Course
           </button>
         )}
@@ -73,9 +77,10 @@ const AllCoursesPageComponent = ({ role }: { role: string }) => {
             filteredCourses.map((course, index) => (
               <div
                 key={index}
-                className="bg-gradient-to-br from-white via-gray-50 to-teal-50 border border-teal-100 shadow-lg rounded-2xl p-6 flex flex-col space-y-4 hover:shadow-2xl hover:scale-105 transition transform duration-300"
+                className="bg-gradient-to-br from-white via-gray-50 to-teal-50 border border-teal-100 shadow-lg rounded-2xl p-6 flex flex-col justify-between space-y-4 hover:shadow-2xl hover:scale-105 transition transform duration-300 min-h-[350px]"
               >
-                {/* Decorative Header */}
+                <div className="flex flex-col gap-3">
+                  {/* Decorative Header */}
                 <div className="flex items-center justify-between">
                   <h3 className="text-2xl font-bold text-teal-700">
                     {course.title}
@@ -107,6 +112,7 @@ const AllCoursesPageComponent = ({ role }: { role: string }) => {
                   </span>{" "}
                   {course.class}
                 </p>
+                </div>
 
                 {/* Learn More Button */}
                 <button className="mt-4 bg-teal-500 hover:bg-teal-600 text-white px-6 py-3 text-lg rounded-xl shadow-md hover:shadow-xl transition duration-200" onClick={()=>{handleCourseClick(course.courseId)}}>

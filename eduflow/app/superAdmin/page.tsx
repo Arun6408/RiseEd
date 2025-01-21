@@ -23,7 +23,7 @@ const SuperAdmin = () => {
       try {
         setToken();
         const res = await axios.get(
-          `http://localhost:5000/api/auth/superAdmin/login`
+          `${process.env.NEXT_PUBLIC_API_URL}/auth/superAdmin/login`
         );
         setUsers(res.data.data.users);
       } catch (error) {
@@ -40,10 +40,10 @@ const SuperAdmin = () => {
     try {
       setToken();
       const res = await axios.post(
-        `http://localhost:5000/api/auth/superAdmin/login`,
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/superAdmin/login`,
         { username }
       );
-      const data = res.data;
+      const data = await res.data;
       console.log(res.data);
       if (data.status !== "success") {
         console.error(data.message);
@@ -51,6 +51,7 @@ const SuperAdmin = () => {
       if (data.token) {
         if (typeof window !== "undefined") {
           localStorage.setItem("token", data.token);
+          localStorage.setItem("user", JSON.stringify(data.user));
           document.cookie = cookie.serialize(
             "user",
             JSON.stringify(data.user),
@@ -74,13 +75,47 @@ const SuperAdmin = () => {
     <div className="w-screen h-screen flex justify-center items-center p-10">
       <div
         className={`flex flex-col justify-start bg-white shadow-xl p-4 w-full rounded-xl h-full`}
-        
       >
-        <h2 className="font-bold text-2xl">List of Users</h2>
         {loading ? (
           <p>Loading...</p>
         ) : (
           <div className="p-2 overflow-x-clip overflow-y-scroll">
+            <div className="flex gap-2 flex-col my-2">
+              <p className="text-xl font-semibold">Login As:</p>
+              <div className="flex gap-4">
+                <button
+                  className="bg-teal-500 hover:bg-teal-600 px-4 py-2 rounded-lg"
+                  onClick={() => handleLoginClick("principal")}
+                >
+                  <span className="font-semibold text-white">Principal</span>
+                </button>
+                <button
+                  className="bg-teal-500 hover:bg-teal-600 px-4 py-2 rounded-lg"
+                  onClick={() => handleLoginClick("headMaster")}
+                >
+                  <span className="font-semibold text-white">HeadMaster</span>
+                </button>
+                <button
+                  className="bg-teal-500 hover:bg-teal-600 px-4 py-2 rounded-lg"
+                  onClick={() => handleLoginClick("teacher1")}
+                >
+                  <span className="font-semibold text-white">Teacher</span>
+                </button>
+                <button
+                  className="bg-teal-500 hover:bg-teal-600 px-4 py-2 rounded-lg"
+                  onClick={() => handleLoginClick("student1")}
+                >
+                  <span className="font-semibold text-white">Student</span>
+                </button>
+                <button
+                  className="bg-teal-500 hover:bg-teal-600 px-4 py-2 rounded-lg"
+                  onClick={() => handleLoginClick("parent1")}
+                >
+                  <span className="font-semibold text-white">Parent</span>
+                </button>
+              </div>
+            </div>
+            <h2 className="font-bold text-2xl">List of Users:</h2>
             <table className="table-auto w-full mt-4 border border-gray-300 m-2 ">
               <thead>
                 <tr className="border-b border-gray-200 bg-gray-200 hover:bg-gray-100">
@@ -93,19 +128,19 @@ const SuperAdmin = () => {
                 </tr>
               </thead>
               <tbody>
-                {users.map((user,index) => (
+                {users.map((user, index) => (
                   <tr
                     key={user.id}
                     className="border-b hover:bg-gray-100 border-gray-200"
                   >
-                    <td className="px-4 py-2 text-left">{index+1}</td>
+                    <td className="px-4 py-2 text-left">{index + 1}</td>
                     <td className="px-4 py-2 text-left">{user.name}</td>
                     <td className="px-4 py-2 text-left">{user.email}</td>
                     <td className="px-4 py-2 text-left">{user.role}</td>
                     <td className="px-4 py-2 text-left">{user.username}</td>
                     <td className="px-4 py-2 text-left">
                       <button
-                        className="bg-blue-500 px-6 py-2 rounded-lg text-white hover:bg-blue-400"
+                        className="bg-teal-500 px-6 py-2 rounded-lg text-white hover:bg-teal-600"
                         onClick={() => {
                           handleLoginClick(user.username);
                         }}

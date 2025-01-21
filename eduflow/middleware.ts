@@ -52,14 +52,6 @@ export function middleware(req: NextRequest): NextResponse {
     return NextResponse.next();
   }
 
-  if ((role === 'parent' || role === 'student') && pathname.startsWith("/courses/upload")) {
-    return NextResponse.redirect(`${req.nextUrl.origin}/unauthorized`);
-  }
-
-  if (pathname.startsWith("/courses")) {
-    return NextResponse.next();
-  }
-
   return NextResponse.redirect(`${req.nextUrl.origin}/unauthorized`);
 }
 
@@ -70,7 +62,6 @@ export const config = {
     "/events",
     "/fees",
     "/dashboard",
-    "/courses/:path*",
     "/homeworks",
     "/doubts",
     "/student",
