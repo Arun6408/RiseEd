@@ -151,10 +151,9 @@ const validateCreateTopic = [
     ),
 ];
 
-const createQuizValidator = [
+const validateCreateQuiz = [
   body('quizTitle').notEmpty().withMessage('Quiz title is required').isString().withMessage('Quiz title must be a string'),
   body('quizDescription').notEmpty().withMessage('Quiz description is required').isString().withMessage('Quiz description must be a string'),
-  body('createdByUserId').isInt().withMessage('Created by User ID must be a valid integer'),
   body('assignedClasses').notEmpty().withMessage('Assigned classes are required').isString().withMessage('Assigned classes must be a string'),
   body('questions').isArray({ min: 1 }).withMessage('At least one question is required').custom((questions) => {
     questions.forEach((q) => {
@@ -165,6 +164,17 @@ const createQuizValidator = [
     return true;
   })
 ];
+
+const validateCreateQuizResult = [
+  body('quizId').isInt().withMessage('Quiz ID must be a valid integer'),
+  body('userId').isInt().withMessage('User ID must be a valid integer'),
+  body('totalQues').isInt().withMessage('Quiz ID must be a valid integer'),
+  body('correctCount').isInt().withMessage('Quiz ID must be a valid integer'),
+  body('wrongCount').isInt().withMessage('Quiz ID must be a valid integer'),
+  body('skippedCount').isInt().withMessage('Quiz ID must be a valid integer'),
+  body('timeSpent').isInt().withMessage('Quiz ID must be a valid integer'),
+  body('score').isInt().withMessage('Quiz ID must be a valid integer'), 
+]
 
 const validateCreateEbook = [
   body('title').notEmpty().withMessage('Ebook title is required').isString().withMessage('Ebook title must be a string'),
@@ -186,8 +196,13 @@ const validateCreateEbook = [
   ])
   .withMessage("Invalid genre"),
   body('fileUrl').notEmpty().withMessage('fileUrl is required').isString().withMessage('fileUrl must be a string'),
-]
+];
 
+const validateWatchTime = [
+  body('videoId').isInt().withMessage('User ID must be a valid integer'),
+  body('watchTime').isInt().withMessage('Watch time must be a valid integer'),
+  body('lastPlaybackPosition').isInt().withMessage('Last Playback Position must be a valid integer'),
+];
 
 
 const validateCreateMessage = (data) => {
@@ -207,6 +222,7 @@ const validateSeenMessage = (data) => {
 
 const validate = (req, res, next) => {
   const errors = validationResult(req);
+
   if (errors.isEmpty()) {
     return next();
   }
@@ -225,10 +241,12 @@ module.exports = {
   validateCreateCourse,
   validateCreateChapter,
   validateCreateTopic,
-  createQuizValidator,
+  validateCreateQuiz,
   validateSuperLogin,
   validateCreateEbook,
+  validateCreateQuizResult,
   validateCreateMessage,
   validateSeenMessage,
+  validateWatchTime,
   validate,
 };

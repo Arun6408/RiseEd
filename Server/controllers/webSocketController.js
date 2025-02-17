@@ -91,7 +91,6 @@ const initWebSocket = (server) => {
     };
 
     const { receiverId,senderId } = messageData;
-    console.log(messageData);
     if (type === "newMessage" || type === "seenMessage") {
       const receiverSocket = clients[receiverId];
       const senderSocket = clients[senderId];

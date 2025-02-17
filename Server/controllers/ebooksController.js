@@ -30,12 +30,12 @@ const getAllEbooks = async (req, res) => {
       name: ebook.name,
     }));
 
-    res.status(200).json({
+    return res.status(200).json({
       status: "success",
       data: formattedEbooks,
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       status: "failed",
       message: error.message,
     });
@@ -68,14 +68,14 @@ const createEbook = async (req, res) => {
             .status(500)
             .json({ status: "failed", message: err.message });
         }
-        res.status(201).json({
+        return res.status(201).json({
           status: "success",
           message: "Ebook created successfully",
         });
       }
     );
   } catch (error) {
-    res.status(500).json({ status: "failed", message: error.message });
+    return res.status(500).json({ status: "failed", message: error.message });
   }
 };
 
@@ -107,13 +107,13 @@ const getEbookById = async (req, res) => {
         createdBy: result.rows[0].name,
       };
 
-      res.status(200).json({
+      return res.status(200).json({
         status: "success",
         data: ebook,
       });
     });
   } catch (error) {
-    res.status(500).json({ status: "failed", message: error.message });
+    return res.status(500).json({ status: "failed", message: error.message });
   }
 };
 
@@ -138,9 +138,9 @@ const deleteEbook = async (req, res) => {
       return res.status(404).json({ status: "failed", message: "Ebook not found" });
     }
 
-    res.status(200).json({ status: "success", message: "Ebook deleted successfully" });
+    return res.status(200).json({ status: "success", message: "Ebook deleted successfully" });
   } catch (error) {
-    res.status(500).json({ status: "failed", message: error.message });
+    return res.status(500).json({ status: "failed", message: error.message });
   }
 };
 

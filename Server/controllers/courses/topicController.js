@@ -1,6 +1,5 @@
 const { getDb } = require("../../db/connectDb");
-const { restrictUsers } = require("../utilController");
-
+const { restrictUsers, getUserId } = require("../utilController");
 
 const getAllTopics = async (req, res) => {
   const db = await getDb();
@@ -30,7 +29,7 @@ const getAllTopics = async (req, res) => {
       chapterId: topic.chapterid,
     }));
 
-    res.status(200).json({
+    return res.status(200).json({
       status: "success",
       results: formattedTopics.length,
       data: {
@@ -38,15 +37,13 @@ const getAllTopics = async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(500).json({
+    return res.status(500).json({
       status: "error",
       message: "Error fetching topics",
       error: err.message,
     });
   }
 };
-
-
 
 const createTopic = async (req, res) => {
   const db = await getDb();
@@ -57,9 +54,11 @@ const createTopic = async (req, res) => {
     content,
     topicType,
     videoUrl,
+    videoDuration,
     pdfUrl,
     questionAndAnswers,
   } = req.body;
+
 
   const role = req.user.role;
   restrictUsers(res, ["student", "parent"], role, "to create a new topic");
@@ -90,10 +89,18 @@ const createTopic = async (req, res) => {
         message: "Chapter not found to add a topic.",
       });
     }
+    let videoId;
+    if (videoUrl && videoDuration) {
+      const videoUploadResult = await db.query(
+        "INSERT INTO Videos (videoUrl, videoDuration) VALUES ($1, $2) RETURNING videoId",
+        [videoUrl, parseInt(videoDuration)]
+      );
+      videoId = videoUploadResult.rows[0].videoid;
+    }
 
     // Insert new topic
     const insertQuery = `
-      INSERT INTO Topics (title, description, content, topicType, videoUrl, pdfUrl, questionAndAnswers, chapterId)
+      INSERT INTO Topics (title, description, content, topicType, videoId, pdfUrl, questionAndAnswers, chapterId)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING topicId
     `;
     const insertResult = await db.query(insertQuery, [
@@ -101,22 +108,21 @@ const createTopic = async (req, res) => {
       description,
       content,
       topicType,
-      videoUrl,
+      videoId,
       pdfUrl,
       questionAndAnswers,
       chapterId,
     ]);
-    console.log(insertResult.rows);
 
-    res.status(201).json({
+    return res.status(201).json({
       status: "success",
       data: {
         message: `${title} Topic created successfully`,
-        topicId: insertResult.rows[0].topicid, // Accessing the inserted topic ID from the result
+        topicId: insertResult.rows[0].topicid,
       },
     });
   } catch (err) {
-    res.status(500).json({
+    return res.status(500).json({
       status: "error",
       message: "Error creating topic",
       error: err.message,
@@ -124,14 +130,14 @@ const createTopic = async (req, res) => {
   }
 };
 
-
 const getTopic = async (req, res) => {
   const { topicId, chapterId } = req.params;
   const db = await getDb();
   const query = `
-    SELECT topicId, title, description, content, topicType, videoUrl, pdfUrl, questionAndAnswers, chapterId
-    FROM Topics
-    WHERE topicId = $1 AND chapterId = $2
+    SELECT topicId, title, description, content, topicType, v.videoId, v.videoUrl, pdfUrl, questionAndAnswers, chapterId
+      FROM Topics t
+      left join Videos v on t.videoId = v.videoId
+      WHERE topicId = $1 AND chapterId = $2
   `;
 
   try {
@@ -151,25 +157,25 @@ const getTopic = async (req, res) => {
       description: result.rows[0].description,
       content: result.rows[0].content,
       topicType: result.rows[0].topictype,
+      videoId: result.rows[0].videoid,
       videoUrl: result.rows[0].videourl,
       pdfUrl: result.rows[0].pdfurl,
       questionAndAnswers: result.rows[0].questionandanswers,
       chapterId: result.rows[0].chapterid,
     };
 
-    res.status(200).json({
+    return res.status(200).json({
       status: "success",
       data: topic,
     });
   } catch (err) {
-    res.status(500).json({
+    return res.status(500).json({
       status: "error",
       message: "Error fetching topic",
       error: err.message,
     });
   }
 };
-
 
 const deleteTopic = async (req, res) => {
   const db = await getDb();
@@ -192,12 +198,12 @@ const deleteTopic = async (req, res) => {
       });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       status: "success",
       message: "Topic deleted successfully",
     });
   } catch (err) {
-    res.status(500).json({
+    return res.status(500).json({
       status: "error",
       message: "Error deleting topic",
       error: err.message,
@@ -205,10 +211,42 @@ const deleteTopic = async (req, res) => {
   }
 };
 
+const updateTopicTime = async (req, res) => {
+  try {
+    const db = await getDb();
+    const userId = getUserId(req);
+    const { topicId } = req.params;
+    const { timeSpentOnTopic } = req.body;
+    console.log("topic ",topicId, timeSpentOnTopic);
+
+    const query = `
+          INSERT INTO TimeSpentOnTopic (userId, topicId, timeSpentOnTopic)
+          VALUES ($1, $2, $3)
+          ON CONFLICT (userId, topicId)
+          DO UPDATE SET 
+              timeSpentOnTopic = TimeSpentOnTopic.timeSpentOnTopic + EXCLUDED.timeSpentOnTopic;
+      `;
+
+    await db.query(query, [userId, topicId, timeSpentOnTopic]);
+
+    return res
+      .status(200)
+      .json({ status: "success", message: "Topic time updated" });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({
+        status: "failed",
+        message: "Error updating topic time",
+        error: error.message,
+      });
+  }
+};
 
 module.exports = {
   getAllTopics,
   createTopic,
   getTopic,
   deleteTopic,
+  updateTopicTime,
 };

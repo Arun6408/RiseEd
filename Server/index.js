@@ -12,6 +12,11 @@ const ebooksRouter = require("./routes/ebooksRoutes");
 const messageRouter = require("./routes/messageRouter");
 const { initWebSocket } = require("./controllers/webSocketController");
 const { connectDb } = require("./db/connectDb");
+const errorHandler = require("./errorHandlers/errorHandler");
+const homeworkRouter = require("./routes/homeworkRoutes");
+const salariesRouter = require("./routes/salariesRoutes");
+const videoRouter = require("./routes/videoRoutes");
+const teacherRouter = require("./routes/teacherRoutes");
 
 const app = express();
 
@@ -21,21 +26,20 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 
-app.get("/", (req, res) => {
-  res.send("Hello World");
-});
 
 app.use("/api/auth", authRouter); 
 app.use(verifyToken); 
 app.use("/api/courses", courseRouter);
-app.use("/api/quiz", quizRouter);
-app.use("/api", ebooksRouter);
+app.use("/api", quizRouter);
+app.use("/api/ebooks", ebooksRouter);
 app.use("/api/messages", messageRouter);
+app.use("/api/homework", homeworkRouter);
+app.use("/api/salaries", salariesRouter);
+app.use('/api/videos', videoRouter);
+app.use('/api/teacher', teacherRouter);
 
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: "Internal server error" });
-});
+app.use(errorHandler);
+
 
 const port = process.env.PORT || 5000;
 

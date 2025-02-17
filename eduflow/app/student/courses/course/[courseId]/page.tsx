@@ -1,33 +1,29 @@
-'use client';
-import { getCourses } from "@/utils/util";
+"use client";
+
+import StudentLayout from "@/app/student/StudentLayout";
+import CoursePageComponent from "@/components/pages/Courses/CoursePageComponent";
+import Loader from "@/components/utils/Loader";
 import { useEffect, useState } from "react";
 
-export default function Page({
+export default function CoursePage({
   params: paramsPromise,
 }: {
-  params: Promise<{ courseId: string }>;
+  params: Promise<{ courseId: number }>;
 }) {
-  const [courses, setCourses] = useState<any>(null);
-  const [courseId, setCourseId] = useState<string | null>(null);
 
+  const [courseId, setCourseId] = useState<number | null>(null);
   useEffect(() => {
-    const fetchParamsAndCourses = async () => {
-      const resolvedParams = await paramsPromise; // Unwrap the params Promise
+    const fetchParams = async () => {
+      const resolvedParams = await paramsPromise;
       setCourseId(resolvedParams.courseId);
-
-      const fetchedCourses = await getCourses(resolvedParams.courseId);
-      setCourses(fetchedCourses);
     };
-
-    fetchParamsAndCourses();
+    fetchParams();
   }, [paramsPromise]);
 
-  
-
+  if(!courseId) return <Loader/>
   return (
-    <div>
-      <h1>Course ID: {courseId}</h1>
-      <div>Courses: {JSON.stringify(courses)}</div>
-    </div>
+    <StudentLayout activeLink="/student/courses">
+      <CoursePageComponent  courseId={courseId} />
+    </StudentLayout>
   );
 }

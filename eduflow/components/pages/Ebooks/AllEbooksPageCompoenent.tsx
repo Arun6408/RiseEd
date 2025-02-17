@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { handleUpload, setToken } from "@/utils/util";
+import { getRole, handleUpload, setToken } from "@/utils/util";
 
 import {
   Modal,
@@ -12,7 +12,6 @@ import {
   useModal,
 } from "@/components/ui/animated-modal";
 import Loader from "@/components/utils/Loader";
-import TeacherLayout from "@/app/teacher/TeacherLayout";
 
 type Ebook = {
   id: number;
@@ -24,14 +23,15 @@ type Ebook = {
   uploadDate: string;
 };
 
-const AllEbooksPageComponent = ({ role }: { role: string; }) => {
+const AllEbooksPageComponent = () => {
   const [ebooks, setEbooks] = useState<Ebook[]>([]);
   const [ebookTitle, setEbookTitle] = useState<string>("");
   const [ebookDescription, setEbookDescription] = useState<string>("");
   const [ebookGenre, setEbookGenre] = useState<string>("");
   const [ebookFile, setEbookFile] = useState<File | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-
+  const [role, setRole] = useState<string|null>(null);
+  
   const fetchBooks = async () => {
     try {
       const url = `${process.env.NEXT_PUBLIC_API_URL}/ebooks`;
@@ -42,8 +42,10 @@ const AllEbooksPageComponent = ({ role }: { role: string; }) => {
       console.error("Error Occurred: ", error);
     }
   };
+  
   useEffect(() => {
     fetchBooks();
+    setRole(getRole());
   }, [ebooks]);
 
   const handleDelete = async (ebookId: number) => {

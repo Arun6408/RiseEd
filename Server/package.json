@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "start": "node index.js",
+    "start": "pm2 start index.js --name \"ultimate-course-app\" --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

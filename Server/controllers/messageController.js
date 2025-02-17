@@ -1,7 +1,6 @@
 const { getDb } = require("../db/connectDb");
 const { getUserId } = require("./utilController");
 
-const { parseISO, format } = require('date-fns');
 
 const getAllMessages = async (req, res) => {
   try {
@@ -26,19 +25,18 @@ const getAllMessages = async (req, res) => {
       FROM messages m
       LEFT JOIN allusers a1 ON a1.id = m.senderId
       LEFT JOIN allusers a2 ON a2.id = m.receiverId
-      WHERE m.senderId = $1 OR m.receiverId = $1
+      WHERE m.senderId = $1 OR m.receiverId = $2
       ORDER BY 
         LEAST(m.senderId, m.receiverId), 
         GREATEST(m.senderId, m.receiverId), 
         m.createdAt DESC;
     `;
 
-    const results = await db.query(query, [userId]);
+    const results = await db.query(query, [userId,userId]);
 
     // Map results to the desired format
     const messages = results.rows.map((message) => {
       const isSender = message.senderid === userId;
-      console.log(message);
       return {
         type: isSender ? 'receiver' : 'sender',
         messageId: message.messageid,
@@ -60,13 +58,19 @@ const getAllMessages = async (req, res) => {
       )
     );
 
-    // Query for remaining users not involved in messages
-    const placeholders = userIds.map((_, index) => `$${index + 1}`).join(", ");
-    const usersQuery = `
+    let usersQuery = `
+      SELECT id, name, role
+      FROM allusers
+      WHERE id != $1
+    `;
+    if(userIds.length > 0){
+      const placeholders = userIds.map((_, index) => `$${index + 1}`).join(", ");
+      usersQuery = `
       SELECT id, name, role 
       FROM allusers 
       WHERE id NOT IN (${placeholders}) AND id != $${userIds.length + 1}
     `;
+    }
     const usersResult = await db.query(usersQuery, [...userIds, userId]);
 
     return res.status(200).json({
@@ -88,14 +92,10 @@ const getAllMessages = async (req, res) => {
 
 
 
-
-
-
 const createMessage = async (messageData) => {
   const { senderId, receiverId, message, createdAt, viewStatus, fileType, fileUrl} = messageData;
   const db = await getDb();
   
-  console.log(messageData);
   const query = `
     INSERT INTO Messages (senderId, receiverId, createdAt, viewStatus, message, fileType, fileUrl)
     VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING messageId
@@ -139,7 +139,7 @@ const getMessagesBetweenUsers = async (req, res) => {
       fileUrl: row.fileurl || null,
     }));
 
-    res.status(200).json({
+    return res.status(200).json({
       status: "success",
       data: messages,
     });
@@ -172,7 +172,7 @@ const deleteMessagesBetweenUsers = async (req, res) => {
 
     await db.query(query, [senderId, selectedUserId, selectedUserId, senderId]);
 
-    res.status(200).json({
+    return res.status(200).json({
       status: "success",
       message: `All messages between senderId ${senderId} and receiverId ${selectedUserId} have been deleted.`,
     });

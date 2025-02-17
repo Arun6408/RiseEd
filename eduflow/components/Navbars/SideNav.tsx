@@ -30,13 +30,13 @@ const SideNav = ({
   const handleNavLinkClick = (link: string) => {
     router.push(link);
   };
-
   return (
-    <div className="w-64 h-screen bg-white flex flex-col justify-between py-4 px-6 border-r border-gray-400">
+    <div className="w-64 h-screen bg-teal-50 flex flex-col justify-between py-4 px-6 border-r border-gray-400">
       <div className="flex flex-col  gap-2">
         <div className="w-full flex justify-center">
           <Logo />
         </div>
+        <div className="flex flex-col gap-1">
         {links.map((navLink, index) => (
           <div
             key={index}
@@ -55,6 +55,7 @@ const SideNav = ({
             <p className="text-md font-medium">{navLink.text}</p>
           </div>
         ))}
+        </div>
       </div>
       <div className="w-full bg-cyan-500 rounded-xl ">
         <div className="flex flex-col justify-between items-center gap-1 px-2 py-2">

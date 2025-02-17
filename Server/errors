@@ -1,0 +1,29 @@
+// errors to be solved
+
+
+node:events:502
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: read ECONNRESET
+    at TLSWrap.onStreamRead (node:internal/stream_base_commons:216:20)
+Emitted 'error' event on Client instance at:
+    at Client._handleErrorEvent (D:\Full Stack\Ultimate Course App\Server\node_modules\pg\lib\client.js:340:10)
+    at Connection.emit (node:events:524:28)
+    at TLSSocket.reportStreamError (D:\Full Stack\Ultimate Course App\Server\node_modules\pg\lib\connection.js:57:12)
+    at TLSSocket.emit (node:events:524:28)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  errno: -4077,
+  code: 'ECONNRESET',
+  syscall: 'read'
+}
+
+Node.js v22.12.0
+[nodemon] app crashed - waiting for file changes before starting...
+
+
+
+(node:19844) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 exit listeners added to [Bus]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+(Use `node --trace-warnings ...` to show where the warning was created)

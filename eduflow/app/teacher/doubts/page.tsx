@@ -17,6 +17,7 @@ import Loader from "@/components/utils/Loader";
 
 const Page = () => {
   const [messages, setMessages] = useState<Message[]>([]);
+  const [filteredMessages,setFilteredMessages]= useState<Message[]>([]);;
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
   const [selectedUserName, setSelectedUserName] = useState<string | null>(null);
   const [userMessages, setUserMessages] = useState<UserMessage[]>([]);
@@ -62,6 +63,7 @@ const Page = () => {
         })
       );
       setMessages([...receivedMessages, ...remainingUsersMessages]);
+
     } catch (error) {
       console.error("Error fetching messages:", error);
     }
@@ -86,7 +88,7 @@ const Page = () => {
 
   const handleSendMessage = () => {
     if (selectedUserId) {
-      const createdAt = formatCustomDate(new Date().toLocaleString("en-US", {
+      let createdAt = new Intl.DateTimeFormat("en-GB", {
         timeZone: "Asia/Kolkata",
         day: "2-digit",
         month: "2-digit",
@@ -94,7 +96,16 @@ const Page = () => {
         hour: "2-digit",
         minute: "2-digit",
         hour12: true,
-      }));
+      }).format(new Date());
+      
+      createdAt = createdAt
+        .replace(",", "")
+        .replace(/\//g, "/")
+        .replace(/(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}) (\w{2})/, "$1/$2/$3 $4:$5 $6")
+        .toUpperCase();  // This will convert AM/PM to uppercase
+      
+      console.log(createdAt);
+      
       if (selectedFiles.length > 0) {
         selectedFiles.map(async (file) => {
           const url = await handleUpload(file, file.type);
@@ -163,15 +174,18 @@ const Page = () => {
 
   useEffect(() => {
     if (searchUserInput) {
-      const filteredMessages = messages.filter(
+      setFilteredMessages(messages.filter(
         (message) =>
           message.name.toLowerCase().includes(searchUserInput.toLowerCase()) ||
           message.role?.toLowerCase().includes(searchUserInput.toLowerCase()) ||
           message.message?.toLowerCase().includes(searchUserInput.toLowerCase())
-      );
-      setMessages(filteredMessages);
+      ));
+    }
+    else {
+      setFilteredMessages(messages);
     }
   }, [searchUserInput]);
+  useEffect(() => { setFilteredMessages(messages)},[messages]);
 
   return (
     <div>
@@ -201,9 +215,9 @@ const Page = () => {
 
             {/* Messages List */}
             <div className="w-full max-h-fit overflow-x-clip overflow-y-scroll">
-              {messages.length > 0 ? (
+              {filteredMessages.length > 0 ? (
                 <ul className="space-y-4">
-                  {messages.map((message, index) => {
+                  {filteredMessages.map((message, index) => {
                     const isSelected = message.otherUserId === selectedUserId;
                     const viewStatusImgSrc =
                       message.viewStatus === "Seen"
@@ -211,7 +225,7 @@ const Page = () => {
                         : message.viewStatus === "Delivered"
                         ? "/icons/delivered.png"
                         : null;
-
+                    const isNew = message.type == 'sender' && message.viewStatus === 'Delivered' && message.otherUserId !== selectedUserId;
                     return (
                       <li
                         key={index}
@@ -248,6 +262,10 @@ const Page = () => {
                             </p>
                           )}
                         </div>
+                        {isNew && (
+                          <div className="absolute top-50 right-5 w-5 h-5 bg-teal-400 rounded-full flex items-center justify-center text-white">
+                          </div>
+                        )}
                       </li>
                     );
                   })}

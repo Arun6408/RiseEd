@@ -33,7 +33,7 @@ const TeacherLayout: React.FC<TeacherLayoutProps> = ({
           <div className="h-16">
             <TopNav />
           </div>
-          <div className="flex-1 bg-gray-100 overflow-scroll">{children}</div>
+          <div className="flex-1 bg-gray-100 overflow-y-scroll">{children}</div>
         </div>
       </div>
   );

@@ -15,7 +15,7 @@ const TopNav = () => {
     }
   };
   return (
-    <div className="w-full bg-white h-full flex justify-between items-center px-5 border-b border-gray-400">
+    <div className="w-full bg-teal-50 h-full flex justify-between items-center px-5 border-b border-gray-400">
       <div
         onClick={handleDivClick}
         className="w-64 px-4 py-1 rounded-full bg-white outline cursor-text gap-4 outline-gray-400 flex focus-within:outline-black"

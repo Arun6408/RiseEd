@@ -1,8 +1,15 @@
 "use client";
 
-import { getChapters, getCourses, getTopics, handleUpload, setToken } from "@/utils/util";
+import {
+  getChapters,
+  getCourses,
+  getTopics,
+  getVideoDuration,
+  handleUpload,
+  setToken,
+} from "@/utils/util";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import TeacherLayout from "../../TeacherLayout";
 import {
   Modal,
@@ -13,26 +20,7 @@ import {
 } from "@/components/ui/animated-modal";
 import { useRouter } from "next/navigation";
 import Loader from "@/components/utils/Loader";
-
-type Course = {
-  courseId: number;
-  title: string;
-  class: string;
-  description: string;
-  content: string | null;
-  taughtBy: string;
-};
-
-type Topic = {
-  topicId: number;
-  title: string;
-  description: string;
-  content: string | null;
-  type: "video" | "text" | "quiz";
-  videoUrl: string | null;
-  pdfUrl: string | null;
-  questions: { question: string; answer: string }[];
-};
+import { Course } from "@/types";
 
 const Page = () => {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -61,8 +49,9 @@ const Page = () => {
   const [topicContent, setTopicContent] = useState("");
   const [topicType, setTopicType] = useState("video");
   const [videoFile, setVideoFile] = useState<File | null>(null);
+  const [videoDuration, setVideoDuration] = useState(0);
+  const inputVideoRef = useRef<HTMLInputElement>(null);
   const [pdfFile, setPdfFile] = useState<File | null>(null);
-
   const [questions, setQuestions] = useState<
     { question: string; answer: string }[]
   >([]);
@@ -116,6 +105,22 @@ const Page = () => {
     setQuestions([]);
     setChapters([]);
     setTopics([]);
+  };
+
+  const handleVideoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setVideoFile(file);
+
+      const videoElement = document.createElement("video");
+      videoElement.preload = "metadata";
+
+      videoElement.onloadedmetadata = () => {
+        setVideoDuration(videoElement.duration);
+      };
+
+      videoElement.src = URL.createObjectURL(file);
+    }
   };
 
   useEffect(() => {
@@ -227,10 +232,10 @@ const Page = () => {
     let videoFileUrl: string | null = null;
     let pdfFileUrl: string | null = null;
     try {
-      //@ts-ignore
-      videoFileUrl = await handleUpload(videoFile, "video");
-      //@ts-ignore
-      pdfFileUrl = await handleUpload(pdfFile, "pdf");
+      if (videoFile) {
+        videoFileUrl = await handleUpload(videoFile, videoFile.type);
+      }
+      if (pdfFile) pdfFileUrl = await handleUpload(pdfFile, pdfFile.type);
       console.log("videoFileUrl:", videoFileUrl);
       console.log("pdfFileUrl:", pdfFileUrl);
     } catch (err) {
@@ -246,8 +251,9 @@ const Page = () => {
         description: topicDescription,
         content: topicContent,
         topicType,
-        video_url: videoFileUrl,
-        pdf_url: pdfFileUrl,
+        videoUrl: videoFileUrl,
+        videoDuration: videoDuration,
+        pdfUrl: pdfFileUrl,
         questionAndAnswers: JSON.stringify(questions),
       };
       console.log(newTopic);
@@ -258,12 +264,8 @@ const Page = () => {
       );
       console.log(res.data);
       if (res.data.status === "success") {
-        const createdTopic = {
-          ...newTopic,
-          topicId: res.data.data.topicId,
-        };
         setLoading(false);
-        setTopics([...topics, createdTopic]);
+        alert("Topic created successfully");
         clearForm();
       } else {
         setLoading(false);
@@ -272,7 +274,7 @@ const Page = () => {
     } catch (error) {
       setLoading(false);
       alert("Failed to create topic. Please try again.");
-      setError('Failed to create topic. Please try again');
+      setError("Failed to create topic. Please try again");
     }
   };
 
@@ -792,20 +794,22 @@ const Page = () => {
                       <div className="flex flex-col gap-2">
                         <label
                           htmlFor="video-url"
-                          className="text-black text-lg font-demibold"
+                          className="text-black text-lg font-semibold"
                         >
                           Upload Video:
                         </label>
                         <div className="border-2 rounded-lg">
                           <input
+                            ref={inputVideoRef}
                             type="file"
                             accept="video/*"
                             onChange={(e) => {
-                              //@ts-ignore
-                              setVideoFile(e.target.files[0]);
+                              handleVideoUpload(e);
+                              setVideoFile(e.target.files && e.target.files[0]);
                             }}
                           />
                         </div>
+                        <p>Duration: {videoDuration.toFixed(2)} seconds</p>
                       </div>
                       <div className="flex flex-col gap-2">
                         <label

@@ -1,24 +1,20 @@
 const restrictUsers = (res, restrictingRoles, currRole, message) => {
   if (restrictingRoles.includes(currRole)) {
-    res.status(403).json({
+    return res.status(403).json({
       status: "error",
       message: `Access Denied. You are not authorized ${message}. Please contact your administrator.`,
     });
-    return true;
   }
-  return false;
 };
 
 const allowUsers = (res,allowingRoles,currRole,message) => {
   if (!allowingRoles.includes(currRole)) {
-    res.status(403).json({
+    return res.status(403).json({
       status: "error",
       message: `Access Denied. You are not authorized ${message}. Please contact your administrator.`,
+      role: currRole
     });
-    return true;
   }
-  return false;
-
 }
 
 const getUserId = (req) => {

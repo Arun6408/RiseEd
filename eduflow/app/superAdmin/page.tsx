@@ -34,7 +34,7 @@ const SuperAdmin = () => {
       }
     };
     fetchUsers();
-  }, [users]);
+  }, []);
 
   const handleLoginClick = async (username: string) => {
     try {
@@ -43,8 +43,7 @@ const SuperAdmin = () => {
         `${process.env.NEXT_PUBLIC_API_URL}/auth/superAdmin/login`,
         { username }
       );
-      const data = await res.data;
-      console.log(res.data);
+      const data = res.data;
       if (data.status !== "success") {
         console.error(data.message);
       }
@@ -65,8 +64,8 @@ const SuperAdmin = () => {
       else if (user.role === "headMaster") Router.push("/headMaster");
       else if (user.role === "teacher") Router.push("/teacher");
       else if (user.role === "student") Router.push("/student");
+      else if (user.role === "parent") Router.push("/parent");
     } catch (error) {
-      console.error(error);
       setUsers([]);
     }
   };

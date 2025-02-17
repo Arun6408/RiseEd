@@ -65,7 +65,7 @@ const useWebSocket = (
                   ...msg,
                   messageId: messageData.messageId,
                   message: messageData.message,
-                  type: 'receiver', // type is receiver because here we are sender sends message
+                  type: 'receiver', 
                   viewStatus: messageData.viewStatus,
                   createdAt: messageData.createdAt,
                 };
@@ -73,13 +73,7 @@ const useWebSocket = (
               return msg;
             });
           
-            // Ensure sorting by `createdAt` in descending order
-            return updatedMessages.sort((a, b) => {
-              console.log(a, b);
-              if(a.createdAt === '01/01/2000 12:00 PM')return 1;
-              else if(b.createdAt === '01/01/2000 12:00 PM') return -1;
-              return (new Date(parseCreatedAt(b.createdAt)).getTime() - new Date(parseCreatedAt(a.createdAt)).getTime())
-            });
+            return updatedMessages;
           });
           
           
@@ -105,13 +99,23 @@ const useWebSocket = (
       }
       if (type === "seenMessage" && messageData) {
         console.log(type, messageData,clientType);
+        setMessages((prev)=>{
+          return prev.map((msg)=>{
+            if(msg.otherUserId === messageData.senderId && msg.createdAt !== "01/01/2000 12:00 PM"){
+              return{
+                ...msg,
+                viewStatus: messageData.viewStatus,
+              }
+            }
+            return msg;
+          })
+        })
         setUserMessages((prev) => {
           return prev.map((msg) => {
             if (
               msg.senderId === messageData.senderId &&
               msg.receiverId === messageData.receiverId
             ) {
-              console.log('message:', msg);
               return {
                 ...msg,
                 viewStatus: messageData.viewStatus,

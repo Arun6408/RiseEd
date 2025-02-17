@@ -1,12 +1,13 @@
 "use client";
-import { getCourses } from "@/utils/util";
+import { getCourses, getRole } from "@/utils/util";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-const AllCoursesPageComponent = ({ role }: { role: string }) => {
+const AllCoursesPageComponent = () => {
   const [courses, setCourses] = useState<any[]>([]);
   const [searchInput, setSearchInput] = useState("");
   const router = useRouter();
+  const role = getRole();
 
   const fetchCourses = async () => {
     const fetchedCourses = await getCourses(null);

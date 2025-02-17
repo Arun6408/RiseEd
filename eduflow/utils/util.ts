@@ -1,9 +1,6 @@
 'use client';
 
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { format } from "date-fns";
-import { toZonedTime } from "date-fns-tz";
 
 
 export function clearCookies() {
@@ -28,6 +25,20 @@ export const getUserId = () => {
   return null; 
 };
 
+export const getName = () => {
+  if (typeof window !== 'undefined') {
+    return JSON.parse(localStorage.getItem('user') ||'{}').name;
+  }
+  return null; 
+};
+
+export const getRole = () => {
+  if (typeof window !== 'undefined') {
+    return JSON.parse(localStorage.getItem('user') ||'{}').role;
+  }
+  return null;
+};
+
 export async function getCourses(courseId: number | null) {
   try {
     setToken(); 
@@ -38,7 +49,10 @@ export async function getCourses(courseId: number | null) {
     }
     
     const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/courses`); // Correct URL
-    return res.data.data.courses; // Fetching all courses
+    if(res.data.status === 'success') {
+      return res.data.data.courses; // Fetching all courses
+    }
+    throw new Error('Error Fetching Courses');
   } catch (err) {
     console.error("Error fetching courses:", err);
     return [];  // Return an empty array in case of error
@@ -92,30 +106,28 @@ export async function getTopics({courseId,chapterId,topicId}:{
 
 
 
-export const handleUpload = async (file: File, fileType: string | null) => {
-  if (!file) return;
+export const handleUpload = async (file: File, fileType: string | null): Promise<string | null> => {
+  if (!file) return null;
 
   const formData = new FormData();
   formData.append("file", file);
-  formData.append(
-    "upload_preset",
-    process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME!
-  );
-  let url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/auto/upload`;
+  formData.append("upload_preset", process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME!);
 
-  if (fileType === "pdf") {
+  let url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/auto/upload`;
+  if (fileType === "application/pdf") {
     url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/raw/upload`;
   }
 
-  const response = await fetch(url, {
-    method: "POST",
-    body: formData,
-  });
-
-  const data = await response.json();
-
-  return data.secure_url;
+  try {
+    const response = await fetch(url, { method: "POST", body: formData });
+    const data = await response.json();
+    return data.secure_url;
+  } catch (error) {
+    console.error("Upload failed", error);
+    return null;
+  }
 };
+
 
 
 export const getCookie = (name: string): string | undefined => {
@@ -139,7 +151,6 @@ export function formatCustomDate(date:string){
 
 //@ts-ignore
 export const parseCreatedAt = (createdAt) => {
-  console.log(createdAt);
   const [date, time, period] = createdAt.split(" ");
   const [day, month, year] = date.split("/");
   const [hour, minute] = time.split(":");
@@ -154,4 +165,21 @@ export const parseCreatedAt = (createdAt) => {
   return new Date(
     `${year}-${month}-${day}T${String(adjustedHour).padStart(2, "0")}:${minute}:00`
   );
+};
+
+export const getVideoDuration = (file: File): Promise<number> => {
+  return new Promise((resolve, reject) => {
+    const video = document.createElement("video");
+    video.preload = "metadata";
+
+    video.onloadedmetadata = () => {
+      resolve(video.duration);
+    };
+
+    video.onerror = () => {
+      reject("Failed to load video duration");
+    };
+
+    video.src = URL.createObjectURL(file);
+  });
 };

@@ -18,6 +18,8 @@ export function middleware(req: NextRequest): NextResponse {
   
   const role: string = user?.role || 'guest';
 
+  console.log('middleware',role);
+
   const publicRoutes: string[] = ['/', "/auth/login", "/events", "/feeStructure", '/unauthorized'];
 
   if (publicRoutes.includes(pathname)) {

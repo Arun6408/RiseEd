@@ -21,7 +21,7 @@ const getAllCourses = async (req, res) => {
       taughtBy: row.taughtby,
     }));
 
-    res.status(200).json({
+    return res.status(200).json({
       status: "success",
       results: formattedRows.length,
       data: {
@@ -29,7 +29,7 @@ const getAllCourses = async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(500).json({
+    return res.status(500).json({
       status: "error",
       message: "Error while fetching courses",
       error: err.message,
@@ -106,13 +106,13 @@ const createCourse = async (req, res) => {
       userId,
     ]);
 
-    res.status(201).json({
+    return res.status(201).json({
       status: "success",
       message: `${title} Course created successfully`,
       courseId: createResult.rows[0].courseid,
     });
   } catch (err) {
-    res.status(500).json({
+    return res.status(500).json({
       status: "error",
       message: "Error while creating the course",
       error: err.message,
@@ -150,12 +150,12 @@ const getCourse = async (req, res) => {
       taughtBy: result.rows[0].taughtby,
     };
 
-    res.status(200).json({
+    return res.status(200).json({
       status: "success",
       data: course,
     });
   } catch (err) {
-    res.status(500).json({
+    return res.status(500).json({
       status: "error",
       message: "Error while fetching the course",
       error: err.message,
@@ -167,10 +167,7 @@ const getCourse = async (req, res) => {
 const deleteCourse = async (req, res) => {
   const db = await getDb();
   const { courseId } = req.params;
-
-  if (restrictUsers(res, ["student"], req.user.role, "delete a course")) {
-    return;
-  }
+  restrictUsers(res, ["student"], req.user.role, "delete a course")
 
   const deleteCourseQuery = `DELETE FROM Courses WHERE courseId = $1`;
 
@@ -184,12 +181,12 @@ const deleteCourse = async (req, res) => {
       });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       status: "success",
       message: "Course deleted successfully",
     });
   } catch (err) {
-    res.status(500).json({
+    return res.status(500).json({
       status: "error",
       message: "Error while deleting the course",
       error: err.message,

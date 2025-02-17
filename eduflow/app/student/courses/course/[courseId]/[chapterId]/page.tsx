@@ -1,37 +1,34 @@
-'use client';
-import { getChapters } from "@/utils/util";
+"use client";
+
+import StudentLayout from "@/app/student/StudentLayout";
+import ChapterPageComponent from "@/components/pages/Courses/ChapterPageComponent";
+import Loader from "@/components/utils/Loader";
 import { useEffect, useState } from "react";
 
-export default function ChaptersPage({
+export default function ChapterPage({
   params: paramsPromise,
 }: {
-  params: Promise<{ courseId: string; chapterId: string }>;
+  params: Promise<{ courseId: number; chapterId: number }>;
 }) {
-  const [chapters, setChapters] = useState<any>(null);
-  const [courseId, setCourseId] = useState<string | null>(null);
-  const [chapterId, setChapterId] = useState<string | null>(null);
+  const [courseId, setCourseId] = useState<number | null>(null);
+  const [chapterId, setChapterId] = useState<number | null>(null);
 
   useEffect(() => {
-    const fetchParamsAndChapters = async () => {
-      const resolvedParams = await paramsPromise; // Unwrap the params Promise
+    const fetchParams = async () => {
+      const resolvedParams = await paramsPromise;
       setCourseId(resolvedParams.courseId);
       setChapterId(resolvedParams.chapterId);
-
-      const fetchedChapters = await getChapters({
-        courseId: resolvedParams.courseId,
-        chapterId: resolvedParams.chapterId,
-      });
-      setChapters(fetchedChapters);
     };
 
-    fetchParamsAndChapters();
+    fetchParams();
   }, [paramsPromise]);
 
+
+  if(!chapterId || !courseId) return <Loader/>
+
   return (
-    <div>
-      <h1>Course ID: {courseId}</h1>
-      <h2>Chapter ID: {chapterId}</h2>
-      <div>Chapters: {JSON.stringify(chapters)}</div>
-    </div>
+    <StudentLayout activeLink="/student/courses">
+      <ChapterPageComponent courseId={courseId} chapterId={chapterId}/>
+    </StudentLayout>
   );
 }
