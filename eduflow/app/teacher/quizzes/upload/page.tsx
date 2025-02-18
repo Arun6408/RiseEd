@@ -179,7 +179,7 @@ const QuizForm: React.FC = () => {
           </div>
           <div className="px-4">
             <label className="block text-lg font-semibold mb-2">
-              Assigned to <span className="text-sm font-medium">(Classes seperated with comma's)</span> <span className="text-red-500">*</span>
+              Assigned to <span className="text-sm font-medium">(Classes seperated with comma&apos;s)</span> <span className="text-red-500">*</span>
             </label>
             <input
               className="w-1/3 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"

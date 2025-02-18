@@ -77,10 +77,12 @@ export const ModalBody = ({
     }
   }, [open]);
 
-  const modalRef = useRef(null);
+  // Explicitly typing the ref
+  const modalRef = useRef<HTMLDivElement>(null);
   const { setOpen } = useModal();
-  //@ts-ignore
-  if(modalRef)useOutsideClick(modalRef, () => setOpen(false));
+
+  // Ensure the hook is always called, not conditionally
+  useOutsideClick(modalRef as React.RefObject<HTMLDivElement>, () => setOpen(false));
 
   return (
     <AnimatePresence>
@@ -138,6 +140,8 @@ export const ModalBody = ({
     </AnimatePresence>
   );
 };
+
+
 
 export const ModalContent = ({
   children,
