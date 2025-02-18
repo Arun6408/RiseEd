@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import QuizPageComponent from "@/components/pages/Quiz/QuizPageComponent";
 import StudentLayout from "@/app/student/StudentLayout";
 
-const page = ({
+const Page = ({
     params: paramsPromise,
   }: {
     params: Promise<{ quizId: number }>;
@@ -21,4 +21,4 @@ const page = ({
   );
 }
 
-export default page
+export default Page

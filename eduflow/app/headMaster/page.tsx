@@ -1,9 +1,7 @@
 'use client';
 
-import { useRouter } from "next/navigation";
 
-const page = () => {
-  const router = useRouter();
+const Page = () => {
 
   // router.push('/dahboard');
   return (
@@ -11,4 +9,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

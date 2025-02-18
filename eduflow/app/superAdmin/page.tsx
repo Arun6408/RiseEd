@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { setToken } from "@/utils/util";
-import cookie from "cookie";
+import * as cookie from "cookie";
 import { useRouter } from "next/navigation";
 
 interface User {

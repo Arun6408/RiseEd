@@ -413,7 +413,7 @@ const Page = () => {
                   </form>
                 </div>
               ) : (
-                <p className="text-teal-600">Let's start a chat</p>
+                <p className="text-teal-600">Let&apos;s start a chat</p>
               )}
             </div>
           </div>

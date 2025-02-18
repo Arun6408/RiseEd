@@ -64,7 +64,7 @@ module.exports = {
     },
   },
   plugins: [addVariablesForColors,
-    //@ts-ignore
+    //@ts-expect-error
     function ({ addUtilities }) {
       addUtilities({
         '.scrollbar-hide': {
@@ -79,7 +79,7 @@ module.exports = {
   ],
 };
 
-//@ts-ignore
+//@ts-expect-error
 function addVariablesForColors({ addBase, theme }) {
   let allColors = flattenColorPalette(theme("colors"));
   let newVars = Object.fromEntries(

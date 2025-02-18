@@ -1,65 +1,65 @@
-'use client';
-import axios from "axios";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+// 'use client';
+// import axios from "axios";
+// import { useState } from "react";
 
 export default function Register() {
-    // Define types for the states
-    const [name, setName] = useState<string>("Arun");
-    const [username, setUsername] = useState<string>("student22");
-    const [email, setEmail] = useState<string>("student22@example.com");
-    const [password, setPassword] = useState<string>("student123");
-    const [password_confirmation, setPasswordConfirmation] = useState<string>("student123");
-    const [role, setRole] = useState<string>("student");
-    const [phone, setPhone] = useState<string>("9999999999");
-    const [age, setAge] = useState<number>(15);
-    const [salary, setSalary] = useState<number>(20000);
-    const [otherMoneyBenefits, setOtherMoneyBenefits] = useState<number>(5000);
-    const [department, setDepartment] = useState<string>("Mathematics");
-    const [assignedClasses, setAssignedClasses] = useState<number[]>([1,2,3,4,5]);
-    const [studentClass, setStudentClass] = useState<number>(2);
-    const [scholarshipAmount, setScholarshipAmount] = useState<number>(5000);
-    const [studentScore, setStudentScore] = useState<number>(90);
-    const [error, setError] = useState<string[]>([]);
+    // // Define types for the states
+    // const [name, setName] = useState<string>("Arun");
+    // const [username, setUsername] = useState<string>("student22");
+    // const [email, setEmail] = useState<string>("student22@example.com");
+    // const [password, setPassword] = useState<string>("student123");
+    // const [password_confirmation, setPasswordConfirmation] = useState<string>("student123");
+    // const [role, setRole] = useState<string>("student");
+    // const [phone, setPhone] = useState<string>("9999999999");
+    // const [age, setAge] = useState<number>(15);
+    // const [salary, setSalary] = useState<number>(20000);
+    // const [otherMoneyBenefits, setOtherMoneyBenefits] = useState<number>(5000);
+    // const [department, setDepartment] = useState<string>("Mathematics");
+    // const [assignedClasses, setAssignedClasses] = useState<number[]>([1,2,3,4,5]);
+    // const [studentClass, setStudentClass] = useState<number>(2);
+    // const [scholarshipAmount, setScholarshipAmount] = useState<number>(5000);
+    // const [studentScore, setStudentScore] = useState<number>(90);
+    // const [error, setError] = useState<string[]>([]);
 
-    const Router = useRouter();
 
-    const roles = ["head_master", "teacher", "student"];
+    // const roles = ["head_master", "teacher", "student"];
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    //     e.preventDefault();
 
-        if(password !== password_confirmation) {
-            setPassword('');
-            setPasswordConfirmation('');
-            alert("Passwords do not match");
-            return;
-        }
-        let body : any = { name, username, email, password, password_confirmation, role, phone, age };
+    //     if(password !== password_confirmation) {
+    //         setPassword('');
+    //         setPasswordConfirmation('');
+    //         alert("Passwords do not match");
+    //         return;
+    //     }
+    //     let body : any = { name, username, email, password, password_confirmation, role, phone, age };
 
-        if(role === 'head_master' || role === 'teacher') {
-            body['salary'] = salary;
-            body['otherMoneyBenefits'] = otherMoneyBenefits;
-            body['department'] = department;
-            body['assignedClasses'] = assignedClasses;
-        } else if(role === 'student') {
-            body['class'] = studentClass;
-            body['scholarshipAmount'] = scholarshipAmount;
-            body['score'] = studentScore;
-        }
+    //     if(role === 'head_master' || role === 'teacher') {
+    //         body['salary'] = salary;
+    //         body['otherMoneyBenefits'] = otherMoneyBenefits;
+    //         body['department'] = department;
+    //         body['assignedClasses'] = assignedClasses;
+    //     } else if(role === 'student') {
+    //         body['class'] = studentClass;
+    //         body['scholarshipAmount'] = scholarshipAmount;
+    //         body['score'] = studentScore;
+    //     }
         
-        const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, body);
-        const data = response.data;
-        console.log(data);
-        if(data.status !== "success") {
-            setError(data.message);
-        }
+    //     const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, body);
+    //     const data = response.data;
+    //     console.log(data);
+    //     if(data.status !== "success") {
+    //         setError(data.message);
+    //     }
         
 
-    };
+    // };
+
+    // if(error)return <div>Something went wrong</div>
   return (
     <div>
-        <form className="" onSubmit={(e) => {handleSubmit(e)}}>
+        {/* <form className="" onSubmit={(e) => {handleSubmit(e)}}>
             <input
             type="text"
             value={name}
@@ -189,7 +189,8 @@ export default function Register() {
                 )
             }
             <button type="submit">Register</button>
-        </form>
+        </form> */}
+        not completed yet
     </div>
   );
 };
