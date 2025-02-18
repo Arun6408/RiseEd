@@ -12,7 +12,6 @@ const ebooksRouter = require("./routes/ebooksRoutes");
 const messageRouter = require("./routes/messageRouter");
 const { initWebSocket } = require("./controllers/webSocketController");
 const { connectDb } = require("./db/connectDb");
-const errorHandler = require("./errorHandlers/errorHandler");
 const homeworkRouter = require("./routes/homeworkRoutes");
 const salariesRouter = require("./routes/salariesRoutes");
 const videoRouter = require("./routes/videoRoutes");
