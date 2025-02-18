@@ -79,7 +79,8 @@ export const ModalBody = ({
 
   const modalRef = useRef(null);
   const { setOpen } = useModal();
-  useOutsideClick(modalRef, () => setOpen(false));
+  //@ts-ignore
+  if(modalRef)useOutsideClick(modalRef, () => setOpen(false));
 
   return (
     <AnimatePresence>

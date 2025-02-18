@@ -14,6 +14,7 @@ import { Message, UserMessage } from "@/types";
 import EmojiPicker from "emoji-picker-react";
 import Loader from "@/components/utils/Loader";
 import StudentLayout from "../StudentLayout";
+import Image from "next/image";
 
 const Page = () => {
   const [messages, setMessages] = useState<Message[]>([]);

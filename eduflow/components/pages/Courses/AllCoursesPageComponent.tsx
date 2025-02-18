@@ -136,7 +136,7 @@ const AllCoursesPageComponent = () => {
         <div className="absolute bottom-0 right-0 w-48 h-48 bg-teal-200 opacity-30 rounded-full blur-3xl animate-pulse"></div>
 
         <h3 className="text-3xl font-extrabold text-white mb-4">
-          You're all set! Let's get learning.
+          You&apos;re all set! Let&apos;s get learning.
         </h3>
         <p className="text-teal-100 mb-6 text-lg leading-relaxed max-w-xl mx-auto">
           Explore the courses we offer and

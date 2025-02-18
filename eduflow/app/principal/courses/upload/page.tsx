@@ -65,7 +65,7 @@ const Page = () => {
       }
     };
     fetchTopics();
-  }, [selectedChapterId]);
+  }, [selectedCourseId,selectedChapterId]);
 
   return (
     <div className="w-screen h-screen bg-gray-200 flex items-center justify-evenly">

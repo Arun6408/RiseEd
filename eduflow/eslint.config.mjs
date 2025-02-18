@@ -16,6 +16,7 @@ const eslintConfig = [
       "@typescript-eslint/no-explicit-any": "off", // Disables 'any' rule
       "@typescript-eslint/no-unused-vars": "off", // Disables unused variables rule
       "@typescript-eslint/ban-ts-comment": "off", // Disables restriction on @ts-ignore
+      "@typescript-eslint/no-unsafe-function-type": "off", // Disables the rule for unsafe function types
     },
   },
 ];
