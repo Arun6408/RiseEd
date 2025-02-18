@@ -6,7 +6,6 @@ import * as cookie from "cookie";
 import styles from "./login.module.css";
 import { FaEyeSlash } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
-import { error } from "console";
 import Loader from "@/components/utils/Loader";
 
 export default function Login() {

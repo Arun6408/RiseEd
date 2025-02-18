@@ -35,8 +35,8 @@ export default function Home() {
           </div>
         </h2>
         <div className="">
-          <button className="bg-gradient-to-tr from-violet-600  via-blue-600 to-sky-500 hover:bg-gradient-to-bl w-52 text-center h-12 rounded-lg text-white font-semibold text-lg m-5">Get Started</button>
-          <button className="bg-transparent w-52 text-center h-12 rounded-lg text-gray-600 outline outline-1 outline-slate-400 hover:outline-none hover:bg-gray-400 hover:text-white transition-all ease-in-out duration-300 font-semibold text-lg m-5">Know Us More</button>
+          <button className="bg-gradient-to-tr from-violet-600  via-blue-600 to-sky-500 hover:bg-gradient-to-bl w-52 text-center h-12 rounded-lg text-white font-semibold text-lg m-5" onClick={handleLoginClick}>Get Started</button>
+          <button className="bg-transparent w-52 text-center h-12 rounded-lg text-gray-600 outline outline-1 outline-slate-400 hover:outline-none hover:bg-gray-400 hover:text-white transition-all ease-in-out duration-300 font-semibold text-lg m-5" onClick={handleLoginClick}>Know Us More</button>
         </div>
       </BackgroundBeamsWithCollision>
     </div>
