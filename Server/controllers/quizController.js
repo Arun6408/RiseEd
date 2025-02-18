@@ -1,5 +1,4 @@
 const { getDb } = require("../db/connectDb");
-const CustomError = require("../errorHandlers/CustomError");
 
 // Create a new quiz
 const createQuiz = async (req, res) => {
