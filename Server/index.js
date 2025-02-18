@@ -38,7 +38,6 @@ app.use("/api/salaries", salariesRouter);
 app.use('/api/videos', videoRouter);
 app.use('/api/teacher', teacherRouter);
 
-app.use(errorHandler);
 
 
 const port = process.env.PORT || 5000;

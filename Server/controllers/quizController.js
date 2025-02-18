@@ -53,7 +53,7 @@ const createQuiz = async (req, res) => {
               `Error inserting question for quiz ${quizId}:`,
               err.message
             );
-            throw new CustomError(err.message, 500);
+            return res.status(500).json({status:"failed", message: err.message});
           }
         }
       );
