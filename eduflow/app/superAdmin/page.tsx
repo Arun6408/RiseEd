@@ -4,6 +4,7 @@ import axios from "axios";
 import { setToken } from "@/utils/util";
 import * as cookie from "cookie";
 import { useRouter } from "next/navigation";
+import Loader from "@/components/utils/Loader";
 
 interface User {
   id: number;
@@ -75,9 +76,7 @@ const SuperAdmin = () => {
       <div
         className={`flex flex-col justify-start bg-white shadow-xl p-4 w-full rounded-xl h-full`}
       >
-        {loading ? (
-          <p>Loading...</p>
-        ) : (
+        {loading ? <Loader/> : (
           <div className="p-2 overflow-x-clip overflow-y-scroll">
             <div className="flex gap-2 flex-col my-2">
               <p className="text-xl font-semibold">Login As:</p>

@@ -6,15 +6,19 @@ import * as cookie from "cookie";
 import styles from "./login.module.css";
 import { FaEyeSlash } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
+import { error } from "console";
+import Loader from "@/components/utils/Loader";
 
 export default function Login() {
   const Router = useRouter();
   const [email, setEmail] = useState("superadmin@example.com");
   const [password, setPassword] = useState("admin123");
   const [showPassword, setShowPassword] = useState(false); // State for toggling password visibility
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
@@ -44,7 +48,9 @@ export default function Login() {
     } catch (error) {
       console.error("Login failed:", error);
     }
+    setLoading(false);
   };
+  if(loading) return <Loader/>
 
   return (
     <div
