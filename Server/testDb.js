@@ -8,7 +8,7 @@ const query = `
 
 const populate = async () => {
     await connectDb();  // Ensure the connection is established first
-    const db = getDb(); // Get the connected database client
+    const db = await getDb(); // Get the connected database client
     try {
         await db.query(query,async (err,res)=>{
             if(err) console.log(err);

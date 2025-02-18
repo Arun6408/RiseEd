@@ -3,7 +3,7 @@ const { getUserId } = require("./utilController");
 
 const teacherDashboardInfo = async (req, res) => {
   try {
-    const db = getDb();
+    const db = await getDb();
     const userId = getUserId(req);
 
     const queries = [

@@ -3,7 +3,7 @@ const { getDb } = require("../db/connectDb");
 const { restrictUsers, allowUsers } = require("./utilController");
 const login = async (req, res) => {
   try {
-    const db = getDb();
+    const db = await getDb();
     const { username, email, password } = req.body;
 
     const query = `SELECT * FROM allusers WHERE (username = $1 OR email = $2) AND password = $3`;

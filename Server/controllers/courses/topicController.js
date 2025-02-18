@@ -59,7 +59,6 @@ const createTopic = async (req, res) => {
     questionAndAnswers,
   } = req.body;
 
-
   const role = req.user.role;
   restrictUsers(res, ["student", "parent"], role, "to create a new topic");
 

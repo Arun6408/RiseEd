@@ -16,7 +16,7 @@ const getAllEbooks = async (req, res) => {
       JOIN AllUsers a ON e.createdByUserId = a.id
     `;
 
-    const db = getDb();
+    const db = await get;
     const result = await db.query(query);
 
     // Manually map keys to camelCase
@@ -57,7 +57,7 @@ const createEbook = async (req, res) => {
             INSERT INTO ebooks (title, createdByUserId, description, genre, fileUrl) 
             VALUES ($1, $2, $3, $4, $5)`;
 
-    const db = getDb();
+    const db = await get;
     const userId = req.user.userId;
     await db.query(
       query,
@@ -85,7 +85,7 @@ const getEbookById = async (req, res) => {
 
     const query =
       "SELECT e.id,title,description,genre,fileUrl,uploadDate,a.name FROM ebooks e join AllUsers a on e.createdByUserId = a.id where e.id = $1 ";
-    const db = getDb();
+    const db = await get;
     await db.query(query, [id], (err, result) => {
       if (err) {
         return res.status(500).json({ status: "failed", message: err.message });
@@ -130,7 +130,7 @@ const deleteEbook = async (req, res) => {
     );
 
     const query = "DELETE FROM ebooks WHERE id = $1";
-    const db = await getDb(); 
+    const db = await await get; 
 
     const result = await db.query(query, [id]); 
 

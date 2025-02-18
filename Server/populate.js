@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS Courses (
     content TEXT,
     department VARCHAR(30) NOT NULL,
     userId INT NOT NULL,
-    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (userId) REFERENCES AllUsers(id) ON DELETE CASCADE
 );
 
@@ -108,7 +108,7 @@ CREATE TABLE IF NOT EXISTS Chapters (
     description TEXT NOT NULL,
     content TEXT,
     courseId INT NOT NULL,
-    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (courseId) REFERENCES Courses(courseId) ON DELETE CASCADE
 );
 
@@ -123,7 +123,7 @@ CREATE TABLE IF NOT EXISTS Topics (
     pdfUrl VARCHAR(255),
     questionAndAnswers TEXT,
     chapterId INT NOT NULL,
-    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (chapterId) REFERENCES Chapters(chapterId) ON DELETE CASCADE,
     FOREIGN KEY (videoId) REFERENCES Videos(videoId)
 );
@@ -978,11 +978,12 @@ INSERT INTO SchoolEvents (conductedBy, title, description, eventType, startDate,
 (2, 'Career Guidance Seminar', 'Session on career opportunities for students.', 'Seminar', DATE('2025-09-25'), DATE('2025-09-25')); -- Upcoming
 
 
+
 `;
 
 const populate = async () => {
     await connectDb();
-    const db = getDb();
+    const db = await getDb();
     try {
         await db.query(query);
         console.log("Database created successfully");
