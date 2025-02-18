@@ -8,18 +8,18 @@ export default function ChaptersPage({
   params: Promise<{ courseId: string; chapterId: string }>;
 }) {
   const [chapters, setChapters] = useState<any>(null);
-  const [courseId, setCourseId] = useState<string | null>(null);
-  const [chapterId, setChapterId] = useState<string | null>(null);
+  const [courseId, setCourseId] = useState<number | null>(null);
+  const [chapterId, setChapterId] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchParamsAndChapters = async () => {
       const resolvedParams = await paramsPromise; // Unwrap the params Promise
-      setCourseId(resolvedParams.courseId);
-      setChapterId(resolvedParams.chapterId);
+      setCourseId(Number(resolvedParams.courseId));
+      setChapterId(Number(resolvedParams.chapterId));
 
       const fetchedChapters = await getChapters({
-        courseId: resolvedParams.courseId,
-        chapterId: resolvedParams.chapterId,
+        courseId: Number(resolvedParams.courseId),
+        chapterId: Number(resolvedParams.chapterId),
       });
       setChapters(fetchedChapters);
     };

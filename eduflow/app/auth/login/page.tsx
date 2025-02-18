@@ -7,7 +7,7 @@ import styles from "./login.module.css";
 import { FaEyeSlash } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
 
-const Login = () => {
+export default function Login() {
   const Router = useRouter();
   const [email, setEmail] = useState("superadmin@example.com");
   const [password, setPassword] = useState("admin123");
@@ -100,5 +100,3 @@ const Login = () => {
     </div>
   );
 };
-
-export default Login;

@@ -3,7 +3,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-const register = () => {
+export default function Register() {
     // Define types for the states
     const [name, setName] = useState<string>("Arun");
     const [username, setUsername] = useState<string>("student22");
@@ -194,4 +194,3 @@ const register = () => {
   );
 };
 
-export default register;
