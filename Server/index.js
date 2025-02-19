@@ -22,7 +22,17 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+
+
+// CORS Configuration
+const corsOptions = {
+  origin: process.env.FRONTEND_URL, // Allow only your frontend URL
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Allowed HTTP methods
+  credentials: true, // Allow cookies and credentials
+  optionsSuccessStatus: 204, // No content for preflight requests
+};
+
+app.use(cors(corsOptions)); // Use CORS with the specified options
 
 
 
