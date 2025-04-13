@@ -2025,3 +2025,29 @@ Error: bind EADDRINUSE null:5000
 2025-04-13T17:58:26: Database connected
 2025-04-13T17:58:26: WebSocket server initialized
 2025-04-13T17:58:26: Server started on port 5000 (production)
+2025-04-13T18:05:12: {
+  name: 'Suresh Kumar',
+  userId: 3,
+  username: 'headMaster',
+  role: 'headMaster'
+}
+2025-04-13T18:05:20: {
+  name: 'Suresh Kumar',
+  userId: 3,
+  username: 'headMaster',
+  role: 'headMaster'
+}
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (node:_http_outgoing:699:11)
+    at ServerResponse.header (D:\Full Stack\Ultimate Course App\Server\node_modules\express\lib\response.js:794:10)
+    at ServerResponse.send (D:\Full Stack\Ultimate Course App\Server\node_modules\express\lib\response.js:174:12)
+    at ServerResponse.json (D:\Full Stack\Ultimate Course App\Server\node_modules\express\lib\response.js:278:15)
+    at Query.<anonymous> (D:\Full Stack\Ultimate Course App\Server\controllers\loginController.js:247:28)
+    at Query.handleReadyForQuery (D:\Full Stack\Ultimate Course App\Server\node_modules\pg\lib\query.js:142:14)
+    at Client._handleReadyForQuery (D:\Full Stack\Ultimate Course App\Server\node_modules\pg\lib\client.js:311:19)
+    at Connection.emit (node:events:524:28)
+    at D:\Full Stack\Ultimate Course App\Server\node_modules\pg\lib\connection.js:116:12
+    at Parser.parse (D:\Full Stack\Ultimate Course App\Server\node_modules\pg-protocol\dist\parser.js:36:17)
+2025-04-13T18:05:25: Database connected
+2025-04-13T18:05:25: WebSocket server initialized
+2025-04-13T18:05:25: Server started on port 5000 (production)

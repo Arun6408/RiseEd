@@ -46,7 +46,7 @@ export function middleware(req: NextRequest): NextResponse {
     return NextResponse.next();
   }
 
-  if (role === "headmaster" && pathname.startsWith("/headMaster")) {
+  if (role === "headMaster" && pathname.startsWith("/headMaster")) {
     return NextResponse.next();
   }
 

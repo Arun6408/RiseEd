@@ -225,3 +225,18 @@
 2025-04-13T17:58:26: Database connected
 2025-04-13T17:58:26: WebSocket server initialized
 2025-04-13T17:58:26: Server started on port 5000 (production)
+2025-04-13T18:05:12: {
+  name: 'Suresh Kumar',
+  userId: 3,
+  username: 'headMaster',
+  role: 'headMaster'
+}
+2025-04-13T18:05:20: {
+  name: 'Suresh Kumar',
+  userId: 3,
+  username: 'headMaster',
+  role: 'headMaster'
+}
+2025-04-13T18:05:25: Database connected
+2025-04-13T18:05:25: WebSocket server initialized
+2025-04-13T18:05:25: Server started on port 5000 (production)
