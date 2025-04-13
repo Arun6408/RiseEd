@@ -1,24 +1,18 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {
-  convertCamelToName,
-  formatCustomDate,
-  getUserId,
-  handleUpload,
-  setToken,
-} from "@/utils/util";
+import { getUserId, handleUpload, setToken } from "@/utils/util";
 import UserLogo from "@/components/utils/UserLogo";
 import useWebSocket from "@/components/hooks/websocket";
 import { Message, UserMessage } from "@/types";
 import EmojiPicker from "emoji-picker-react";
 import Loader from "@/components/utils/Loader";
 import StudentLayout from "../StudentLayout";
-import Image from "next/image";
 
 const Page = () => {
+  const [isChatOpen, setIsChatOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
-  const [filteredMessages,setFilteredMessages]= useState<Message[]>([]);;
+  const [filteredMessages, setFilteredMessages] = useState<Message[]>([]);
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
   const [selectedUserName, setSelectedUserName] = useState<string | null>(null);
   const [userMessages, setUserMessages] = useState<UserMessage[]>([]);
@@ -64,7 +58,6 @@ const Page = () => {
         })
       );
       setMessages([...receivedMessages, ...remainingUsersMessages]);
-
     } catch (error) {
       console.error("Error fetching messages:", error);
     }
@@ -73,6 +66,7 @@ const Page = () => {
   const handleUserSelect = (message: Message) => {
     setSelectedUserId(message.otherUserId);
     setSelectedUserName(message.name);
+    setIsChatOpen(true);
   };
 
   const fetchUserMessages = async () => {
@@ -98,15 +92,18 @@ const Page = () => {
         minute: "2-digit",
         hour12: true,
       }).format(new Date());
-      
+
       createdAt = createdAt
         .replace(",", "")
         .replace(/\//g, "/")
-        .replace(/(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}) (\w{2})/, "$1/$2/$3 $4:$5 $6")
-        .toUpperCase();  // This will convert AM/PM to uppercase
-      
+        .replace(
+          /(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}) (\w{2})/,
+          "$1/$2/$3 $4:$5 $6"
+        )
+        .toUpperCase(); // This will convert AM/PM to uppercase
+
       console.log(createdAt);
-      
+
       if (selectedFiles.length > 0) {
         selectedFiles.map(async (file) => {
           const url = await handleUpload(file, file.type);
@@ -175,18 +172,27 @@ const Page = () => {
 
   useEffect(() => {
     if (searchUserInput) {
-      setFilteredMessages(messages.filter(
-        (message) =>
-          message.name.toLowerCase().includes(searchUserInput.toLowerCase()) ||
-          message.role?.toLowerCase().includes(searchUserInput.toLowerCase()) ||
-          message.message?.toLowerCase().includes(searchUserInput.toLowerCase())
-      ));
-    }
-    else {
+      setFilteredMessages(
+        messages.filter(
+          (message) =>
+            message.name
+              .toLowerCase()
+              .includes(searchUserInput.toLowerCase()) ||
+            message.role
+              ?.toLowerCase()
+              .includes(searchUserInput.toLowerCase()) ||
+            message.message
+              ?.toLowerCase()
+              .includes(searchUserInput.toLowerCase())
+        )
+      );
+    } else {
       setFilteredMessages(messages);
     }
   }, [searchUserInput]);
-  useEffect(() => { setFilteredMessages(messages)},[messages]);
+  useEffect(() => {
+    setFilteredMessages(messages);
+  }, [messages]);
 
   return (
     <div>
@@ -194,7 +200,10 @@ const Page = () => {
       <StudentLayout activeLink="/student/doubts">
         <div className="flex h-full bg-gradient-to-br from-teal-100 via-teal-50 to-teal-200">
           {/* Left Sidebar */}
-          <div className="w-1/3 bg-gradient-to-b from-teal-700 to-teal-900 text-white p-6 shadow-lg rounded-tr-lg h-full flex flex-col">
+          <div
+            className={`bg-gradient-to-b from-teal-700 to-teal-900 text-white p-6 shadow-lg rounded-tr-lg h-full flex flex-col 
+      ${selectedUserId ? "hidden md:flex md:w-1/3" : "w-full md:w-1/3"}`}
+          >
             <h2 className="text-2xl h-fit font-semibold mb-6">Users</h2>
 
             {/* Search Input */}
@@ -215,7 +224,7 @@ const Page = () => {
             </div>
 
             {/* Messages List */}
-            <div className="w-full max-h-fit overflow-x-clip overflow-y-scroll">
+            <div className="w-full max-h-fit overflow-x-clip overflow-y-scroll scrollbar-thin scrollbar-thumb-teal-600 scrollbar-track-teal-900 scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
               {filteredMessages.length > 0 ? (
                 <ul className="space-y-4">
                   {filteredMessages.map((message, index) => {
@@ -226,12 +235,15 @@ const Page = () => {
                         : message.viewStatus === "Delivered"
                         ? "/icons/delivered.png"
                         : null;
-                    const isNew = message.type == 'sender' && message.viewStatus === 'Delivered' && message.otherUserId !== selectedUserId;
+                    const isNew =
+                      message.type == "sender" &&
+                      message.viewStatus === "Delivered" &&
+                      message.otherUserId !== selectedUserId;
                     return (
                       <li
                         key={index}
                         onClick={() => handleUserSelect(message)}
-                        className={`p-4 rounded-xl cursor-pointer flex items-center gap-4 transition-transform transform hover:scale-105 shadow ${
+                        className={`p-4 rounded-xl w-full cursor-pointer flex items-center gap-4 transition-transform transform hover:scale-105 shadow ${
                           isSelected
                             ? "bg-teal-600"
                             : "bg-teal-800 hover:bg-teal-700"
@@ -241,7 +253,7 @@ const Page = () => {
                           name={message.name || "User"}
                           className="bg-white text-teal-800"
                         />
-                        <div className="flex-1 min-w-0">
+                        <div className="min-w-0 flex flex-col">
                           <p className="truncate font-semibold">
                             {message.name}
                           </p>
@@ -264,8 +276,7 @@ const Page = () => {
                           )}
                         </div>
                         {isNew && (
-                          <div className="absolute top-50 right-5 w-5 h-5 bg-teal-400 rounded-full flex items-center justify-center text-white">
-                          </div>
+                          <div className="absolute top-50 right-5 w-5 h-5 bg-teal-400 rounded-full flex items-center justify-center text-white"></div>
                         )}
                       </li>
                     );
@@ -277,13 +288,27 @@ const Page = () => {
             </div>
           </div>
 
-          {/* Right Sidebar */}
-          <div className="w-2/3 flex flex-col p-4">
+          {/* Chat box */}
+          <div
+            className={`flex flex-col p-4 h-full w-full
+            ${selectedUserId ? "block md:w-2/3" : "hidden md:flex md:w-2/3"}`}
+          >
+            {/* Right Sidebar */}
             <div className="border-b border-teal-300 pb-6 mb-6">
               <h2 className="text-3xl font-bold text-teal-800">
                 {selectedUserId ? (
                   <div className="flex justify-between">
                     <div className="flex gap-4 items-center">
+                      <button
+                        className="md:hidden text-teal-600 font-bold"
+                        onClick={() => {
+                          setIsChatOpen(false);
+                          setSelectedUserId(null);
+                        }}
+                      >
+                        ←
+                      </button>
+
                       <UserLogo
                         name={selectedUserName || ""}
                         className="w-10 h-10 bg-white text-teal-800"
@@ -308,39 +333,47 @@ const Page = () => {
               {selectedUserId ? (
                 <div className="flex flex-col gap-2 h-full">
                   <div className="flex flex-col gap-0.5 h-full overflow-y-scroll my-1">
-                    {userMessages.map((msg, index) => (
-                      <div
-                        key={index}
-                        className={`max-w-lg px-6 py-4 rounded-xl flex flex-col shadow-lg backdrop-blur-lg ${
-                          msg.senderId === selectedUserId
-                            ? "bg-teal-100 text-teal-900 self-start"
-                            : " bg-teal-500 text-white self-end"
-                        }`}
-                      >
-                        <p>{msg.message}</p>
-                        {msg.fileType !== "Message" && msg.fileUrl && (
-                          <a
-                            target="_blank"
-                            href={msg.fileUrl}
-                            className="px-3 py-1 bg-blue-500 hover:bg-blue-600 rounded-lg text-white"
-                          >
-                            Open File
-                          </a>
-                        )}
-                        <p className="text-xs text-right mt-2 flex">
-                          {msg.createdAt}
-                          <img
-                            src={
-                              msg.viewStatus === "Seen"
-                                ? "/icons/seen.png"
-                                : "/icons/delivered.png"
-                            }
-                            className="w-5 aspect-square"
-                            alt="icon"
-                          />
+                    {userMessages.length > 0 ? (
+                      userMessages.map((msg, index) => (
+                        <div
+                          key={index}
+                          className={`max-w-lg px-6 py-4 rounded-xl flex flex-col shadow-lg backdrop-blur-lg ${
+                            msg.senderId === selectedUserId
+                              ? "bg-teal-100 text-teal-900 self-start"
+                              : " bg-teal-500 text-white self-end"
+                          }`}
+                        >
+                          <p>{msg.message}</p>
+                          {msg.fileType !== "Message" && msg.fileUrl && (
+                            <a
+                              target="_blank"
+                              href={msg.fileUrl}
+                              className="px-3 py-1 bg-blue-500 hover:bg-blue-600 rounded-lg text-white"
+                            >
+                              Open File
+                            </a>
+                          )}
+                          <p className="text-xs text-right mt-2 flex">
+                            {msg.createdAt}
+                            <img
+                              src={
+                                msg.viewStatus === "Seen"
+                                  ? "/icons/seen.png"
+                                  : "/icons/delivered.png"
+                              }
+                              className="w-5 aspect-square"
+                              alt="icon"
+                            />
+                          </p>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="flex items-center justify-center h-full">
+                        <p className="text-center text-teal-500">
+                          Let&apos;s start a chat...
                         </p>
                       </div>
-                    ))}
+                    )}
                   </div>
                   <form onSubmit={(e) => e.preventDefault()}>
                     <div className="flex justify-end gap-4 h-full p-2">

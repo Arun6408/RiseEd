@@ -1,8 +1,7 @@
 // components/TeacherLayout.tsx
 import React, { ReactNode } from "react";
-import SideNav from "@/components/Navbars/SideNav";
-import TopNav from "@/components/Navbars/TopNav";
 import { teacherNavLinks } from "@/constants";
+import Nav from "@/components/Navbars/Nav";
 
 interface TeacherLayoutProps {
   children: ReactNode;
@@ -22,20 +21,16 @@ const TeacherLayout: React.FC<TeacherLayoutProps> = ({
 
   return (
       <div className="w-full h-screen flex">
-        <div>
-          <SideNav
+          <Nav
             links={teacherNavLinks}
             activeLink={activeLink} 
             score={teacherScore}
-          />
-        </div>
+            >
         <div className="flex-1 flex flex-col">
-          <div className="h-16">
-            <TopNav />
-          </div>
           <div className="flex-1 bg-gray-100 overflow-y-scroll">{children}</div>
         </div>
-      </div>
+      </Nav>
+    </div>
   );
 };
 

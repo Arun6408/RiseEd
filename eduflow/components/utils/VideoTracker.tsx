@@ -1,65 +1,21 @@
-import { setToken } from "@/utils/util";
-import axios from "axios";
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 
 export default function VideoTracker({
   videoUrl,
   children,
   topicId,
-  videoId
+  videoId,
+  onVideoEnd
 }: {
   videoUrl: string;
   children: React.ReactNode;
   topicId: number | null;
   videoId: number | null;
+  onVideoEnd?: () => void;
 }) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const [watchTime, setWatchTime] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [lastPlaybackPosition, setLastPlaybackPosition] = useState(0);
-  const [lastSentMinute, setLastSentMinute] = useState(-1); // Track last sent minute
-
-  useEffect(() => {
-    let interval: NodeJS.Timeout | null = null;
-
-    if (isPlaying) {
-      interval = setInterval(() => {
-        setWatchTime((prev) => {
-          const newWatchTime = prev + 1;
-
-          if (newWatchTime % 60 === 0) {
-            sendWatchTime(false); // Send update every 60 seconds
-          }
-
-          return newWatchTime;
-        });
-      }, 1000);
-    } else if (interval) {
-      clearInterval(interval);
-    }
-
-    return () => {
-      if (interval) clearInterval(interval);
-    };
-  }, [isPlaying]);
-
-  const sendWatchTime = async (isPaused: boolean) => {
-    const currentMinute = Math.floor(watchTime / 60);
-    
-    if (isPaused || currentMinute > lastSentMinute) { 
-      try {
-        setToken();
-        await axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/videos/updateWatchStatus`, {
-          videoId,
-          watchTime,
-          lastPlaybackPosition,
-        });
-        setLastSentMinute(currentMinute);
-      } catch (error) {
-        console.error("Error sending watch time: ", error);
-      }
-    }
-  };
 
   const handlePlay = () => {
     setIsPlaying(true);
@@ -73,16 +29,14 @@ export default function VideoTracker({
     if (videoRef.current) {
       setLastPlaybackPosition(Math.floor(videoRef.current.currentTime));
     }
-    sendWatchTime(true);
   };
 
-  useEffect(() => {
-    window.addEventListener("beforeunload", () => sendWatchTime(true));
-    return () => {
-      sendWatchTime(true);
-      window.removeEventListener("beforeunload", () => sendWatchTime(true));
-    };
-  }, []);
+  const handleVideoEnd = () => {
+    handlePauseOrExit();
+    if (onVideoEnd) {
+      onVideoEnd();
+    }
+  };
 
   return (
     <div>
@@ -94,7 +48,7 @@ export default function VideoTracker({
         autoPlay={true}
         onPlay={handlePlay}
         onPause={handlePauseOrExit}
-        onEnded={handlePauseOrExit}
+        onEnded={handleVideoEnd}
       >
         {children}
       </video>

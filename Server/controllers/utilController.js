@@ -17,6 +17,19 @@ const allowUsers = (res,allowingRoles,currRole,message) => {
   }
 }
 
+const update_student_zcoins = async (userId) => {
+  const db = await getDb();
+  const result = await db.query(
+    `UPDATE students SET currentZCoins = 
+      (SELECT (TopicEarnings + HomeworkEarnings + quizEarnings - coursebought - quizzesBought) 
+       FROM student_zcoin_summary WHERE userId = $1) 
+    WHERE userId = $1
+    RETURNING currentZCoins as zcoins`, 
+    [userId]
+  );
+  return result.rows[0]?.zcoins;
+}
+
 const getUserId = (req) => {
   return req.user.userId;
 }
@@ -27,4 +40,5 @@ module.exports = {
   restrictUsers,
   allowUsers,
   getUserId,
+  update_student_zcoins,
 };

@@ -1,11 +1,10 @@
-
-
-import React from 'react'
+import React from "react";
+import PrincipalLayout from "./PrincipalLayout";
 
 const page = () => {
   return (
-    <div>Principal page</div>
-  )
-}
+    <PrincipalLayout activeLink="/principal">Principal page</PrincipalLayout>
+  );
+};
 
-export default page
+export default page;

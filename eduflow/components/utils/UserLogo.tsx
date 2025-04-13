@@ -9,7 +9,8 @@ const UserLogo = ({ name , className}: { name: string; className:string ; }) => 
     .slice(0, 2);
 
   return (
-    <div
+    initials.length > 0 ? (
+      <div
       className={`flex items-center justify-center h-12 w-12 rounded-full shadow-md ${className} `}
       style={{ backgroundColor: color || '#FF8C00' }} 
     >
@@ -17,6 +18,7 @@ const UserLogo = ({ name , className}: { name: string; className:string ; }) => 
         {initials}
       </span>
     </div>
+    ) : null
   );
 };
 

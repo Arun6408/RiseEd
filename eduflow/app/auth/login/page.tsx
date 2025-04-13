@@ -41,7 +41,7 @@ export default function Login() {
       const role = data.user.role;
       if (role === "superAdmin") Router.push("/superAdmin");
       else if (role === "principal") Router.push("/principal");
-      else if (role === "headMaster") Router.push("/head_master");
+      else if (role === "headMaster") Router.push("/headMaster");
       else if (role === "teacher") Router.push("/teacher");
       else if (role === "student") Router.push("/student");
     } catch (error) {

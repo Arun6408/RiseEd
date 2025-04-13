@@ -63,3 +63,40 @@ export type Topic = {
   pdfUrl: string | null;
   questions: { question: string; answer: string }[];
 };
+
+export type RegisterUser = {
+  name: string;
+  username: string;
+  email: string;
+  password: string;
+  passwordConfirmation: string;
+  role: string;
+  phone: number | null;
+  age: number | null;
+
+  subject: string;
+  assignedClasses: string[];
+  basicSalary: number | null;
+  rentAllowance: number | null;
+  foodAllowance: number | null;
+  travelAllowance: number | null;
+  otherAllowance: number | null;
+
+  taxDeduction: number | null;
+  providentFund: number | null;
+  otherDeductions: number | null;
+
+  class: number | null;
+  scholarshipAmount: number | null;
+  score: number | null;
+
+  parentName: string;
+  parentUsername: string;
+  parentPassword: string;
+  parentPasswordConfirmation: string;
+  parentAge: number | null;
+  parentPhoneNumber: number | null;
+  parentEmail: string;
+  totalFeeAmount: number | null;
+  feePaid: number | null;
+};

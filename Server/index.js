@@ -14,27 +14,38 @@ const { initWebSocket } = require("./controllers/webSocketController");
 const { connectDb } = require("./db/connectDb");
 const homeworkRouter = require("./routes/homeworkRoutes");
 const salariesRouter = require("./routes/salariesRoutes");
-const videoRouter = require("./routes/videoRoutes");
 const teacherRouter = require("./routes/teacherRoutes");
+const studentRoutes = require("./routes/studentRoutes");
 
 const app = express();
 
+// Global error handler
+process.on('uncaughtException', (err) => {
+  console.error('Fatal Error:', err.message);
+  if (process.env.NODE_ENV === 'production') {
+    process.exit(1);
+  }
+});
+
+process.on('unhandledRejection', (reason) => {
+  console.error('Unhandled Promise Rejection:', reason);
+  if (process.env.NODE_ENV === 'production') {
+    process.exit(1);
+  }
+});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
 // CORS Configuration
 const corsOptions = {
-  origin: process.env.FRONTEND_URL, // Allow only your frontend URL
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Allowed HTTP methods
-  credentials: true, // Allow cookies and credentials
-  optionsSuccessStatus: 204, // No content for preflight requests
+  origin: process.env.FRONTEND_URL,
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true,
+  optionsSuccessStatus: 204,
 };
 
-app.use(cors(corsOptions)); // Use CORS with the specified options
-
-
+app.use(cors(corsOptions));
 
 app.use("/api/auth", authRouter); 
 app.use(verifyToken); 
@@ -44,10 +55,8 @@ app.use("/api/ebooks", ebooksRouter);
 app.use("/api/messages", messageRouter);
 app.use("/api/homework", homeworkRouter);
 app.use("/api/salaries", salariesRouter);
-app.use('/api/videos', videoRouter);
 app.use('/api/teacher', teacherRouter);
-
-
+app.use("/api/student", studentRoutes); 
 
 const port = process.env.PORT || 5000;
 
@@ -55,12 +64,26 @@ const start = async () => {
   try {
     await connectDb(); 
     const server = app.listen(port, () => {
-      console.log(`Server is running on port ${port}`);
+      console.log(`Server started on port ${port} (${process.env.NODE_ENV || 'development'})`);
     });
 
-    initWebSocket(server); // Initialize WebSocket server
+    server.on('error', (error) => {
+      if (error.code === 'EADDRINUSE') {
+        console.error(`Port ${port} is already in use. Please choose a different port.`);
+      } else {
+        console.error('Server Error:', error.message);
+      }
+      if (process.env.NODE_ENV === 'production') {
+        process.exit(1);
+      }
+    });
+
+    initWebSocket(server);
   } catch (err) {
-    console.error("Error starting server:", err);
+    console.error("Startup Error:", err.message);
+    if (process.env.NODE_ENV === 'production') {
+      process.exit(1);
+    }
   }
 };
 

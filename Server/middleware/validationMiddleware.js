@@ -12,80 +12,45 @@ const validateSuperLogin = [
 ];
 
 const validateRegister = [
-  body("name").notEmpty().withMessage("Name is required"),
-  body("username").notEmpty().withMessage("Username is required"),
-  body("password").notEmpty().withMessage("Password is required"),
+  body("name").notEmpty().withMessage("Name is required").trim(),
+  body("username").notEmpty().withMessage("Username is required").trim(),
+  body("password").notEmpty().withMessage("Password is required").trim(),
   body("role")
     .notEmpty()
     .withMessage("Role is required")
-    .isIn([
-      "superAdmin",
-      "principal",
-      "headMaster",
-      "teacher",
-      "student",
-      "parent",
-    ])
+    .isIn(["superAdmin", "principal", "headMaster", "teacher", "student", "parent"])
     .withMessage("Invalid role"),
-  body("age")
-    .notEmpty()
-    .withMessage("Age is required")
-    .isInt()
-    .withMessage("Age must be a number"),
-  body("phone")
-    .notEmpty()
-    .withMessage("Phone is required")
-    .isMobilePhone()
-    .withMessage("Invalid phone number"),
-  body("email")
-    .notEmpty()
-    .withMessage("Email is required")
-    .isEmail()
-    .withMessage("Invalid email format"),
-
+  body("age").notEmpty().withMessage("Age is required").isInt().withMessage("Age must be a number"),
+  body("phone").notEmpty().withMessage("Phone is required").isMobilePhone().withMessage("Invalid phone number"),
+  body("email").notEmpty().withMessage("Email is required").isEmail().withMessage("Invalid email format").trim(),
+  
   // Role-specific validations
-  body("salary")
-    .if(body("role").isIn(["principal", "head_master", "teacher"]))
-    .notEmpty()
-    .withMessage("Salary is required")
-    .isNumeric()
-    .withMessage("Salary must be a number"),
-
-  body("department")
-    .if(body("role").isIn(["head_master", "teacher"]))
-    .notEmpty()
-    .withMessage("Department is required"),
-
-  body("assignedClasses")
-    .if(body("role").isIn(["head_master", "teacher"]))
-    .notEmpty()
-    .withMessage("Assigned classes are required"),
-
-  body("class")
-    .if(body("role").equals("student"))
-    .notEmpty()
-    .withMessage("Class is required"),
-
-  body("scholarshipAmount")
-    .if(body("role").equals("student"))
-    .notEmpty()
-    .withMessage("Scholarship amount is required")
-    .isNumeric()
-    .withMessage("Scholarship amount must be a number"),
-
-  body("score")
-    .if(body("role").equals("student"))
-    .notEmpty()
-    .withMessage("Score is required")
-    .isNumeric()
-    .withMessage("Score must be a number"),
-  body("schoolFee")
-    .if(body("role").equals("parent"))
-    .notEmpty()
-    .withMessage("School fee is required")
-    .isNumeric()
-    .withMessage("School fee must be a number"),
+  body("basicSalary").if(body("role").isIn(["principal", "headMaster", "teacher"])).notEmpty().withMessage("Salary is required").isNumeric(),
+  body("rentAllowance").if(body("role").isIn(["principal", "headMaster", "teacher"])).notEmpty().withMessage("Rent Allowance is required").isNumeric(),
+  body("foodAllowance").if(body("role").isIn(["principal", "headMaster", "teacher"])).notEmpty().withMessage("Food Allowance is required").isNumeric(),
+  body("travelAllowance").if(body("role").isIn(["principal", "headMaster", "teacher"])).notEmpty().withMessage("Travel Allowance is required").isNumeric(),
+  body("otherAllowance").if(body("role").isIn(["principal", "headMaster", "teacher"])).notEmpty().withMessage("Other Allowance is required").isNumeric(),
+  body("taxDeduction").if(body("role").isIn(["principal", "headMaster", "teacher"])).notEmpty().withMessage("Tax Deduction is required").isNumeric(),
+  body("providentFund").if(body("role").isIn(["principal", "headMaster", "teacher"])).notEmpty().withMessage("Provident Fund is required").isNumeric(),
+  body("otherDeductions").if(body("role").isIn(["principal", "headMaster", "teacher"])).notEmpty().withMessage("Other Deductions are required").isNumeric(),
+  body("subject").if(body("role").isIn(["headMaster", "teacher"])).notEmpty().withMessage("Subject is required"),
+  body("assignedClasses").if(body("role").isIn(["headMaster", "teacher"])).isArray().withMessage("Assigned classes must be an array"),
+  
+  body("class").if(body("role").isIn((value) => value === "student")).notEmpty().withMessage("Class is required"),
+  body("scholarshipAmount").if(body("role").custom((value) => value === "student")).notEmpty().withMessage("Scholarship amount is required").isNumeric(),
+  body("score").if(body("role").custom((value) => value === "student")).notEmpty().withMessage("Score is required").isNumeric(),
+  
+  body("parentName").if(body("role").isIn((value) => value === "student")).notEmpty().withMessage("Parent Name is required").trim(),
+  body("parentUsername").if(body("role").isIn((value) => value === "student")).notEmpty().withMessage("Parent Username is required").trim(),
+  body("parentPassword").if(body("role").isIn((value) => value === "student")).notEmpty().withMessage("Parent Password is required").trim(),
+  body("parentAge").if(body("role").isIn((value) => value === "student")).notEmpty().withMessage("Parent Age is required").isInt().withMessage("Parent Age must be a number"),
+  body("parentPhoneNumber").if(body("role").isIn((value) => value === "student")).notEmpty().withMessage("Parent Phone is required").isMobilePhone().withMessage("Invalid Parent phone number"),
+  body("parentEmail").if(body("role").isIn((value) => value === "student")).notEmpty().withMessage("Parent Email is required").isEmail().withMessage("Invalid Parent email format").trim(),
+  body("totalFeeAmount").if(body("role").isIn((value) => value === "student")).notEmpty().withMessage("Total Fee is required").isInt().withMessage("Total Fee must be a number"),
+  body("feePaid").if(body("role").isIn((value) => value === "student")).isInt().withMessage("Fee Paid must be a number"),
+  
 ];
+
 
 const validateCreateCourse = [
   body("title")

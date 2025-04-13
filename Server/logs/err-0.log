@@ -1,0 +1,1908 @@
+2025-04-13T17:51:09: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:51:09: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:51:12: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:51:12: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:51:16: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:51:16: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:51:19: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:51:19: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:51:22: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:51:22: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:51:27: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:51:27: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:51:31: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:51:31: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:51:34: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:51:34: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:51:37: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:51:37: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:51:41: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:51:41: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:51:44: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:51:44: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:51:48: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:51:48: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:51:51: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:51:51: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:51:55: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:51:55: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:51:58: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:51:58: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:52:01: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:52:01: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:52:05: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:52:05: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:52:08: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:52:08: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:52:11: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:52:11: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:52:15: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:52:15: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:52:18: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:52:18: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:54:42: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:54:42: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:54:47: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:54:47: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:54:56: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:54:56: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:55:05: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:55:05: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:55:09: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:55:09: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:55:14: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:55:14: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:55:18: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:55:18: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:55:22: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:55:22: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:55:25: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:55:25: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:55:29: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:55:29: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:55:33: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:55:33: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:55:37: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:55:37: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:55:40: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:55:40: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:55:44: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:55:44: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:55:48: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:55:48: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:55:51: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:55:51: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:55:55: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:55:55: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:55:58: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:55:58: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:56:02: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:56:02: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:56:05: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:56:05: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:56:09: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:56:09: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:56:12: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:56:12: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:56:15: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:56:15: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:56:19: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:56:19: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:56:22: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:56:22: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:56:26: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:56:26: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:56:29: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:56:29: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:56:33: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:56:33: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:56:36: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:56:36: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:56:40: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:56:40: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:56:43: Server error: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+2025-04-13T17:56:43: Uncaught Exception: Error: bind EADDRINUSE null:5000
+    at listenOnPrimaryHandle (node:net:1993:18)
+    at shared (node:internal/cluster/child:157:3)
+    at Worker.<anonymous> (node:internal/cluster/child:110:7)
+    at process.onInternalMessage (node:internal/cluster/utils:49:5)
+    at process.emit (node:events:536:35)
+    at emit (node:internal/child_process:949:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+  errno: -4091,
+  code: 'EADDRINUSE',
+  syscall: 'bind',
+  address: null,
+  port: 5000
+}
+2025-04-13T17:56:47: Server Error: bind EADDRINUSE null:5000
+2025-04-13T17:56:50: Server Error: bind EADDRINUSE null:5000
+2025-04-13T17:56:53: Server Error: bind EADDRINUSE null:5000
+2025-04-13T17:56:55: Server Error: bind EADDRINUSE null:5000
+2025-04-13T17:56:58: Server Error: bind EADDRINUSE null:5000
+2025-04-13T17:57:08: Server Error: bind EADDRINUSE null:5000
+2025-04-13T17:57:10: Server Error: bind EADDRINUSE null:5000
+2025-04-13T17:57:13: Server Error: bind EADDRINUSE null:5000
+2025-04-13T17:57:15: Server Error: bind EADDRINUSE null:5000
+2025-04-13T17:57:17: Server Error: bind EADDRINUSE null:5000
+2025-04-13T17:57:20: Server Error: bind EADDRINUSE null:5000
+2025-04-13T17:57:22: Server Error: bind EADDRINUSE null:5000
+2025-04-13T17:57:25: Server Error: bind EADDRINUSE null:5000
+2025-04-13T17:57:27: Server Error: bind EADDRINUSE null:5000
+2025-04-13T17:57:30: Server Error: bind EADDRINUSE null:5000
+2025-04-13T17:57:32: Server Error: bind EADDRINUSE null:5000
+2025-04-13T17:57:35: Server Error: bind EADDRINUSE null:5000
+2025-04-13T17:57:37: Server Error: bind EADDRINUSE null:5000
+2025-04-13T17:57:40: Server Error: bind EADDRINUSE null:5000
+2025-04-13T17:57:43: Server Error: bind EADDRINUSE null:5000
+2025-04-13T17:57:45: Server Error: bind EADDRINUSE null:5000
+2025-04-13T17:57:48: Server Error: bind EADDRINUSE null:5000
+2025-04-13T17:57:50: Server Error: bind EADDRINUSE null:5000
+2025-04-13T17:57:53: Server Error: bind EADDRINUSE null:5000
+2025-04-13T17:57:55: Server Error: bind EADDRINUSE null:5000
+2025-04-13T17:57:57: Server Error: bind EADDRINUSE null:5000
+2025-04-13T17:58:00: Server Error: bind EADDRINUSE null:5000
+2025-04-13T17:58:03: Server Error: bind EADDRINUSE null:5000
+2025-04-13T17:58:05: Server Error: bind EADDRINUSE null:5000
+2025-04-13T17:58:08: Server Error: bind EADDRINUSE null:5000
+2025-04-13T17:58:10: Server Error: bind EADDRINUSE null:5000
+2025-04-13T17:58:13: Server Error: bind EADDRINUSE null:5000
+2025-04-13T17:58:15: Server Error: bind EADDRINUSE null:5000
+2025-04-13T17:58:18: Server Error: bind EADDRINUSE null:5000
+2025-04-13T17:58:20: Server Error: bind EADDRINUSE null:5000
+2025-04-13T17:58:23: Server Error: bind EADDRINUSE null:5000

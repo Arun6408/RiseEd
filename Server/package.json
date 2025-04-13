@@ -6,6 +6,10 @@
     "dev": "nodemon index.js",
     "build": "npm install",
     "start": "node index.js",
+    "prod": "pm2 start ecosystem.config.js",
+    "stop": "pm2 stop ecosystem.config.js",
+    "restart": "pm2 restart ecosystem.config.js",
+    "logs": "pm2 logs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -13,6 +17,7 @@
   "description": "",
   "dependencies": {
     "@neondatabase/serverless": "^0.10.4",
+    "bcryptjs": "^3.0.2",
     "body-parser": "^1.20.3",
     "cloudinary": "^2.5.1",
     "cors": "^2.8.5",
@@ -24,6 +29,7 @@
     "mysql2": "^3.11.5",
     "nodemon": "^3.1.9",
     "pg": "^8.13.1",
+    "pm2": "^5.3.1",
     "ws": "^8.18.0"
   }
 }

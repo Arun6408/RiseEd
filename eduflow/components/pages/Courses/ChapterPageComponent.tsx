@@ -1,6 +1,5 @@
 "use client";
 
-import RightNav from "@/components/Navbars/RightNav";
 import { getChapters, getRole, getTopics } from "@/utils/util";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -100,7 +99,6 @@ courseId: number; chapterId: number;
             </div>
           )}
         </div>
-        <RightNav />
       </div>
   );
 }
