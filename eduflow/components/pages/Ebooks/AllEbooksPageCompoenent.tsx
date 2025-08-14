@@ -118,7 +118,7 @@ const AllEbooksPageComponent = () => {
           Dive into a curated collection of eBooks across genres, beautifully
           crafted for your learning journey.
         </p>
-        {role && role in ['teacher','headMaster', 'principal'] && (
+        {role != "student" && (
           <Modal>
             <ModalTrigger className="mt-6 bg-teal-600 text-white font-semibold px-6 py-3 rounded-lg shadow-lg hover:bg-teal-700 transition-all">
               Add New Ebook
@@ -238,7 +238,7 @@ const AllEbooksPageComponent = () => {
       </div>
 
       {/* Ebook Grid */}
-      {ebooks && ebooks.length === 0 ? (
+      {ebooks.length === 0 ? (
         <div className="flex justify-center items-center h-[60vh]">
           <p className="text-xl font-medium text-teal-600">
             No eBooks available at the moment.

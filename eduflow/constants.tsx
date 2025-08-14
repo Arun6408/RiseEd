@@ -61,11 +61,6 @@ export const studentNavLinks = [
       iconLink: "/icons/dashboard.png",
     },
     {
-      link: "/student/selfAnalysis",
-      text: "Self Analysis",
-      iconLink: "/icons/selfAnalysis.png",
-    },
-    {
       link: "/student/courses",
       text: "Courses",
       iconLink: "/icons/courses.png",
@@ -89,48 +84,11 @@ export const studentNavLinks = [
       link: "/student/quizzes",
       text: "Quiz",
       iconLink: "/icons/quiz.png",
-    },    
-];
-
-export const principalNavLinks = [
-  {
-    link: "/principal",
-    text: "Dashboard",
-    iconLink: "/icons/dashboard.png",
-  },
-  {
-    link: "/principal/registrations",
-    text: "Registrations",
-    iconLink: "/icons/registrations.png",
-  },
-  {
-    link: "/principal/students",
-    text: "Students",
-    iconLink: "/icons/students.png",
-  },
-  {
-    link: "/principal/teachersStats",
-    text: "Teacher Stats",
-    iconLink: "/icons/teacherStats.png",
-  },
-  {
-    link: "/principal/feeDues",
-    text: "Fee Dues",
-    iconLink: "/icons/feeDues.png",
-  },
-  {
-    link: "/principal/courses",
-    text: "Courses",
-    iconLink: "/icons/courses.png",
-  },
-  {
-    link: "/principal/ebooks",
-    text: "E-Books",
-    iconLink: "/icons/ebooks.png",
-  },
-  {
-    link: "/principal/events",
-    text: "Events",
-    iconLink: "/icons/events.png",
-  },
-];
+    },
+    {
+      link: "/student/selfAnalysis",
+      text: "Self Analysis",
+      iconLink: "/icons/selfAnalysis.png",
+    },
+    
+]

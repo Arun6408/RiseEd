@@ -2,7 +2,9 @@ const dotenv = require("dotenv");
 const { getDb, connectDb, closeDb } = require("./db/connectDb");
 dotenv.config();
 
-const types = `
+const query = `
+
+
 
 
 -- Define ENUM types
@@ -15,11 +17,6 @@ CREATE TYPE ebook_genre AS ENUM ('Fiction', 'Non-Fiction', 'Science', 'Technolog
 CREATE TYPE salary_Transaction_Status AS ENUM('Paid', 'Pending');
 CREATE TYPE completion_status AS ENUM ('not_started', 'in_progress', 'completed');
 CREATE TYPE activity_type AS ENUM ('video_watch', 'quiz_attempt', 'homework', 'course_study', 'login');
-CREATE TYPE zcoin_purchase_type AS ENUM ('Exclusive', 'Special', 'Standard', 'Free');
-`;
-
-const query = types +`
-
 
 
 -- AllUsers table
@@ -51,8 +48,6 @@ CREATE TABLE IF NOT EXISTS Students (
     class INT NOT NULL,
     scholarshipAmount DECIMAL(10, 2),
     userId INT NOT NULL,
-    currentZCoins INT DEFAULT 0,
-    totalZCoinsEarned INT DEFAULT 0,
     FOREIGN KEY (userId) REFERENCES AllUsers(id) ON DELETE CASCADE
 );
 
@@ -96,8 +91,6 @@ CREATE TABLE IF NOT EXISTS Courses (
     content TEXT,
     department VARCHAR(30) NOT NULL,
     userId INT NOT NULL,
-    priceInZCoins INT NOT NULL,
-    type zcoin_purchase_type NOT NULL,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (userId) REFERENCES AllUsers(id) ON DELETE CASCADE
 );
@@ -124,7 +117,6 @@ CREATE TABLE IF NOT EXISTS Topics (
     pdfUrl VARCHAR(255),
     questionAndAnswers TEXT,
     chapterId INT NOT NULL,
-    zCoinsEarning INT NOT NULL,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (chapterId) REFERENCES Chapters(chapterId) ON DELETE CASCADE,
     FOREIGN KEY (videoId) REFERENCES Videos(videoId)
@@ -138,8 +130,6 @@ CREATE TABLE IF NOT EXISTS Quiz (
     quizCourseId INT NOT NULL,
     createdByUserId INT NOT NULL,
     assignedClasses TEXT NOT NULL,
-    priceInZCoins INT NOT NULL,
-    type zcoin_purchase_type NOT NULL,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (createdByUserId) REFERENCES AllUsers(id) ON DELETE CASCADE,
     FOREIGN KEY (quizCourseId) REFERENCES Courses(courseId) ON DELETE CASCADE
@@ -196,7 +186,6 @@ CREATE TABLE IF NOT EXISTS QuizResults(
     timeSpent INT NOT NULL,
     score INT NOT NULL,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    zCoinsEarning INT GENERATED ALWAYS AS (score * 2) STORED,
     FOREIGN KEY (quizId) REFERENCES Quiz(quizId) ON DELETE CASCADE,
     FOREIGN KEY (userId) REFERENCES AllUsers(id) ON DELETE CASCADE
 );
@@ -222,7 +211,6 @@ CREATE TABLE IF NOT EXISTS HomeworkSubmissions(
     fileType VARCHAR(20) DEFAULT NULL,
     fileUrl VARCHAR(255) DEFAULT NULL,
     grade DECIMAL(3,2) DEFAULT NULL,
-    zCoinsEarning INT NOT NULL,
     submittedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (homeworkId) REFERENCES Homework(homeworkId) ON DELETE CASCADE,
     FOREIGN KEY (submittedByUserId) REFERENCES AllUsers(id) ON DELETE CASCADE
@@ -282,94 +270,6 @@ CREATE TABLE IF NOT EXISTS SchoolEvents (
     FOREIGN KEY (conductedBy) REFERENCES AllUsers(id) ON DELETE CASCADE
 );
 
-
-CREATE TABLE IF NOT EXISTS VideoWatchStatus (
-    id SERIAL PRIMARY KEY,
-    userId INT NOT NULL,
-    videoId INT NOT NULL,
-    watchTime INT NOT NULL DEFAULT 0, 
-    lastPlaybackPosition INT DEFAULT 0,
-    lastWatched TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (userId) REFERENCES AllUsers(id) ON DELETE CASCADE,
-    FOREIGN KEY (videoId) REFERENCES Videos(videoId) ON DELETE CASCADE,
-    UNIQUE (userId, videoId)
-);
-
-
-
-CREATE TABLE IF NOT EXISTS TimeSpentOnTopic (
-    id SERIAL PRIMARY KEY,
-    userId INT NOT NULL,
-    topicId INT NOT NULL,
-    timeSpentOnTopic INT NOT NULL,
-    FOREIGN KEY (userId) REFERENCES AllUsers(id) ON DELETE CASCADE,
-    FOREIGN KEY (topicId) REFERENCES Topics(topicId) ON DELETE CASCADE,
-    UNIQUE (userId, topicId)
-);
-
-CREATE TABLE IF NOT EXISTS CoursePurchases (
-    id SERIAL PRIMARY KEY,
-    userId INT NOT NULL,
-    courseId INT NOT NULL,
-    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (userId) REFERENCES AllUsers(id) ON DELETE CASCADE,
-    FOREIGN KEY (courseId) REFERENCES Courses(courseid) ON DELETE CASCADE
-);
-
-CREATE TABLE IF NOT EXISTS QuizPurchases (
-    id SERIAL PRIMARY KEY,
-    userId INT NOT NULL,
-    quizId INT NOT NULL,
-    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (userId) REFERENCES AllUsers(id) ON DELETE CASCADE,
-    FOREIGN KEY (quizId) REFERENCES Quiz(quizId) ON DELETE CASCADE
-);
-
-CREATE TABLE IF NOT EXISTS TopicEarnings (
-    id SERIAL PRIMARY KEY,
-    topicId INT NOT NULL,
-    userId INT NOT NULL,
-    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE (topicId, userId),
-    FOREIGN KEY (topicId) REFERENCES Topics(topicId) ON DELETE CASCADE,
-    FOREIGN KEY (userId) REFERENCES AllUsers(id) ON DELETE CASCADE
-);
-
-CREATE OR REPLACE VIEW student_zcoin_summary AS
-SELECT 
-    au.id as userId, 
-    (
-        SELECT COALESCE(SUM(c.priceInZCoins), 0) 
-        FROM coursepurchases cp
-        LEFT JOIN courses c ON cp.courseid = c.courseid
-        WHERE cp.userid = au.id
-    ) AS coursebought, 
-    (
-        SELECT COALESCE(SUM(q.priceInZCoins), 0)
-        FROM quizpurchases qp
-        LEFT JOIN quiz q ON q.quizid = qp.quizid
-        WHERE qp.userid = au.id
-    ) AS quizzesBought, 
-    (
-        SELECT COALESCE(SUM(t.zCoinsEarning), 0)
-        FROM topicearnings te
-        LEFT JOIN topics t ON t.topicId = te.topicId
-        WHERE te.userId = au.id
-    ) AS TopicEarnings, 
-    (
-        SELECT COALESCE(SUM(hs.zCoinsEarning), 0)
-        FROM homeworksubmissions hs
-        WHERE hs.submittedbyuserid = au.id
-    ) AS HomeworkEarnings, 
-    (
-        SELECT COALESCE(SUM(qr.zCoinsEarning), 0)
-        FROM quizresults qr
-        WHERE qr.userid = au.id
-    ) AS quizEarnings
-FROM allusers au
-WHERE au.role = 'student'
-ORDER BY au.id;
-
 -- Insert Super Admin
 INSERT INTO AllUsers (name, userName, password, role, age, phone, email) 
 VALUES ('Amit Sharma', 'superAdmin', 'admin123', 'superAdmin', 40, '9876543210', 'superadmin@example.com');
@@ -424,28 +324,28 @@ VALUES
 ('Manav Tiwari', 'student20', 'student123', 'student', 14, '9876543236', 'student20@example.com');
 
 
-INSERT INTO Students (userId, class, scholarshipAmount, currentZCoins, totalZCoinsEarned) 
+INSERT INTO Students (userId, class, scholarshipAmount) 
 VALUES 
-((SELECT id FROM AllUsers WHERE userName = 'student1'), 1, 1000.00, 150, 250),
-((SELECT id FROM AllUsers WHERE userName = 'student2'), 2, 1500.00, 100, 150),
-((SELECT id FROM AllUsers WHERE userName = 'student3'), 3, 1200.00, 250, 450),
-((SELECT id FROM AllUsers WHERE userName = 'student4'), 4, 1000.00, 150, 250),
-((SELECT id FROM AllUsers WHERE userName = 'student5'), 5, 1500.00, 100, 150),
-((SELECT id FROM AllUsers WHERE userName = 'student6'), 6, 1200.00, 250, 450),
-((SELECT id FROM AllUsers WHERE userName = 'student7'), 7, NULL, 125, 200),
-((SELECT id FROM AllUsers WHERE userName = 'student8'), 8, NULL, 200, 350),
-((SELECT id FROM AllUsers WHERE userName = 'student9'), 9, 1000.00, 300, 550),
-((SELECT id FROM AllUsers WHERE userName = 'student10'), 10, NULL, 350, 650),
-((SELECT id FROM AllUsers WHERE userName = 'student11'), 1, 800.00, 150, 250),
-((SELECT id FROM AllUsers WHERE userName = 'student12'), 2, 1200.00, 100, 150),
-((SELECT id FROM AllUsers WHERE userName = 'student13'), 3, NULL, 250, 450),
-((SELECT id FROM AllUsers WHERE userName = 'student14'), 4, 1100.00, 250, 450),
-((SELECT id FROM AllUsers WHERE userName = 'student15'), 5, 900.00, 125, 200),
-((SELECT id FROM AllUsers WHERE userName = 'student16'), 6, NULL, 200, 350),
-((SELECT id FROM AllUsers WHERE userName = 'student17'), 7, 950.00, 300, 550),
-((SELECT id FROM AllUsers WHERE userName = 'student18'), 8, NULL, 350, 650),
-((SELECT id FROM AllUsers WHERE userName = 'student19'), 9, 1000.00, 150, 250),
-((SELECT id FROM AllUsers WHERE userName = 'student20'), 10, 1200.00, 100, 150);
+((SELECT id FROM AllUsers WHERE userName = 'student1'), 1, 1000.00),  
+((SELECT id FROM AllUsers WHERE userName = 'student2'), 2, 1500.00),
+((SELECT id FROM AllUsers WHERE userName = 'student3'), 3, 1200.00),
+((SELECT id FROM AllUsers WHERE userName = 'student4'), 4, 1000.00),
+((SELECT id FROM AllUsers WHERE userName = 'student5'), 5, 1500.00),
+((SELECT id FROM AllUsers WHERE userName = 'student6'), 6, 1200.00),
+((SELECT id FROM AllUsers WHERE userName = 'student7'), 7, NULL),
+((SELECT id FROM AllUsers WHERE userName = 'student8'), 8, NULL),
+((SELECT id FROM AllUsers WHERE userName = 'student9'), 9, 1000.00),
+((SELECT id FROM AllUsers WHERE userName = 'student10'), 10, NULL),
+((SELECT id FROM AllUsers WHERE userName = 'student11'), 1, 800.00),
+((SELECT id FROM AllUsers WHERE userName = 'student12'), 2, 1200.00),
+((SELECT id FROM AllUsers WHERE userName = 'student13'), 3, NULL),
+((SELECT id FROM AllUsers WHERE userName = 'student14'), 4, 1100.00),
+((SELECT id FROM AllUsers WHERE userName = 'student15'), 5, 900.00),
+((SELECT id FROM AllUsers WHERE userName = 'student16'), 6, NULL),
+((SELECT id FROM AllUsers WHERE userName = 'student17'), 7, 950.00),
+((SELECT id FROM AllUsers WHERE userName = 'student18'), 8, NULL),
+((SELECT id FROM AllUsers WHERE userName = 'student19'), 9, 1000.00),
+((SELECT id FROM AllUsers WHERE userName = 'student20'), 10, 1200.00);
 
 
 
@@ -519,14 +419,14 @@ VALUES
 
 
 -- Insert into Courses
-INSERT INTO Courses (class, title, description, content, department, userId, priceInZCoins, type)
+INSERT INTO Courses (class, title, description, content, department, userId)
 VALUES 
-('1,2,3,4,5', 'Basic Mathematics', 'This course introduces young learners to the fundamentals of mathematics, helping them build a strong foundation for future learning. It covers key topics like numbers, counting, shapes, and basic arithmetic through interactive lessons and engaging activities.', 'Comprehensive and interactive content covering foundational mathematics.', 'Mathematics', 4, 0, 'Free'),
-('6,7,8,9,10', 'Advanced Mathematics', 'Designed for middle school students, this course dives into advanced mathematical concepts, including algebra, geometry, and trigonometry. It helps students sharpen problem-solving skills and develop a deep understanding of mathematical principles.', 'In-depth and advanced content covering higher-level mathematics.', 'Mathematics', 5, 150, 'Exclusive'),
-('1,2,3,4,5', 'Science Basics', 'An introductory course on basic scientific principles, experiments, and real-life applications.', 'Detailed and practical content covering basic science concepts.', 'Science', 6, 80, 'Standard'),
-('6,7,8,9,10', 'History and Culture', 'A comprehensive course exploring historical events and cultural evolution from ancient to modern times.', 'In-depth content covering global history and cultural studies.', 'History',7, 0, 'Free'),
-('3,4,5,6', 'Physics Essentials', 'A dynamic course designed to introduce learners to the principles of physics, covering topics from motion to electricity.', 'Comprehensive content on foundational physics concepts.', 'Physics', 8, 120, 'Special'),
-('7,8,9,10', 'World Geography', 'An engaging course exploring the physical and human geography of the world, including continents, climates, and cultures.', 'In-depth content on geographical principles and real-world applications.', 'Geography', 8, 90, 'Standard');
+('1,2,3,4,5', 'Basic Mathematics', 'This course introduces young learners to the fundamentals of mathematics, helping them build a strong foundation for future learning. It covers key topics like numbers, counting, shapes, and basic arithmetic through interactive lessons and engaging activities.', 'Comprehensive and interactive content covering foundational mathematics.', 'Mathematics', 5),
+('6,7,8,9,10', 'Advanced Mathematics', 'Designed for middle school students, this course dives into advanced mathematical concepts, including algebra, geometry, and trigonometry. It helps students sharpen problem-solving skills and develop a deep understanding of mathematical principles.', 'In-depth and advanced content covering higher-level mathematics.', 'Mathematics', 5),
+('1,2,3,4,5', 'Science Basics', 'An introductory course on basic scientific principles, experiments, and real-life applications.', 'Detailed and practical content covering basic science concepts.', 'Science', 6),
+('6,7,8,9,10', 'History and Culture', 'A comprehensive course exploring historical events and cultural evolution from ancient to modern times.', 'In-depth content covering global history and cultural studies.', 'History',7),
+('3,4,5,6', 'Physics Essentials', 'A dynamic course designed to introduce learners to the principles of physics, covering topics from motion to electricity.', 'Comprehensive content on foundational physics concepts.', 'Physics', 8),
+('7,8,9,10', 'World Geography', 'An engaging course exploring the physical and human geography of the world, including continents, climates, and cultures.', 'In-depth content on geographical principles and real-world applications.', 'Geography', 8);
 
 -- Insert into Chapters for Course 1
 INSERT INTO Chapters (title, description, content, courseId)
@@ -564,122 +464,120 @@ VALUES
 ('Continents and Oceans', 'Explore the geography of continents and oceans, their features, and their role in shaping the world.', 'Interactive content on the physical features of Earth.', 6),
 ('Climate and Weather Patterns', 'Understand the different climate zones, weather patterns, and how they affect human life.', 'Detailed content on climate and meteorology.', 6);
 
-
 -- Insert into Topics for Course 1, Chapter 1
-INSERT INTO Topics (title, description, content, topicType, videoId, pdfUrl, questionAndAnswers, chapterId, zCoinsEarning)
+INSERT INTO Topics (title, description, content, topicType, videoId, pdfUrl, questionAndAnswers, chapterId)
 VALUES 
-('Understanding Numbers', 'Learn about the importance of numbers in everyday life, from counting objects to performing calculations. Explore how numbers form the basis of mathematical concepts and problem-solving.', 'Detailed content that explains the significance and applications of numbers.', 'video', 1, NULL, '[{"question":"What are prime numbers?","answer":"Prime numbers are numbers greater than 1 that have only two factors: 1 and themselves."}]', 1, 10),
-('Counting Practice', 'This topic focuses on mastering counting through real-world examples, such as organizing items, counting money, and identifying patterns. Fun activities make counting a practical and enjoyable skill.', 'Engaging and practical content for learning counting techniques.', 'pdf', NULL, 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', '[{"question":"What is skip counting?","answer":"Skip counting is counting by a specific number, such as by 2s, 5s, or 10s."}]', 1, 20);
+('Understanding Numbers', 'Learn about the importance of numbers in everyday life, from counting objects to performing calculations. Explore how numbers form the basis of mathematical concepts and problem-solving.', 'Detailed content that explains the significance and applications of numbers.', 'video', 1, NULL, '[{"question":"What are prime numbers?","answer":"Prime numbers are numbers greater than 1 that have only two factors: 1 and themselves."}]', 1),
+('Counting Practice', 'This topic focuses on mastering counting through real-world examples, such as organizing items, counting money, and identifying patterns. Fun activities make counting a practical and enjoyable skill.', 'Engaging and practical content for learning counting techniques.', 'pdf', NULL, 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', '[{"question":"What is skip counting?","answer":"Skip counting is counting by a specific number, such as by 2s, 5s, or 10s."}]', 1);
 
 -- Insert into Topics for Course 1, Chapter 2
-INSERT INTO Topics (title, description, content, topicType, videoId, pdfUrl, questionAndAnswers, chapterId, zCoinsEarning)
+INSERT INTO Topics (title, description, content, topicType, videoId, pdfUrl, questionAndAnswers, chapterId)
 VALUES 
-('Shapes and Sizes', 'Students will explore various shapes, their properties, and their real-life applications. The topic emphasizes recognizing and analyzing geometric figures, from basic polygons to 3D objects.', 'Comprehensive and engaging content on understanding shapes and their characteristics.', 'video', 1, NULL, '[{"question":"What is the difference between a square and a rectangle?","answer":"A square has all sides equal, while a rectangle has opposite sides equal."}]', 2, 20),
-('Geometry Practice', 'Through interactive exercises, students will identify, classify, and analyze geometric shapes. Activities include solving puzzles, drawing shapes, and understanding their significance in design and engineering.', 'Practical and application-focused content on geometric concepts.', 'pdf', NULL, 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', '[{"question":"What are parallel lines?","answer":"Parallel lines are two lines that never intersect and remain equidistant."}]', 2, 30);
+('Shapes and Sizes', 'Students will explore various shapes, their properties, and their real-life applications. The topic emphasizes recognizing and analyzing geometric figures, from basic polygons to 3D objects.', 'Comprehensive and engaging content on understanding shapes and their characteristics.', 'video', 1, NULL, '[{"question":"What is the difference between a square and a rectangle?","answer":"A square has all sides equal, while a rectangle has opposite sides equal."}]', 2),
+('Geometry Practice', 'Through interactive exercises, students will identify, classify, and analyze geometric shapes. Activities include solving puzzles, drawing shapes, and understanding their significance in design and engineering.', 'Practical and application-focused content on geometric concepts.', 'pdf', NULL, 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', '[{"question":"What are parallel lines?","answer":"Parallel lines are two lines that never intersect and remain equidistant."}]', 2);
 
 -- Insert into Topics for Course 2, Chapter 1
-INSERT INTO Topics (title, description, content, topicType, videoId, pdfUrl, questionAndAnswers, chapterId, zCoinsEarning)
+INSERT INTO Topics (title, description, content, topicType, videoId, pdfUrl, questionAndAnswers, chapterId)
 VALUES 
-('Introduction to Algebra', 'Discover how algebra forms the basis of modern mathematics. Students will learn to work with variables, write equations, and solve real-world problems using algebraic methods.', 'Comprehensive and application-driven content on algebra basics.', 'video', 1, NULL, '[{"question":"What is a variable in algebra?","answer":"A variable is a symbol, usually a letter, that represents an unknown value in an equation."}]', 3, 30),
-('Practice Algebra', 'Students will practice solving equations, simplifying expressions, and understanding algebra''s practical applications. The exercises include relatable examples such as calculating distances and budgeting.', 'Interactive and problem-solving content for practicing algebra.', 'pdf', NULL, 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', '[{"question":"Solve: 3x - 5 = 10","answer":"x = 5."}]', 3, 40);
+('Introduction to Algebra', 'Discover how algebra forms the basis of modern mathematics. Students will learn to work with variables, write equations, and solve real-world problems using algebraic methods.', 'Comprehensive and application-driven content on algebra basics.', 'video', 1, NULL, '[{"question":"What is a variable in algebra?","answer":"A variable is a symbol, usually a letter, that represents an unknown value in an equation."}]', 3),
+('Practice Algebra', 'Students will practice solving equations, simplifying expressions, and understanding algebra''s practical applications. The exercises include relatable examples such as calculating distances and budgeting.', 'Interactive and problem-solving content for practicing algebra.', 'pdf', NULL, 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', '[{"question":"Solve: 3x - 5 = 10","answer":"x = 5."}]', 3);
 
 -- Insert into Topics for Course 2, Chapter 2
-INSERT INTO Topics (title, description, content, topicType, videoId, pdfUrl, questionAndAnswers, chapterId, zCoinsEarning)
+INSERT INTO Topics (title, description, content, topicType, videoId, pdfUrl, questionAndAnswers, chapterId)
 VALUES 
-('Basics of Trigonometry', 'This topic introduces trigonometry, focusing on understanding angles, the properties of triangles, and the use of trigonometric functions. Students will learn to apply these concepts in real-life scenarios like navigation and construction.', 'Comprehensive and real-world relevant content on trigonometry.', 'video', 1, NULL, '[{"question":"What is a right-angle triangle?","answer":"A right-angle triangle is a triangle with one angle measuring 90 degrees."}]', 4, 30),
-('Trigonometry Practice', 'Engage in hands-on activities to master trigonometric calculations and identities. Examples include measuring heights, calculating angles, and solving geometry problems.', 'Practical and engaging content for applying trigonometry concepts.', 'pdf', NULL, 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', '[{"question":"What is cos(0°)?","answer":"cos(0°) = 1."}]', 4, 40);
+('Basics of Trigonometry', 'This topic introduces trigonometry, focusing on understanding angles, the properties of triangles, and the use of trigonometric functions. Students will learn to apply these concepts in real-life scenarios like navigation and construction.', 'Comprehensive and real-world relevant content on trigonometry.', 'video', 1, NULL, '[{"question":"What is a right-angle triangle?","answer":"A right-angle triangle is a triangle with one angle measuring 90 degrees."}]', 4),
+('Trigonometry Practice', 'Engage in hands-on activities to master trigonometric calculations and identities. Examples include measuring heights, calculating angles, and solving geometry problems.', 'Practical and engaging content for applying trigonometry concepts.', 'pdf', NULL, 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', '[{"question":"What is cos(0°)?","answer":"cos(0°) = 1."}]', 4);
 
 -- Insert into Topics for Course 3, Chapter 1
-INSERT INTO Topics (title, description, content, topicType, videoId, pdfUrl, questionAndAnswers, chapterId, zCoinsEarning)
+INSERT INTO Topics (title, description, content, topicType, videoId, pdfUrl, questionAndAnswers, chapterId)
 VALUES 
-('The Scientific Method', 'Learn how to formulate hypotheses, conduct experiments, and analyze results using the scientific method.', 'Detailed content on scientific processes.', 'video', 1, NULL, '[{"question":"What is a hypothesis?","answer":"A hypothesis is a testable statement predicting the outcome of an experiment."}]', 5, 10),
-('Experiment Basics', 'Understand the components of a scientific experiment, including variables, controls, and safety guidelines.', 'Comprehensive content on experiment design.', 'pdf', NULL, 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736765002/sei1fgorfdtgweyo6zyn.pdf', '[{"question":"What is a control in an experiment?","answer":"A control is a standard for comparison in an experiment."}]', 5, 20);
+('The Scientific Method', 'Learn how to formulate hypotheses, conduct experiments, and analyze results using the scientific method.', 'Detailed content on scientific processes.', 'video', 1, NULL, '[{"question":"What is a hypothesis?","answer":"A hypothesis is a testable statement predicting the outcome of an experiment."}]', 5),
+('Experiment Basics', 'Understand the components of a scientific experiment, including variables, controls, and safety guidelines.', 'Comprehensive content on experiment design.', 'pdf', NULL, 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736765002/sei1fgorfdtgweyo6zyn.pdf', '[{"question":"What is a control in an experiment?","answer":"A control is a standard for comparison in an experiment."}]', 5);
 
 -- Insert into Topics for Course 3, Chapter 2
-INSERT INTO Topics (title, description, content, topicType, videoId, pdfUrl, questionAndAnswers, chapterId, zCoinsEarning)
+INSERT INTO Topics (title, description, content, topicType, videoId, pdfUrl, questionAndAnswers, chapterId)
 VALUES 
-('Characteristics of Living Organisms', 'Explore the defining characteristics of living organisms, including growth, reproduction, and metabolism.', 'Interactive content on biology basics.', 'video', 1, NULL, '[{"question":"What are the seven life processes?","answer":"The seven life processes are movement, respiration, sensitivity, growth, reproduction, excretion, and nutrition."}]', 6, 20),
-('Ecosystem Dynamics', 'Learn about ecosystems, food chains, and how organisms interact with their environment.', 'Detailed content on ecology and ecosystems.', 'pdf', NULL, 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736765002/sei1fgorfdtgweyo6zyn.pdf', '[{"question":"What is an ecosystem?","answer":"An ecosystem is a community of interacting organisms and their physical environment."}]', 6, 30);
+('Characteristics of Living Organisms', 'Explore the defining characteristics of living organisms, including growth, reproduction, and metabolism.', 'Interactive content on biology basics.', 'video', 1, NULL, '[{"question":"What are the seven life processes?","answer":"The seven life processes are movement, respiration, sensitivity, growth, reproduction, excretion, and nutrition."}]', 6),
+('Ecosystem Dynamics', 'Learn about ecosystems, food chains, and how organisms interact with their environment.', 'Detailed content on ecology and ecosystems.', 'pdf', NULL, 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736765002/sei1fgorfdtgweyo6zyn.pdf', '[{"question":"What is an ecosystem?","answer":"An ecosystem is a community of interacting organisms and their physical environment."}]', 6);
 
 -- Insert into Topics for Course 4, Chapter 1
-INSERT INTO Topics (title, description, content, topicType, videoId, pdfUrl, questionAndAnswers, chapterId, zCoinsEarning)
+INSERT INTO Topics (title, description, content, topicType, videoId, pdfUrl, questionAndAnswers, chapterId)
 VALUES 
-('Mesopotamia: The Cradle of Civilization', 'Discover the history and achievements of Mesopotamia, including the invention of writing and the wheel.', 'Comprehensive content on Mesopotamian civilization.', 'video', 1, NULL, '[{"question":"What is Mesopotamia known for?","answer":"Mesopotamia is known for its contributions to writing, agriculture, and urbanization."}]', 7, 20),
-('Ancient Egypt: Society and Culture', 'Explore the social structure, art, and religious beliefs of ancient Egypt, along with its monumental architecture.', 'Detailed content on Egyptian culture and society.', 'pdf', NULL, 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736765002/sei1fgorfdtgweyo6zyn.pdf', '[{"question":"What was the role of the pharaoh in ancient Egypt?","answer":"The pharaoh was both a political leader and a divine figure."}]', 7, 30);
+('Mesopotamia: The Cradle of Civilization', 'Discover the history and achievements of Mesopotamia, including the invention of writing and the wheel.', 'Comprehensive content on Mesopotamian civilization.', 'video', 1, NULL, '[{"question":"What is Mesopotamia known for?","answer":"Mesopotamia is known for its contributions to writing, agriculture, and urbanization."}]', 7),
+('Ancient Egypt: Society and Culture', 'Explore the social structure, art, and religious beliefs of ancient Egypt, along with its monumental architecture.', 'Detailed content on Egyptian culture and society.', 'pdf', NULL, 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736765002/sei1fgorfdtgweyo6zyn.pdf', '[{"question":"What was the role of the pharaoh in ancient Egypt?","answer":"The pharaoh was both a political leader and a divine figure."}]', 7);
 
 -- Insert into Topics for Course 4, Chapter 2
-INSERT INTO Topics (title, description, content, topicType, videoId, pdfUrl, questionAndAnswers, chapterId, zCoinsEarning)
+INSERT INTO Topics (title, description, content, topicType, videoId, pdfUrl, questionAndAnswers, chapterId)
 VALUES 
-('The Role of Language in Culture', 'Learn how language shapes cultural identity, facilitates communication, and influences societal development.', 'Interactive and engaging content on the importance of language.', 'video', 1, NULL, '[{"question":"Why is language important in culture?","answer":"Language helps preserve cultural heritage and fosters unity within communities."}]', 8, 20),
-('Art and Cultural Expression', 'Discover how art reflects cultural values and changes over time, influencing society and preserving traditions.', 'Detailed content on cultural art forms.', 'pdf', NULL, 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736765002/sei1fgorfdtgweyo6zyn.pdf', '[{"question":"What is the purpose of art in culture?","answer":"Art serves as a medium for expression, storytelling, and preserving traditions."}]', 8, 30);
-
+('The Role of Language in Culture', 'Learn how language shapes cultural identity, facilitates communication, and influences societal development.', 'Interactive and engaging content on the importance of language.', 'video', 1, NULL, '[{"question":"Why is language important in culture?","answer":"Language helps preserve cultural heritage and fosters unity within communities."}]', 8),
+('Art and Cultural Expression', 'Discover how art reflects cultural values and changes over time, influencing society and preserving traditions.', 'Detailed content on cultural art forms.', 'pdf', NULL, 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736765002/sei1fgorfdtgweyo6zyn.pdf', '[{"question":"What is the purpose of art in culture?","answer":"Art serves as a medium for expression, storytelling, and preserving traditions."}]', 8);
 
 -- Insert into Topics for Course 5, Chapter 1 (Continued)
-INSERT INTO Topics (title, description, content, topicType, videoId, pdfUrl, questionAndAnswers, chapterId, zCoinsEarning)
+INSERT INTO Topics (title, description, content, topicType, videoId, pdfUrl, questionAndAnswers, chapterId)
 VALUES 
 ('Gravitational Force', 'Explore the concept of gravity, its discovery, and its significance in the universe.', 'Comprehensive content on gravitational force and its effects.', 'video', 1, NULL, 
 '[{"question":"Who discovered gravity?","answer":"Gravity was discovered by Sir Isaac Newton."},
-{"question":"What is the formula for gravitational force?","answer":"The formula is F = G * (m1 * m2) / r²."}]', 9, 30),
+{"question":"What is the formula for gravitational force?","answer":"The formula is F = G * (m1 * m2) / r²."}]', 9),
 ('Friction: A Necessary Evil', 'Learn about the concept of friction, its advantages, and its challenges in the physical world.', 'Detailed exploration of friction and its real-world applications.', 'pdf', NULL, 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736765002/sei1fgorfdtgweyo6zyn.pdf', 
 '[{"question":"What is friction?","answer":"Friction is the resistance to motion between two surfaces in contact."},
-{"question":"How does friction help in daily life?","answer":"Friction helps in tasks like walking, driving, and writing."}]', 9, 40),
+{"question":"How does friction help in daily life?","answer":"Friction helps in tasks like walking, driving, and writing."}]', 9),
 ('Friction and Its Applications', 'Learn about friction as a force, its types, advantages, and how it is minimized in certain applications.', 'Comprehensive content on friction and its real-world implications.', 'video', 1, NULL, 
 '[{"question":"What is friction?","answer":"Friction is the resistive force acting between two surfaces in contact, opposing their relative motion."},
-{"question":"Why is friction important?","answer":"Friction is essential for walking, driving vehicles, and holding objects."}]', 9, 40);
+{"question":"Why is friction important?","answer":"Friction is essential for walking, driving vehicles, and holding objects."}]', 9);
 
 -- Insert into Topics for Course 5, Chapter 2
-INSERT INTO Topics (title, description, content, topicType, videoId, pdfUrl, questionAndAnswers, chapterId, zCoinsEarning)
+INSERT INTO Topics (title, description, content, topicType, videoId, pdfUrl, questionAndAnswers, chapterId)
 VALUES 
 ('Basics of Electricity', 'Understand the fundamental concepts of electricity, including current, voltage, and resistance.', 'In-depth content on the basics of electricity and circuits.', 'video', 1, NULL, 
 '[{"question":"What is electric current?","answer":"Electric current is the flow of electric charge in a conductor."},
-{"question":"What is Ohm''s Law?","answer":"Ohm''s Law states that V = IR, where V is voltage, I is current, and R is resistance."}]', 10, 30),
+{"question":"What is Ohm''s Law?","answer":"Ohm''s Law states that V = IR, where V is voltage, I is current, and R is resistance."}]', 10),
 ('Magnetic Fields and Applications', 'Learn about magnetic fields, their properties, and their applications in modern technology.', 'Detailed exploration of magnetic fields and their uses.', 'pdf', NULL, 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736765002/sei1fgorfdtgweyo6zyn.pdf', 
 '[{"question":"What is a magnetic field?","answer":"A magnetic field is the region around a magnet where its force is effective."},
-{"question":"Give an example of a device that uses magnets.","answer":"Electric motors and generators use magnets."}]', 10, 40),
+{"question":"Give an example of a device that uses magnets.","answer":"Electric motors and generators use magnets."}]', 10),
 ('Electric Circuits', 'Understand the components of an electric circuit, how current flows, and the significance of resistance.', 'Detailed content on the principles of electric circuits and their construction.', 'video', 1, NULL, 
 '[{"question":"What are the main components of an electric circuit?","answer":"An electric circuit typically includes a power source, conductive path, and load."},
-{"question":"What is Ohm''s law?","answer":"Ohm''s law states that the current through a conductor is directly proportional to the voltage and inversely proportional to the resistance."}]', 10, 30),
+{"question":"What is Ohm''s law?","answer":"Ohm''s law states that the current through a conductor is directly proportional to the voltage and inversely proportional to the resistance."}]', 10),
 ('Magnetic Fields and Their Uses', 'Explore magnetic fields, their characteristics, and how they are used in devices like motors and generators.', 'In-depth content on magnetic fields and their applications in technology.', 'pdf', NULL, 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736765002/sei1fgorfdtgweyo6zyn.pdf', 
 '[{"question":"What is a magnetic field?","answer":"A magnetic field is the region around a magnet where magnetic forces are observed."},
-{"question":"Give an example of a device using magnets.","answer":"Electric motors use magnets to convert electrical energy into mechanical energy."}]', 10, 40);
+{"question":"Give an example of a device using magnets.","answer":"Electric motors use magnets to convert electrical energy into mechanical energy."}]', 10);
 
 -- Insert into Topics for Course 6, Chapter 1
-INSERT INTO Topics (title, description, content, topicType, videoId, pdfUrl, questionAndAnswers, chapterId, zCoinsEarning)
+INSERT INTO Topics (title, description, content, topicType, videoId, pdfUrl, questionAndAnswers, chapterId)
 VALUES 
 ('The Seven Continents', 'Discover the features, landmarks, and significance of the seven continents of the world.', 'Comprehensive content on the physical and cultural aspects of continents.', 'video', 1, NULL, 
 '[{"question":"What is the largest continent?","answer":"Asia is the largest continent."},
-{"question":"How many continents are there?","answer":"There are seven continents."}]', 11, 20),
+{"question":"How many continents are there?","answer":"There are seven continents."}]', 11),
 ('Exploring the Oceans', 'Understand the major oceans of the world, their features, and their role in the ecosystem.', 'In-depth content on the geography and importance of oceans.', 'pdf', NULL, 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736765002/sei1fgorfdtgweyo6zyn.pdf', 
 '[{"question":"What is the largest ocean?","answer":"The Pacific Ocean is the largest."},
-{"question":"Why are oceans important?","answer":"Oceans regulate climate, provide food, and support biodiversity."}]', 11, 30);
+{"question":"Why are oceans important?","answer":"Oceans regulate climate, provide food, and support biodiversity."}]', 11);
 
 -- Insert into Topics for Course 6, Chapter 2
-INSERT INTO Topics (title, description, content, topicType, videoId, pdfUrl, questionAndAnswers, chapterId, zCoinsEarning)
+INSERT INTO Topics (title, description, content, topicType, videoId, pdfUrl, questionAndAnswers, chapterId)
 VALUES 
 ('Understanding Climate Zones', 'Learn about different climate zones, their characteristics, and their impact on life on Earth.', 'Detailed exploration of tropical, temperate, and polar climate zones.', 'video', 1, NULL, 
 '[{"question":"What are the major climate zones?","answer":"The major climate zones are tropical, temperate, and polar."},
-{"question":"How does climate affect ecosystems?","answer":"Climate determines the types of plants and animals that can thrive in an area."}]', 12, 20),
+{"question":"How does climate affect ecosystems?","answer":"Climate determines the types of plants and animals that can thrive in an area."}]', 12),
 ('Weather Patterns and Predictions', 'Understand how weather patterns are formed, observed, and predicted using modern techniques.', 'Comprehensive content on meteorology and weather forecasting.', 'pdf', NULL, 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736765002/sei1fgorfdtgweyo6zyn.pdf', 
 '[{"question":"What causes weather changes?","answer":"Weather changes are caused by atmospheric conditions, including temperature, pressure, and humidity."},
-{"question":"What is the role of satellites in weather prediction?","answer":"Satellites monitor weather patterns and provide data for forecasts."}]', 12, 30);
+{"question":"What is the role of satellites in weather prediction?","answer":"Satellites monitor weather patterns and provide data for forecasts."}]', 12);
 
 
 
 -- Quiz for Course 1
-INSERT INTO Quiz (quizTitle, quizDescription, quizCourseId, createdByUserId, assignedClasses, priceInZCoins, type)
+INSERT INTO Quiz (quizTitle, quizDescription, quizCourseId, createdByUserId, assignedClasses)
 VALUES 
-('Understanding Numbers', 'Quiz on Understanding basic numbers and operations.', 1, 4, '1,2,3', 0, 'Free'),
-('Counting Practice', 'Quiz to test counting skills and number sequences.', 1, 5, '4,5', 0, 'Free'),
-('Shapes and Sizes', 'Quiz on recognizing and understanding various shapes and sizes.', 1, 6, '1,2,3', 0, 'Free'),
-('Geometry Practice', 'Quiz on basic geometry concepts and problems.', 1, 7, '4,5', 0, 'Free');
+('Understanding Numbers', 'Quiz on Understanding basic numbers and operations.', 1, 4, '1,2,3'),
+('Counting Practice', 'Quiz to test counting skills and number sequences.', 1, 5, '4,5'),
+('Shapes and Sizes', 'Quiz on recognizing and understanding various shapes and sizes.', 1, 6, '1,2,3'),
+('Geometry Practice', 'Quiz on basic geometry concepts and problems.', 1, 7, '4,5');
 
 -- Quiz for Course 2
-INSERT INTO Quiz (quizTitle, quizDescription, quizCourseId, createdByUserId, assignedClasses, priceInZCoins, type)
+INSERT INTO Quiz (quizTitle, quizDescription, quizCourseId, createdByUserId, assignedClasses)
 VALUES 
-('Introduction to Algebra', 'Basic introduction to algebraic expressions and operations.', 2, 4, '6,7,8', 50, 'Standard'),
-('Practice Algebra', 'Practice on solving simple algebraic equations.', 2, 5, '9,10', 75, 'Special'),
-('Basics of Trigonometry', 'Introduction to trigonometric ratios and their applications.', 2, 6, '6,7,8', 100, 'Exclusive'),
-('Trigonometry Practice', 'Practice problems based on trigonometry concepts.', 2, 7, '9,10', 100, 'Exclusive');
+('Introduction to Algebra', 'Basic introduction to algebraic expressions and operations.', 2, 4, '6,7,8'),
+('Practice Algebra', 'Practice on solving simple algebraic equations.', 2, 5, '9,10'),
+('Basics of Trigonometry', 'Introduction to trigonometric ratios and their applications.', 2, 6, '6,7,8'),
+('Trigonometry Practice', 'Practice problems based on trigonometry concepts.', 2, 7, '9,10');
 
 -- Questions for Course 1
 
@@ -844,48 +742,48 @@ VALUES
 (8, 'Web Development Basics', 'Create a landing page using Bootstrap.', '2,4,10', '2025-03-22 23:59:59', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf');
 
 
-INSERT INTO HomeworkSubmissions (homeworkId, submittedByUserId, answertext, fileType, fileUrl, grade, zCoinsEarning) 
+INSERT INTO HomeworkSubmissions (homeworkId, submittedByUserId, answertext, fileType, fileUrl, grade) 
 VALUES 
-(1, 9, 'Solved all algebra problems as per the instructions.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.5, 40),
-(1, 10, 'Here is my completed algebra assignment.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 7.8, 30),
-(2, 11, 'Detailed essay on World War II.', NULL, NULL, 9.2, 50),
-(2, 14, 'My perspective on the impacts of World War II.', NULL, NULL, 8.7, 40),
-(3, 10, 'Solved all physics numerical problems.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.0, 30),
-(3, 12, 'Attached solutions for the kinematics problems.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 7.9, 30),
-(4, 9, 'Research paper on the digestive system.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 7.5, 20),
-(4, 13, 'Summary of human digestion with diagrams.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.2, 40),
-(5, 11, 'Created a simple website using HTML, CSS, and JavaScript.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 9.0, 50),
-(5, 15, 'Implemented a responsive design for the website.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.4, 40),
-(6, 10, 'Solutions for linear equations problems.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.1, 30),
-(6, 11, 'Detailed explanation of methods used.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 7.6, 20),
-(7, 19, 'Report on Indian Constitution principles.', NULL, NULL, 9.0, 50),
-(7, 22, 'Analysis of constitutional amendments.', NULL, NULL, 8.5, 40),
-(8, 21, 'Experiment results with observations.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 7.8, 30),
-(8, 23, 'Comparison of different magnetic fields.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.6, 40),
-(9, 20, 'Research on medicinal plant properties.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.9, 50),
-(9, 24, 'List of medicinal plants and their uses.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 9.1, 50),
-(10, 19, 'Bootstrap landing page design.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.3, 30),
-(10, 21, 'Added animations and interactivity.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.7, 40),
-(11, 14, 'Statistical analysis with graphs.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.5, 40),
-(11, 17, 'Descriptive statistics and interpretations.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 7.9, 30),
-(12, 13, 'Summary of the novel with key themes.', NULL, NULL, 9.2, 50),
-(12, 23, 'Character analysis and critical review.', NULL, NULL, 8.7, 40),
-(13, 10, 'Designed a simple LED circuit.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.0, 30),
-(13, 25, 'Simulation of a basic amplifier circuit.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 7.8, 30),
-(14, 9, 'Cognitive biases affecting decision-making.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.2, 40),
-(14, 16, 'Report on heuristics and bias impact.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.5, 40),
-(15, 17, 'Basics of machine learning with examples.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.9, 50),
-(15, 27, 'Comparison of ML models.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 9.1, 50),
-(16, 11, 'Solved linear equations using substitution.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.3, 30),
-(16, 21, 'Graphical method for solving equations.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 7.9, 30),
-(17, 12, 'Constitution report covering fundamental rights.', NULL, NULL, 8.4, 40),
-(17, 24, 'Indian Constitution amendments summary.', NULL, NULL, 8.6, 40),
-(18, 9, 'Experimental data and observations on magnetism.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.7, 40),
-(18, 27, 'Comparison of electromagnets and permanent magnets.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 9.0, 50),
-(19, 16, 'List of medicinal plants and their healing properties.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.9, 50),
-(19, 26, 'Detailed research on traditional medicine.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 9.2, 50),
-(20, 18, 'Created a simple Bootstrap landing page.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.5, 40),
-(20, 28, 'Implemented responsive design and animations.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.7, 40);
+(1, 9, 'Solved all algebra problems as per the instructions.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.5),
+(1, 10, 'Here is my completed algebra assignment.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 7.8),
+(2, 11, 'Detailed essay on World War II.', NULL, NULL, 9.2),
+(2, 14, 'My perspective on the impacts of World War II.', NULL, NULL, 8.7),
+(3, 10, 'Solved all physics numerical problems.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.0),
+(3, 12, 'Attached solutions for the kinematics problems.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 7.9),
+(4, 9, 'Research paper on the digestive system.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 7.5),
+(4, 13, 'Summary of human digestion with diagrams.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.2),
+(5, 11, 'Created a simple website using HTML, CSS, and JavaScript.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 9.0),
+(5, 15, 'Implemented a responsive design for the website.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.4),
+(6, 10, 'Solutions for linear equations problems.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.1),
+(6, 11, 'Detailed explanation of methods used.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 7.6),
+(7, 19, 'Report on Indian Constitution principles.', NULL, NULL, 9.0),
+(7, 22, 'Analysis of constitutional amendments.', NULL, NULL, 8.5),
+(8, 21, 'Experiment results with observations.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 7.8),
+(8, 23, 'Comparison of different magnetic fields.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.6),
+(9, 20, 'Research on medicinal plant properties.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.9),
+(9, 24, 'List of medicinal plants and their uses.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 9.1),
+(10, 19, 'Bootstrap landing page design.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.3),
+(10, 21, 'Added animations and interactivity.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.7),
+(11, 14, 'Statistical analysis with graphs.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.5),
+(11, 17, 'Descriptive statistics and interpretations.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 7.9),
+(12, 13, 'Summary of the novel with key themes.', NULL, NULL, 9.2),
+(12, 23, 'Character analysis and critical review.', NULL, NULL, 8.7),
+(13, 10, 'Designed a simple LED circuit.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.0),
+(13, 25, 'Simulation of a basic amplifier circuit.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 7.8),
+(14, 9, 'Cognitive biases affecting decision-making.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.2),
+(14, 16, 'Report on heuristics and bias impact.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.5),
+(15, 17, 'Basics of machine learning with examples.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.9),
+(15, 27, 'Comparison of ML models.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 9.1),
+(16, 11, 'Solved linear equations using substitution.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.3),
+(16, 21, 'Graphical method for solving equations.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 7.9),
+(17, 12, 'Constitution report covering fundamental rights.', NULL, NULL, 8.4),
+(17, 24, 'Indian Constitution amendments summary.', NULL, NULL, 8.6),
+(18, 9, 'Experimental data and observations on magnetism.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.7),
+(18, 27, 'Comparison of electromagnets and permanent magnets.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 9.0),
+(19, 16, 'List of medicinal plants and their healing properties.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.9),
+(19, 26, 'Detailed research on traditional medicine.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 9.2),
+(20, 18, 'Created a simple Bootstrap landing page.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.5),
+(20, 28, 'Implemented responsive design and animations.', 'pdf', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf', 8.7);
 
 
 -- insert salaries for users
@@ -903,120 +801,79 @@ VALUES
 INSERT INTO salaryTransactions (userId, transactionDate, transactionId, salaryMonth, amount, status, payslipUrl) 
 VALUES 
 
-(2, '2024-01-31', 'TXN001', 'Jan 2024', 57200.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
-(3, '2024-01-31', 'TXN002', 'Jan 2024', 50800.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
-(4, '2024-01-31', 'TXN003', 'Jan 2024', 69300.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
+(2, '2024-01-31', 'TXN001', 'Jan 2024', 48000.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
+(3, '2024-01-31', 'TXN002', 'Jan 2024', 42700.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
+(4, '2024-01-31', 'TXN003', 'Jan 2024', 58000.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
 (5, '2024-01-31', 'TXN004', 'Jan 2024', 63200.00, 'Pending', null),
-(6, '2024-01-31', 'TXN005', 'Jan 2024', 55300.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
-(7, '2024-01-31', 'TXN006', 'Jan 2024', 60500.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
-(8, '2024-01-31', 'TXN007', 'Jan 2024', 72600.00, 'Pending', null),
+(6, '2024-01-31', 'TXN005', 'Jan 2024', 45800.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
+(7, '2024-01-31', 'TXN006', 'Jan 2024', 50700.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
+(8, '2024-01-31', 'TXN007', 'Jan 2024', 60400.00, 'Pending', null),
 
-(2, '2024-02-29', 'TXN008', 'Feb 2024', 57200.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
-(3, '2024-02-29', 'TXN009', 'Feb 2024', 50800.00, 'Pending', null),
-(4, '2024-02-29', 'TXN010', 'Feb 2024', 69300.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
-(5, '2024-02-29', 'TXN011', 'Feb 2024', 63200.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
-(6, '2024-02-29', 'TXN012', 'Feb 2024', 55300.00, 'Pending', null),
-(7, '2024-02-29', 'TXN013', 'Feb 2024', 60500.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
-(8, '2024-02-29', 'TXN014', 'Feb 2024', 72600.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
+(2, '2024-02-29', 'TXN008', 'Feb 2024', 48000.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
+(3, '2024-02-29', 'TXN009', 'Feb 2024', 42700.00, 'Pending', null),
+(4, '2024-02-29', 'TXN010', 'Feb 2024', 58000.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
+(5, '2024-02-29', 'TXN011', 'Feb 2024', 53100.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
+(6, '2024-02-29', 'TXN012', 'Feb 2024', 45800.00, 'Pending', null),
+(7, '2024-02-29', 'TXN013', 'Feb 2024', 50700.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
+(8, '2024-02-29', 'TXN014', 'Feb 2024', 60400.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
 
-(2, '2024-03-31', 'TXN015', 'Mar 2024', 57200.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
-(3, '2024-03-31', 'TXN016', 'Mar 2024', 50800.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
-(4, '2024-03-31', 'TXN017', 'Mar 2024', 69300.00, 'Pending', null),
-(5, '2024-03-31', 'TXN018', 'Mar 2024', 63200.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
-(6, '2024-03-31', 'TXN019', 'Mar 2024', 55300.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
-(7, '2024-03-31', 'TXN020', 'Mar 2024', 60500.00, 'Pending', null),
-(8, '2024-03-31', 'TXN021', 'Mar 2024', 72600.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
+(2, '2024-03-31', 'TXN015', 'Mar 2024', 48000.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
+(3, '2024-03-31', 'TXN016', 'Mar 2024', 42700.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
+(4, '2024-03-31', 'TXN017', 'Mar 2024', 58000.00, 'Pending', null),
+(5, '2024-03-31', 'TXN018', 'Mar 2024', 53100.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
+(6, '2024-03-31', 'TXN019', 'Mar 2024', 45800.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
+(7, '2024-03-31', 'TXN020', 'Mar 2024', 50700.00, 'Pending', null),
+(8, '2024-03-31', 'TXN021', 'Mar 2024', 60400.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
 
-(2, '2024-04-30', 'TXN022', 'Apr 2024', 57200.00, 'Pending', null),
-(3, '2024-04-30', 'TXN023', 'Apr 2024', 50800.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
-(4, '2024-04-30', 'TXN024', 'Apr 2024', 69300.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
-(5, '2024-04-30', 'TXN025', 'Apr 2024', 63200.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
-(6, '2024-04-30', 'TXN026', 'Apr 2024', 55300.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
-(7, '2024-04-30', 'TXN027', 'Apr 2024', 60500.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
-(8, '2024-04-30', 'TXN028', 'Apr 2024', 72600.00, 'Pending', null),
+(2, '2024-04-30', 'TXN022', 'Apr 2024', 48000.00, 'Pending', null),
+(3, '2024-04-30', 'TXN023', 'Apr 2024', 42700.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
+(4, '2024-04-30', 'TXN024', 'Apr 2024', 58000.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
+(5, '2024-04-30', 'TXN025', 'Apr 2024', 53100.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
+(6, '2024-04-30', 'TXN026', 'Apr 2024', 45800.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
+(7, '2024-04-30', 'TXN027', 'Apr 2024', 50700.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
+(8, '2024-04-30', 'TXN028', 'Apr 2024', 60400.00, 'Pending', null),
 
-(2, '2024-05-31', 'TXN029', 'May 2024', 57200.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
-(3, '2024-05-31', 'TXN030', 'May 2024', 50800.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
-(4, '2024-05-31', 'TXN031', 'May 2024', 69300.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
-(5, '2024-05-31', 'TXN032', 'May 2024', 63200.00, 'Pending', null),
-(6, '2024-05-31', 'TXN033', 'May 2024', 55300.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
-(7, '2024-05-31', 'TXN034', 'May 2024', 60500.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
-(8, '2024-05-31', 'TXN035', 'May 2024', 72600.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf');
+(2, '2024-05-31', 'TXN029', 'May 2024', 48000.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
+(3, '2024-05-31', 'TXN030', 'May 2024', 42700.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
+(4, '2024-05-31', 'TXN031', 'May 2024', 58000.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
+(5, '2024-05-31', 'TXN032', 'May 2024', 53100.00, 'Pending', null),
+(6, '2024-05-31', 'TXN033', 'May 2024', 45800.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
+(7, '2024-05-31', 'TXN034', 'May 2024', 50700.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf'),
+(8, '2024-05-31', 'TXN035', 'May 2024', 60400.00, 'Paid', 'https://res.cloudinary.com/ddlvnsstz/raw/upload/v1736716408/ym64cupxrgdeybazatoj.pdf');
 
 
-
-INSERT INTO VideoWatchStatus (userId, videoId, watchTime, lastPlaybackPosition) VALUES
-(4, 1, 12, 6),
-(5, 1, 25, 0),
-(6, 1, 8, 4),
-(7, 1, 30, 0),
-(8, 1, 18, 9),
-(9, 1, 12, 6),
-(10, 1, 25, 0),
-(11, 1, 8, 4),
-(12, 1, 30, 0),
-(13, 1, 18, 9);
-
-INSERT INTO TimeSpentOnTopic (userId, topicId, timeSpentOnTopic) VALUES
-(4, 1, 1200),
-(5, 2, 2500),
-(6, 3, 800),
-(7, 4, 3000),
-(8, 5, 1800),
-(4, 6, 2200),
-(5, 7, 1400),
-(6, 8, 3600),
-(7, 9, 900),
-(8, 10, 1700),
-(4, 11, 2800),
-(5, 12, 1900),
-(6, 13, 2900),
-(7, 14, 1100),
-(8, 15, 2400),
-(4, 16, 3300),
-(5, 17, 2500),
-(6, 18, 1300),
-(7, 19, 2000),
-(8, 20, 2700),
-(4, 21, 1800),
-(5, 22, 1400),
-(6, 23, 2600),
-(7, 24, 900),
-(8, 25, 3200),
-(4, 26, 2000),
-(5, 27, 1500);
 
 INSERT INTO Attendance (userId, attendanceDate) VALUES
-(4, DATE('2025-01-01')),
-(5, DATE('2025-01-02')),
-(6, DATE('2025-01-03')),
-(7, DATE('2025-01-04')),
-(8, DATE('2025-01-05')),
-(4, DATE('2025-01-06')),
-(5, DATE('2025-01-07')),
-(6, DATE('2025-01-08')),
-(7, DATE('2025-01-09')),
-(8, DATE('2025-01-10')),
-(4, DATE('2025-01-11')),
-(5, DATE('2025-01-12')),
-(6, DATE('2025-01-13')),
-(7, DATE('2025-01-14')),
-(8, DATE('2025-01-15')),
-(4, DATE('2025-01-16')),
-(5, DATE('2025-01-17')),
-(6, DATE('2025-01-18')),
-(7, DATE('2025-01-19')),
-(8, DATE('2025-01-20')),
-(4, DATE('2025-01-21')),
-(5, DATE('2025-01-22')),
-(6, DATE('2025-01-23')),
-(7, DATE('2025-01-24')),
-(8, DATE('2025-01-25')),
-(4, DATE('2025-01-26')),
-(5, DATE('2025-01-27')),
-(6, DATE('2025-01-28')),
-(7, DATE('2025-01-29')),
-(8, DATE('2025-01-30'));
+(4, DATE('2025-07-01')),
+(5, DATE('2025-07-02')),
+(6, DATE('2025-07-03')),
+(7, DATE('2025-07-04')),
+(8, DATE('2025-07-05')),
+(4, DATE('2025-07-06')),
+(5, DATE('2025-07-07')),
+(6, DATE('2025-07-08')),
+(7, DATE('2025-07-09')),
+(8, DATE('2025-07-10')),
+(4, DATE('2025-07-11')),
+(5, DATE('2025-07-12')),
+(6, DATE('2025-07-13')),
+(7, DATE('2025-07-14')),
+(8, DATE('2025-07-15')),
+(4, DATE('2025-07-16')),
+(5, DATE('2025-07-17')),
+(6, DATE('2025-07-18')),
+(7, DATE('2025-07-19')),
+(8, DATE('2025-07-20')),
+(4, DATE('2025-07-21')),
+(5, DATE('2025-07-22')),
+(6, DATE('2025-07-23')),
+(7, DATE('2025-07-24')),
+(8, DATE('2025-07-25')),
+(4, DATE('2025-07-26')),
+(5, DATE('2025-07-27')),
+(6, DATE('2025-07-28')),
+(7, DATE('2025-07-29')),
+(8, DATE('2025-07-30'));
 
 --Insert SchoolEvents
 INSERT INTO SchoolEvents (conductedBy, title, description, eventType, startDate, endDate) VALUES
@@ -1031,58 +888,8 @@ INSERT INTO SchoolEvents (conductedBy, title, description, eventType, startDate,
 (2, 'Winter Carnival', 'Fun-filled winter event with games and food stalls.', 'Festival', DATE('2025-12-20'), DATE('2025-12-20')), -- Upcoming
 (2, 'Career Guidance Seminar', 'Session on career opportunities for students.', 'Seminar', DATE('2025-09-25'), DATE('2025-09-25')); -- Upcoming
 
-INSERT INTO CoursePurchases (userId, courseId) VALUES
-(9, 3),
-(10, 6),
-(11, 2),
-(12, 3),
-(13, 6),
-(14, 6),
-(16, 3),
-(17, 3),
-(19, 3),
-(23, 3),
-(24, 6),
-(27, 3);
 
-INSERT INTO QuizPurchases (userId, quizId) VALUES
-(9, 5),
-(13, 5),
-(15, 5),
-(21, 6),
-(26, 5);
 
-INSERT INTO TopicEarnings (topicId, userId) VALUES
-(1, 9),
-(2, 9),
-(3, 10),
-(4, 10),
-(5, 11),
-(6, 11),
-(7, 12),
-(8, 12),
-(9, 13),
-(10, 13),
-(11, 14),
-(12, 14),
-(13, 15),
-(14, 15),
-(15, 16),
-(16, 16),
-(17, 17),
-(18, 17),
-(19, 18),
-(20, 18),
-(21, 19),
-(22, 19),
-(23, 9),
-(24, 10),
-(25, 11),
-(26, 12),
-(27, 13),
-(27, 14),
-(27, 15),
-(13, 16);
 
 `;
 

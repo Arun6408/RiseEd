@@ -1,14 +1,11 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import StudentLayout from "./StudentLayout";
-import { setToken } from "@/utils/util";
 import axios from "axios";
+import { setToken } from "@/utils/util";
 import dynamic from "next/dynamic";
 import Loader from "@/components/utils/Loader";
-import { FaGraduationCap, FaTasks, FaBrain, FaCoins } from "react-icons/fa";
-import { MdEvent } from "react-icons/md";
-import { BsGraphUp } from "react-icons/bs";
-import ZCoin from "@/components/utils/ZCoin";
+import { number } from "echarts";
 
 const ReactECharts = dynamic(() => import("echarts-for-react"), { ssr: false });
 
@@ -28,15 +25,7 @@ type QuizScore = {
   createdat: string;
   score: number;
   quiztitle: string;
-};
-
-type ZcoinSummary = {
-  userid: number;
-  coursebought: string;
-  quizzesbought: string;
-  topicearnings: string;
-  homeworkearnings: string;
-  quizearnings: string;
+  maxmarks:number;
 };
 
 type UpcomingEvent = {
@@ -50,324 +39,231 @@ type CurrentGrade = {
   grade: string;
 };
 
-type AttendanceStats = {
+type Attendance = {
   daysPresent: number;
   daysAbsent: number;
 };
 
-type DashboardDataType = {
+type StudentDashboardData = {
   Assignments: AssignmentStats;
   quizzes: QuizStats;
   quizScores: QuizScore[];
-  zcoinSummary: ZcoinSummary;
   upcomingEvents: UpcomingEvent[];
   currentGrade: CurrentGrade;
-  attendance: AttendanceStats;
+  attendance: Attendance;
 };
 
 const Page = () => {
-  const [dashboardData, setDashboardData] = useState<DashboardDataType | null>(
+  const [dashboardData, setDashboardData] = useState<StudentDashboardData | null>(
     null
   );
 
+  const fetchDashboardData = async () => {
+    try {
+      setToken();
+      const { data } = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/student/dashboard`
+      );
+      setDashboardData(data.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setToken();
-        const { data } = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/student/dashboard`
-        );
-        setDashboardData(data.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
+    fetchDashboardData();
   }, []);
 
   if (!dashboardData) return <Loader />;
 
+  // Chart options for different visualizations
   const assignmentOption = {
-    color: ["#0F766E", "#E11D48", "#F59E0B"],
-    tooltip: {
-      trigger: "item",
-      formatter: "{b}: {c} ({d}%)",
-      backgroundColor: "rgba(255, 255, 255, 0.9)",
-      borderColor: "#0F766E",
-      borderWidth: 1,
-      textStyle: {
-        color: "#333",
-        fontSize: 14,
-      },
-    },
-    legend: {
-      orient: "vertical",
-      right: 0,
-      top: 0,
-      textStyle: {
-        color: "#333",
-        fontSize: 14,
-      },
-      itemGap: 10,
-      itemWidth: 10,
-      itemHeight: 10,
-    },
+    color: ["#10B981", "#F59E0B", "#EF4444", "#6B7280"],
+    tooltip: { trigger: "item" },
     series: [
       {
         type: "pie",
-        radius: ["50%", "70%"],
-        center: ["50%", "60%"],
+        radius: ["40%", "70%"],
         avoidLabelOverlap: false,
-        itemStyle: {
-          borderRadius: 10,
-          borderColor: "#fff",
-          borderWidth: 2,
-        },
         label: {
           show: true,
           position: "outside",
           formatter: "{b}: {c}",
           fontSize: 14,
           color: "#333",
-          fontWeight: "bold",
-          distance: 20,
         },
         labelLine: {
           show: true,
           length: 15,
-          length2: 20,
-          smooth: true,
-        },
-        emphasis: {
-          label: {
-            show: true,
-            fontSize: 16,
-            fontWeight: "bold",
-          },
-          itemStyle: {
-            shadowBlur: 10,
-            shadowOffsetX: 0,
-            shadowColor: "rgba(0, 0, 0, 0.2)",
-          },
         },
         data: [
-          {
-            value: dashboardData.Assignments.submittedontime,
-            name: "Submitted on Time",
-          },
-          {
-            value: dashboardData.Assignments.submittedlate,
-            name: "Submitted Late",
-          },
+          { value: dashboardData.Assignments.submittedontime, name: "On Time" },
+          { value: dashboardData.Assignments.submittedlate, name: "Late" },
           { value: dashboardData.Assignments.missed, name: "Missed" },
+          { value: dashboardData.Assignments.currentpending, name: "Pending" },
         ],
-        animationType: "scale",
-        animationEasing: "elasticOut",
-        animationDelay: function (idx: number) {
-          return idx * 100;
-        },
       },
     ],
   };
 
   const attendanceOption = {
-    color: ["#27cbbd", "#0F766E"],
+    color: ["#10B981", "#EF4444"],
     tooltip: { trigger: "item" },
-    legend: {
-      orient: "vertical",
-      right: 10,
-      top: "top",
-    },
     series: [
       {
         type: "pie",
+        radius: ["40%", "70%"],
+        avoidLabelOverlap: false,
+        label: {
+          show: true,
+          position: "outside",
+          formatter: "{b}: {c} days",
+          fontSize: 14,
+          color: "#333",
+        },
+        labelLine: {
+          show: true,
+          length: 15,
+        },
         data: [
           { value: dashboardData.attendance.daysPresent, name: "Present" },
           { value: dashboardData.attendance.daysAbsent, name: "Absent" },
         ],
-        animationType: "scale",
       },
     ],
   };
 
-  const zcoinOption = {
-    color: ["#0F766E", "#27cbbd", "#10B981", "#E11D48", "#F59E0B"],
-    tooltip: {
-      trigger: "axis",
-      axisPointer: {
-        type: "shadow",
-      },
-      formatter: "{b}: {c}",
-      backgroundColor: "rgba(255, 255, 255, 0.9)",
-      borderColor: "#0F766E",
-      borderWidth: 1,
-      textStyle: {
-        color: "#333",
-        fontSize: 14,
-      },
-    },
-    grid: {
-      left: "3%",
-      right: "4%",
-      bottom: "3%",
-      containLabel: true,
-    },
+  const quizScoresOption = {
+    color: ["#0F766E"],
+    tooltip: { trigger: "axis" },
     xAxis: {
       type: "category",
-      data: ["Earned", "Spent"],
-      axisLabel: {
-        color: "#333",
-        fontSize: 14,
-        fontWeight: "bold",
-      },
+      data: dashboardData.quizScores.map((quiz) => 
+        quiz.quiztitle.length > 15 
+          ? quiz.quiztitle.substring(0, 15) + "..." 
+          : quiz.quiztitle
+      ),
     },
-    yAxis: {
+    yAxis: { 
       type: "value",
-      axisLabel: {
-        color: "#333",
-        fontSize: 14,
-        formatter: "{value}",
-      },
+      max: 100,
+      name: "Score (%)"
     },
     series: [
       {
         type: "bar",
-        barWidth: "40%",
-        data: [
-          {
-            value: Number(dashboardData.zcoinSummary.quizearnings) +
-              Number(dashboardData.zcoinSummary.homeworkearnings) +
-              Number(dashboardData.zcoinSummary.topicearnings),
-            itemStyle: { color: "#0F766E" },
-          },
-          {
-            value: Number(dashboardData.zcoinSummary.coursebought) +
-              Number(dashboardData.zcoinSummary.quizzesbought),
-            itemStyle: { color: "#E11D48" },
-          },
-        ],
+        data: dashboardData.quizScores.map((quiz) => Number(((quiz.score/quiz.maxmarks)*100).toFixed(2))),
+        itemStyle: {
+          borderRadius: [4, 4, 0, 0],
+        },
+      },
+    ],
+  };
+
+  const upcomingEventsOption = {
+    color: ["#0F766E", "#F59E0B", "#10B981", "#8B5CF6"],
+    tooltip: { 
+      trigger: "item",
+      formatter: function(params: any) {
+        const event = dashboardData.upcomingEvents[params.dataIndex];
+        const date = new Date(event.startdate).toLocaleDateString('en-US', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+        return `${event.title}<br/>${event.eventtype}<br/>${date}`;
+      }
+    },
+    series: [
+      {
+        type: "pie",
+        radius: ["40%", "70%"],
+        avoidLabelOverlap: false,
         label: {
           show: true,
-          position: "top",
-          formatter: "{c}",
-          fontSize: 14,
+          position: "outside",
+          formatter: "{b}",
+          fontSize: 12,
           color: "#333",
-          fontWeight: "bold",
         },
-        emphasis: {
-          itemStyle: {
-            shadowBlur: 10,
-            shadowOffsetX: 0,
-            shadowColor: "rgba(0, 0, 0, 0.2)",
-          },
+        labelLine: {
+          show: true,
+          length: 10,
         },
+        data: dashboardData.upcomingEvents.map((event) => ({
+          value: 1,
+          name: event.title.length > 20 ? event.title.substring(0, 20) + "..." : event.title
+        })),
       },
     ],
   };
 
   return (
     <StudentLayout activeLink="/student">
-      <div className="p-6 min-h-max bg-gradient-to-br from-teal-50 to-teal-100">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white py-6 rounded-xl shadow-lg px-5 border-t-4 border-teal-700 transform hover:scale-105 transition-transform duration-200">
-            <div className="flex items-center space-x-3 mb-3">
-              <div className="p-2 bg-teal-100 rounded-lg">
-                <FaGraduationCap className="text-teal-700 text-xl" />
-              </div>
-              <h2 className="font-semibold text-teal-700">Current Grade</h2>
-            </div>
-            <p className="text-4xl font-bold text-teal-900">
+      <div className="p-6 min-h-max bg-teal-50">
+        {/* Header Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div className="bg-white py-3 rounded-xl shadow-md px-5 border-t-4 border-teal-700">
+            <h2 className="font-semibold text-teal-700">Current Grade</h2>
+            <p className="text-3xl font-bold text-teal-900 mt-2">
               {dashboardData.currentGrade.grade}
             </p>
           </div>
-          <div className="bg-white py-6 rounded-xl shadow-lg px-5 border-t-4 border-teal-700 transform hover:scale-105 transition-transform duration-200">
-            <div className="flex items-center space-x-3 mb-3">
-              <div className="p-2 bg-teal-100 rounded-lg">
-                <FaTasks className="text-teal-700 text-xl" />
-              </div>
-              <h2 className="font-semibold text-teal-700">Total Assignments</h2>
-            </div>
-            <p className="text-4xl font-bold text-teal-900">
+          
+          <div className="bg-white py-3 rounded-xl shadow-md px-5 border-t-4 border-teal-700">
+            <h2 className="font-semibold text-teal-700">Total Assignments</h2>
+            <p className="text-3xl font-bold text-teal-900 mt-2">
               {dashboardData.Assignments.totalhomeworks}
             </p>
           </div>
-          <div className="bg-white py-6 rounded-xl shadow-lg px-5 border-t-4 border-teal-700 transform hover:scale-105 transition-transform duration-200">
-            <div className="flex items-center space-x-3 mb-3">
-              <div className="p-2 bg-teal-100 rounded-lg">
-                <FaBrain className="text-teal-700 text-xl" />
-              </div>
-              <h2 className="font-semibold text-teal-700">Quizzes Attempted</h2>
-            </div>
-            <p className="text-4xl font-bold text-teal-900">
+          
+          <div className="bg-white py-3 rounded-xl shadow-md px-5 border-t-4 border-teal-700">
+            <h2 className="font-semibold text-teal-700">Quizzes Attempted</h2>
+            <p className="text-3xl font-bold text-teal-900 mt-2">
               {dashboardData.quizzes.quizattempted}
             </p>
           </div>
-          <div className="bg-white py-6 rounded-xl shadow-lg px-5 border-t-4 border-teal-700 transform hover:scale-105 transition-transform duration-200">
-            <div className="flex items-center space-x-3 mb-3">
-              <div className="p-2 bg-teal-100 rounded-lg">
-                <FaCoins className="text-teal-700 text-xl" />
-              </div>
-              <h2 className="font-semibold text-teal-700">Total Zcoins</h2>
-            </div>
-            <div className="flex items-center space-x-1">
-              <ZCoin />
-              <p className="text-4xl font-bold text-teal-900">
-              {Number(dashboardData.zcoinSummary.quizearnings) +
-                Number(dashboardData.zcoinSummary.homeworkearnings) +
-                Number(dashboardData.zcoinSummary.topicearnings) -
-                Number(dashboardData.zcoinSummary.coursebought) -
-                Number(dashboardData.zcoinSummary.quizzesbought)}
+          
+          <div className="bg-white py-3 rounded-xl shadow-md px-5 border-t-4 border-teal-700">
+            <h2 className="font-semibold text-teal-700">Upcoming Events</h2>
+            <p className="text-3xl font-bold text-teal-900 mt-2">
+              {dashboardData.upcomingEvents.length}
             </p>
-            </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white p-6 rounded-xl shadow-lg transform hover:scale-[1.02] transition-transform duration-200">
-            <div className="flex items-center space-x-3 mb-4">
-              <div className="p-2 bg-teal-100 rounded-lg">
-                <BsGraphUp className="text-teal-700 text-xl" />
-              </div>
-              <h3 className="text-lg font-semibold text-teal-700">
-                Assignment Status
-              </h3>
-            </div>
+        {/* Charts Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          <div className="bg-white p-6 rounded-xl shadow-md">
+            <h3 className="text-lg font-semibold text-teal-700 mb-4">
+              Assignment Status
+            </h3>
             <ReactECharts option={assignmentOption} className="w-full h-64" />
           </div>
-          <div className="bg-white p-6 rounded-xl shadow-lg transform hover:scale-[1.02] transition-transform duration-200">
-            <div className="flex items-center space-x-3 mb-4">
-              <div className="p-2 bg-teal-100 rounded-lg">
-                <FaCoins className="text-teal-700 text-xl" />
-              </div>
-              <h3 className="text-lg font-semibold text-teal-700">
-                Zcoin Distribution
-              </h3>
-            </div>
-            <ReactECharts option={zcoinOption} className="w-full h-64" />
-          </div>
-          <div className="bg-white p-6 rounded-xl shadow-lg transform hover:scale-[1.02] transition-transform duration-200">
-            <div className="flex items-center space-x-3 mb-4">
-              <div className="p-2 bg-teal-100 rounded-lg">
-                <FaGraduationCap className="text-teal-700 text-xl" />
-              </div>
-              <h3 className="text-lg font-semibold text-teal-700">
-                Attendance Overview
-              </h3>
-            </div>
+          
+          <div className="bg-white p-6 rounded-xl shadow-md">
+            <h3 className="text-lg font-semibold text-teal-700 mb-4">
+              Attendance Overview
+            </h3>
             <ReactECharts option={attendanceOption} className="w-full h-64" />
+          </div>
+          
+          <div className="bg-white p-6 rounded-xl shadow-md">
+            <h3 className="text-lg font-semibold text-teal-700 mb-4">
+              Quiz Performance
+            </h3>
+            <ReactECharts option={quizScoresOption} className="w-full h-64" />
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-          <div className="bg-white p-6 rounded-xl shadow-lg transform hover:scale-[1.02] transition-transform duration-200">
-            <div className="flex items-center space-x-3 mb-4">
-              <div className="p-2 bg-teal-100 rounded-lg">
-                <FaBrain className="text-teal-700 text-xl" />
-              </div>
-              <h3 className="text-lg font-semibold text-teal-700">
-                Quiz Scores
-              </h3>
-            </div>
+        {/* Detailed Tables and Events */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Quiz Scores Table */}
+          <div className="bg-white p-6 rounded-xl shadow-md">
+            <h2 className="text-xl font-semibold text-teal-900 mb-5">
+              Quiz Performance Details
+            </h2>
             <div className="overflow-x-auto">
               <table className="min-w-full border rounded-lg">
                 <thead className="bg-teal-700 text-white">
@@ -379,13 +275,18 @@ const Page = () => {
                 </thead>
                 <tbody>
                   {dashboardData.quizScores.map((quiz, index) => (
-                    <tr
-                      key={index}
-                      className="border-t hover:bg-teal-50 transition-colors duration-200"
-                    >
-                      <td className="p-3">{quiz.quiztitle}</td>
-                      <td className="p-3">{quiz.score}</td>
+                    <tr key={index} className="border-t hover:bg-teal-50">
+                      <td className="p-3 font-medium">{quiz.quiztitle}</td>
                       <td className="p-3">
+                        <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                          quiz.score >= 80 ? 'bg-green-100 text-green-800' :
+                          quiz.score >= 60 ? 'bg-yellow-100 text-yellow-800' :
+                          'bg-red-100 text-red-800'
+                        }`}>
+                          {quiz.score}%
+                        </span>
+                      </td>
+                      <td className="p-3 text-gray-600">
                         {new Date(quiz.createdat).toLocaleDateString()}
                       </td>
                     </tr>
@@ -394,28 +295,76 @@ const Page = () => {
               </table>
             </div>
           </div>
-          <div className="bg-white p-6 rounded-xl shadow-lg transform hover:scale-[1.02] transition-transform duration-200">
-            <div className="flex items-center space-x-3 mb-4">
-              <div className="p-2 bg-teal-100 rounded-lg">
-                <MdEvent className="text-teal-700 text-xl" />
-              </div>
-              <h3 className="text-lg font-semibold text-teal-700">
-                Upcoming Events
-              </h3>
-            </div>
+
+          {/* Upcoming Events */}
+          <div className="bg-white p-6 rounded-xl shadow-md">
+            <h2 className="text-xl font-semibold text-teal-900 mb-5">
+              Upcoming Events
+            </h2>
             <div className="space-y-4">
               {dashboardData.upcomingEvents.map((event) => (
-                <div
-                  key={event.id}
-                  className="border-l-4 border-teal-700 pl-4 py-3 hover:bg-teal-50 rounded-r-lg transition-colors duration-200"
-                >
-                  <h4 className="font-medium text-teal-900">{event.title}</h4>
-                  <p className="text-sm text-gray-600">
-                    {event.eventtype} •{" "}
-                    {new Date(event.startdate).toLocaleDateString()}
+                <div key={event.id} className="border-l-4 border-teal-500 pl-4 py-3 bg-teal-50 rounded-r-lg">
+                  <h3 className="font-semibold text-teal-900 text-lg">
+                    {event.title}
+                  </h3>
+                  <p className="text-teal-700 text-sm mb-2">
+                    {event.eventtype}
+                  </p>
+                  <p className="text-gray-600 text-sm">
+                    {new Date(event.startdate).toLocaleDateString('en-US', {
+                      weekday: 'long',
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    })}
                   </p>
                 </div>
               ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Assignment Details Table */}
+        <div className="bg-white p-6 rounded-xl shadow-md mt-8">
+          <h2 className="text-xl font-semibold text-teal-900 mb-5">
+            Assignment Summary
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <div className="text-center p-4 bg-green-50 rounded-lg border border-green-200">
+              <p className="text-2xl font-bold text-green-600">
+                {dashboardData.Assignments.submittedontime}
+              </p>
+              <p className="text-green-700 font-medium">On Time</p>
+            </div>
+            
+            <div className="text-center p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+              <p className="text-2xl font-bold text-yellow-600">
+                {dashboardData.Assignments.submittedlate}
+              </p>
+              <p className="text-yellow-700 font-medium">Late</p>
+            </div>
+            
+            <div className="text-center p-4 bg-red-50 rounded-lg border border-red-200">
+              <p className="text-2xl font-bold text-red-600">
+                {dashboardData.Assignments.missed}
+              </p>
+              <p className="text-red-700 font-medium">Missed</p>
+            </div>
+            
+            <div className="text-center p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <p className="text-2xl font-bold text-gray-600">
+                {dashboardData.Assignments.currentpending}
+              </p>
+              <p className="text-gray-700 font-medium">Pending</p>
+            </div>
+            
+            <div className="text-center p-4 bg-teal-50 rounded-lg border border-teal-200">
+              <p className="text-2xl font-bold text-teal-600">
+                {dashboardData.Assignments.totalhomeworks}
+              </p>
+              <p className="text-teal-700 font-medium">Total</p>
             </div>
           </div>
         </div>

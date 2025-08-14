@@ -1,24 +1,21 @@
 "use client";
-import VideoTracker from "@/components/utils/VideoTracker";
 import { getTopics, setToken } from "@/utils/util";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
 export default function TopicPageComponent({
-  courseId,
-  chapterId,
-  topicId,
+  courseId, chapterId, topicId
 }: {
-  courseId: number;
-  chapterId: number;
-  topicId: number;
+    courseId: number;
+    chapterId: number;
+    topicId: number;
 }) {
   const [topic, setTopic] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [videoEnded, setVideoEnded] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchTopics = async () => {
+
       const fetchedTopics = await getTopics({
         courseId: courseId,
         chapterId: chapterId,
@@ -43,25 +40,11 @@ export default function TopicPageComponent({
     fetchTopics();
   }, []);
 
-  const handleVideoEnd = () => {
-    setVideoEnded(true);
-  };
 
-  useEffect(() => {
-    if (videoEnded) {
-      setToken();
-      axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/courses/${courseId}/chapters/${chapterId}/topics/${topicId}/video-end`,
-        {
-          videoId: topic.videoId,
-        }
-      );
-    }
-  }, [videoEnded]);
 
   return (
-    <div>
-      {loading && <div>Loading...</div>}
+      <div>
+        {loading && <div>Loading...</div>}
       {!loading && (
         <div className="w-full bg-gradient-to-b from-teal-100 to-gray-50">
           <div className="mx-auto bg-white shadow-lg p-10">
@@ -71,41 +54,30 @@ export default function TopicPageComponent({
                   {topic.title}
                 </h1>
                 <p className="text-lg text-gray-800 mb-8">
-                  <span className="font-semibold text-teal-900">
-                    Description:
-                  </span>{" "}
-                  {topic.description}
+                  <span className="font-semibold text-teal-900">Description:</span> {topic.description}
                 </p>
                 {topic.content && (
                   <div className="mb-8">
-                    <h2 className="text-2xl font-bold text-teal-700 mb-4">
-                      Content
-                    </h2>
-                    <p className="text-gray-700 leading-relaxed">
-                      {topic.content}
-                    </p>
+                    <h2 className="text-2xl font-bold text-teal-700 mb-4">Content</h2>
+                    <p className="text-gray-700 leading-relaxed">{topic.content}</p>
                   </div>
                 )}
                 {topic.videoUrl && (
                   <div className="mb-8">
-                    <h2 className="text-2xl font-bold text-teal-700 mb-4">
-                      Video
-                    </h2>
-                    <VideoTracker
-                      videoUrl={topic.videoUrl}
-                      topicId={topicId}
-                      videoId={topic.videoId}
-                      onVideoEnd={handleVideoEnd}
+                    <h2 className="text-2xl font-bold text-teal-700 mb-4">Video</h2>
+                    <video
+                      controls
+                      className="w-full rounded-lg shadow-lg"
+                      src={topic.videoUrl}
+                      autoPlay={true}
                     >
                       Your browser does not support the video tag.
-                    </VideoTracker>
+                    </video>
                   </div>
                 )}
                 {topic.pdfUrl && (
                   <div className="mb-8">
-                    <h2 className="text-2xl font-bold text-teal-700 mb-4">
-                      PDFs
-                    </h2>
+                    <h2 className="text-2xl font-bold text-teal-700 mb-4">PDFs</h2>
                     <a
                       href={topic.pdfUrl}
                       target="_blank"
@@ -116,32 +88,25 @@ export default function TopicPageComponent({
                     </a>
                   </div>
                 )}
-                {topic.questionAndAnswers &&
-                  topic.questionAndAnswers.length > 0 && (
-                    <div>
-                      <h2 className="text-2xl font-bold text-teal-700 mb-4">
-                        Questions & Answers
-                      </h2>
-                      <ul className="list-disc pl-6 text-gray-700 space-y-2">
-                        {topic.questionAndAnswers.map(
-                          (qa: any, index: number) => (
-                            <li key={index}>
-                              <span className="font-semibold">Q:</span>{" "}
-                              {qa.question}
-                              <br />
-                              <span className="font-semibold">A:</span>{" "}
-                              {qa.answer}
-                            </li>
-                          )
-                        )}
-                      </ul>
-                    </div>
-                  )}
+                {topic.questionAndAnswers && topic.questionAndAnswers.length > 0 && (
+                  <div>
+                    <h2 className="text-2xl font-bold text-teal-700 mb-4">Questions & Answers</h2>
+                    <ul className="list-disc pl-6 text-gray-700 space-y-2">
+                      {topic.questionAndAnswers.map((qa: any, index: number) => (
+                        <li key={index}>
+                          <span className="font-semibold">Q:</span> {qa.question}
+                          <br />
+                          <span className="font-semibold">A:</span> {qa.answer}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </>
             )}
           </div>
         </div>
       )}
-    </div>
+      </div>
   );
 }

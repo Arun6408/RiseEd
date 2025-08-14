@@ -16,6 +16,7 @@ const homeworkRouter = require("./routes/homeworkRoutes");
 const salariesRouter = require("./routes/salariesRoutes");
 const teacherRouter = require("./routes/teacherRoutes");
 const studentRoutes = require("./routes/studentRoutes");
+const ensureDbConnection = require("./middleware/dbMiddleware");
 
 const app = express();
 
@@ -47,6 +48,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+app.use(ensureDbConnection); 
 app.use("/api/auth", authRouter); 
 app.use(verifyToken); 
 app.use("/api/courses", courseRouter);

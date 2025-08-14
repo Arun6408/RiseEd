@@ -1,8 +1,9 @@
 const { getDb } = require("../../db/connectDb");
-const { restrictUsers } = require("../utilController");
+const { restrictUsers, getUserId } = require("../utilController");
 
 const getAllCourses = async (req, res) => {
-  const db = await getDb(); // Ensure the connection is established
+  const userId = getUserId(req);
+  const db = await getDb();
   const query = `
     SELECT c.courseId, c.title, c.class, c.description, au.name AS taughtBy
     FROM courses AS c
@@ -11,6 +12,7 @@ const getAllCourses = async (req, res) => {
 
   try {
     const result = await db.query(query);
+    
 
     // Manually map keys to camelCase
     const formattedRows = result.rows.map((row) => ({
@@ -64,9 +66,6 @@ const createCourse = async (req, res) => {
     const assignedClassesQuery = `
       SELECT assignedClasses, department 
       FROM teachers WHERE userId = $1
-      UNION 
-      SELECT assignedClasses, department 
-      FROM HeadMasters WHERE userId = $1
     `;
     const assignedResult = await db.query(assignedClassesQuery, [userId]);
 
@@ -88,7 +87,7 @@ const createCourse = async (req, res) => {
     if (!assignedClasses.length) {
       return res.status(403).json({
         status: "error",
-        message: "No matching classes found to create a course",
+        message: "You are not authorized to create a course in any of these classes",
       });
     }
 

@@ -7,6 +7,7 @@ const teacherDashboardInfo = async (req, res) => {
     const userId = getUserId(req);
 
     const queries = [
+      // 1. Student count
       db.query(
         `
         SELECT COUNT(*) AS studentCount
@@ -20,6 +21,7 @@ const teacherDashboardInfo = async (req, res) => {
         [userId]
       ),
 
+      // 2. Last salary transaction
       db.query(
         `
         SELECT salaryMonth, amount, status, transactionDate
@@ -34,6 +36,7 @@ const teacherDashboardInfo = async (req, res) => {
         [userId]
       ),
 
+      // 3. Content stats
       db.query(
         `
         SELECT 
@@ -48,6 +51,7 @@ const teacherDashboardInfo = async (req, res) => {
         [userId]
       ),
 
+      // 4. Total video duration
       db.query(
         `
         SELECT COALESCE(SUM(v.videoDuration), 0) AS totalDuration
@@ -60,6 +64,7 @@ const teacherDashboardInfo = async (req, res) => {
         [userId]
       ),
 
+      // 5. Videos created monthly
       db.query(
         `
         SELECT 
@@ -75,6 +80,7 @@ const teacherDashboardInfo = async (req, res) => {
         [userId]
       ),
 
+      // 6. Homework stats
       db.query(
         `
         SELECT 
@@ -92,11 +98,11 @@ const teacherDashboardInfo = async (req, res) => {
         [userId]
       ),
 
+      // 7. Attendance stats (last 30 days)
       db.query(
         `
-        SELECT 
-            COUNT(attendanceDate) AS presentDays,
-            (30 - COUNT(attendanceDate)) AS absentDays
+        SELECT COUNT(attendanceDate) AS presentDays,
+               (30 - COUNT(attendanceDate)) AS absentDays
         FROM attendance
         WHERE userId = $1
         AND attendanceDate >= CURRENT_DATE - INTERVAL '30 days';
@@ -104,26 +110,7 @@ const teacherDashboardInfo = async (req, res) => {
         [userId]
       ),
 
-      db.query(
-        `
-        SELECT 
-            t.title AS topicTitle,
-            COUNT(DISTINCT vws.userId) AS noOfStudentsWatched,
-            SUM(vws.watchTime) AS totalTimeWatched,
-            ROUND(AVG(LEAST(vws.watchTime::DECIMAL / v.videoDuration, 1)) * 100, 2) AS averageCompletionPercentage
-        FROM topics t
-        JOIN videos v ON t.videoId = v.videoId
-        JOIN videoWatchStatus vws ON v.videoId = vws.videoId
-        JOIN allUsers au ON vws.userId = au.id
-        JOIN chapters ch ON t.chapterId = ch.chapterId
-        JOIN courses co ON ch.courseId = co.courseId
-        WHERE au.role = 'student' AND co.userId = $1
-        GROUP BY t.topicId, t.title
-        ORDER BY t.title;
-      `,
-        [userId]
-      ),
-
+      // 8. Events
       db.query(
         `
         SELECT title, 
@@ -134,40 +121,74 @@ const teacherDashboardInfo = async (req, res) => {
             END AS eventStatus
         FROM SchoolEvents;
         `
+      ),
+
+      // 9. Quiz scores + max marks
+      db.query(
+        `
+        SELECT 
+          qr.createdAt,
+          qr.score,
+          q.quizTitle,
+          qq.maxMarks
+        FROM quizResults qr
+        JOIN quiz q ON qr.quizId = q.quizId
+        JOIN (
+            SELECT quizId, COUNT(*) * 1 AS maxMarks
+            FROM quizQuestions
+            GROUP BY quizId
+        ) qq ON q.quizId = qq.quizId
+        WHERE qr.userId = $1
+        ORDER BY qr.createdAt;
+        `,
+        [userId]
       )
     ];
 
     const results = await Promise.all(queries);
-    const events = results[8].rows;
-    const eventsGrouped = events.reduce((acc, event) => {
-        const status = event.eventstatus.toLowerCase(); // Normalize status to lowercase
+
+    const events = results[7].rows; // now index 7 for events
+    const eventsGrouped = events.reduce(
+      (acc, event) => {
+        const status = event.eventstatus.toLowerCase();
         if (!acc[status]) acc[status] = [];
         acc[status].push(event.title);
         return acc;
-      }, { upcoming: [], ongoing: [], completed: [] });
+      },
+      { upcoming: [], ongoing: [], completed: [] }
+    );
+
     const data = {
       studentCount: results[0].rows[0]?.studentcount || 0,
       lastSalaryTransaction: results[1].rows[0] || null,
-      contentStats: results[2].rows[0] || { noofcourses: 0, noofchapters: 0, nooftopics: 0 },
+      contentStats: results[2].rows[0] || {
+        noofcourses: 0,
+        noofchapters: 0,
+        nooftopics: 0
+      },
       totalVideoDuration: results[3].rows[0]?.totalduration || 0,
       videosCreatedMonthly: results[4].rows,
       homeworkStats: results[5].rows,
-      attendanceStats: results[6].rows[0] || { presentdays: 0, absentdays: 30 },
-      videoWatchStats: results[7].rows,
+      attendanceStats: results[6].rows[0] || {
+        presentdays: 0,
+        absentdays: 30
+      },
       events: eventsGrouped,
+      quizScores: results[8].rows // new quiz scores + max marks
     };
-
 
     return res.json({
       status: "success",
-      data: data,
+      data
     });
   } catch (error) {
     console.error("Error fetching dashboard info:", error);
-    return res.status(500).json({ status: "failed", message: error.message });
+    return res
+      .status(500)
+      .json({ status: "failed", message: error.message });
   }
 };
 
 module.exports = {
-  teacherDashboardInfo,
+  teacherDashboardInfo
 };

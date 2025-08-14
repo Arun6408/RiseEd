@@ -1,5 +1,6 @@
 "use client";
 
+import RightNav from "@/components/Navbars/RightNav";
 import { getChapters, getCourses, getRole } from "@/utils/util";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -96,6 +97,7 @@ export default function CoursePageComponent({
             </div>
           )}
         </div>
+        <RightNav />
       </div>
   );
 }

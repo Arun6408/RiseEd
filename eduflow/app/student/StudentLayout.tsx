@@ -1,7 +1,8 @@
 // components/StudentLayout.tsx
 import React, { ReactNode } from "react";
+import SideNav from "@/components/Navbars/SideNav";
+import TopNav from "@/components/Navbars/TopNav";
 import { studentNavLinks } from "@/constants";
-import Nav from "@/components/Navbars/Nav";
 
 interface StudentLayoutProps {
   children: ReactNode;
@@ -20,11 +21,21 @@ const StudentLayout: React.FC<StudentLayoutProps> = ({
   };
 
   return (
-    <div className="w-full h-screen flex flex-col lg:flex-row">
-      <Nav links={studentNavLinks} activeLink={activeLink} score={teacherScore} >
-        <div className="flex-1 bg-teal-50">{children}</div>
-      </Nav>
-    </div>
+      <div className="w-full h-screen flex">
+        <div>
+          <SideNav
+            links={studentNavLinks}
+            activeLink={activeLink} 
+            score={teacherScore}
+          />
+        </div>
+        <div className="flex-1 flex flex-col">
+          <div className="h-16">
+            <TopNav />
+          </div>
+          <div className="flex-1 bg-teal-50 overflow-y-scroll">{children}</div>
+        </div>
+      </div>
   );
 };
 

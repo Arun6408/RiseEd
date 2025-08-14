@@ -33,22 +33,22 @@ const AllCoursesPageComponent = () => {
   return (
     <div>
       {/* Hero Section */}
-      <div className="w-full h-96 md:h-[500px] bg-gradient-to-br from-teal-600 via-teal-800 to-teal-900 rounded-sm md:rounded-3xl flex flex-col items-center justify-center text-center px-6 relative overflow-hidden">
+      <div className="w-full h-[500px] bg-gradient-to-br from-teal-600 via-teal-800 to-teal-900 rounded-3xl flex flex-col items-center justify-center text-center px-6 relative overflow-hidden">
         {/* Decorative Elements */}
-        <div className="absolute top-10 left-12 w-12 md:w-40 aspect-square bg-teal-500 opacity-20 rounded-full animate-pulse"></div>
-        <div className="absolute bottom-16 right-20 w-20 md:w-56 aspect-square bg-cyan-500 opacity-30 rounded-full"></div>
+        <div className="absolute top-10 left-12 w-40 h-40 bg-teal-500 opacity-20 rounded-full animate-pulse"></div>
+        <div className="absolute bottom-16 right-20 w-56 h-56 bg-cyan-500 opacity-30 rounded-full"></div>
 
         {/* Hero Content */}
-        <h1 className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-teal-200 z-30 to-teal-100 font-extrabold text-4xl md:text-6xl mb-4">
+        <h1 className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-teal-200 to-teal-100 font-extrabold text-6xl mb-4">
           Explore Your Next Course
         </h1>
-        <p className="text-teal-200 text-lg max-w-2xl z-30">
+        <p className="text-teal-200 text-lg max-w-2xl">
           Find the best courses to boost your career and expand your knowledge.
           Start learning today!
         </p>
 
         {/* Search Bar */}
-        <div className="mt-8 w-full max-w-2xl z-30 flex items-center bg-white shadow-xl rounded-full overflow-hidden">
+        <div className="mt-8 w-full max-w-2xl flex items-center bg-white shadow-xl rounded-full overflow-hidden">
           <input
             type="text"
             placeholder="Search for a course..."
@@ -56,7 +56,7 @@ const AllCoursesPageComponent = () => {
             onChange={(e) => setSearchInput(e.target.value)}
             className="w-full px-6 py-3 text-gray-700 text-lg focus:outline-none"
           />
-          <button className="bg-teal-500 hover:bg-teal-600 text-white px-3 md:px-8  py-3 text-lg rounded-r-full transition duration-200">
+          <button className="bg-teal-500 hover:bg-teal-600 text-white px-8 py-3 text-lg rounded-r-full transition duration-200">
             Search
           </button>
         </div>
@@ -64,7 +64,7 @@ const AllCoursesPageComponent = () => {
 
       {/* Courses Section */}
       <div className="mt-12 px-6 relative">
-        {role in ['teacher', 'principal', 'headMaster'] && (
+        {role !== "student" && role !== "parent" && (
           <button className="absolute top-0 right-5 px-4 py-2 bg-teal-700 text-white rounded-xl hover:bg-teal-800 transition" onClick={()=>{handleAddCourse()}}>
             + New Course
           </button>

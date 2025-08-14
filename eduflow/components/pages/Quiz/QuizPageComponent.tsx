@@ -153,33 +153,33 @@ const QuizPageComponent = ({ quizId }: QuizPageComponentProps) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-start py-5  h-full w-full bg-teal-100 ">
+    <div className="flex flex-col items-center justify-center h-full w-full bg-teal-100 p-6">
       {currentQuestionIndex === null && !showResult && (
-        <div className="bg-white shadow-lg rounded-lg mx-2 p-8 text-center w-fit h-fit border-4 border-teal-500">
+        <div className="bg-white shadow-lg rounded-lg m-20 p-8 text-center w-fit h-fit border-4 border-teal-500">
           {quizDetails && (
             <div>
-              <h1 className=" text-2xl md:text-4xl font-bold text-teal-700">
+              <h1 className="text-4xl font-bold text-teal-700">
                 {quizDetails.quiztitle}
               </h1>
-              <p className="text-teal-600 mt-4 text-sm md:text-lg">
+              <p className="text-teal-600 mt-4 text-lg">
                 {quizDetails.quizdescription}
               </p>
-              <p className="mt-3 text-teal-700 text-sm md:text-lg">
+              <p className="mt-3 text-teal-700 text-lg">
                 <strong>Course:</strong> {quizDetails.coursetitle}
               </p>
-              <p className="text-teal-700 text-sm md:text-lg">
+              <p className="text-teal-700 text-lg">
                 <strong>Teacher:</strong> {quizDetails.teachername}
               </p>
-              <p className="text-teal-700 text-sm md:text-lg">
+              <p className="text-teal-700 text-lg">
                 <strong>Assigned Classes:</strong> {quizDetails.assignedclasses}
               </p>
-              <p className="text-teal-700 text-sm md:text-lg">
+              <p className="text-teal-700 text-lg">
                 <strong>Noof Questions:</strong> {quizQuestions.length}
               </p>
               <h1 className="text-xl text-left font-bold text-teal-700">
                 Quiz Rules
               </h1>
-              <ul className="text-sm md:text-lg text-teal-600 mt-4 text-left">
+              <ul className="text-lg text-teal-600 mt-4 text-left">
                 <li>✅ +4 for each correct answer</li>
                 <li>❌ -1 for each wrong answer</li>
                 <li>🔄 0 for skipped questions</li>

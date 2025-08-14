@@ -3,17 +3,16 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 
-//for production db
-
-const pool = process.env.NODE_ENV === "production" 
+// For production db
+const pool = process.env.DATABASE_ENV === "production"
   ? new Pool({
       connectionString: process.env.DATABASE_URL,
       ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false,
-      connectionTimeoutMillis: 30000, // Increase connection timeout
-      idleTimeoutMillis: 60000, // Set idle timeout to keep connections alive
-      max: 20, // Max number of connections in pool
+      connectionTimeoutMillis: 30000, 
+      idleTimeoutMillis: 60000, 
+      max: 20, 
     })
-  : // for local db
+  : // For local db
     new Pool({
       host: process.env.PG_HOST,
       port: process.env.PG_PORT,
@@ -24,13 +23,25 @@ const pool = process.env.NODE_ENV === "production"
 
 let db;
 
-const connectDb = async () => {
-  if (!db) {
+const connectDb = async (retries = 5, delay = 5000) => {
+  if (db) return; // Already connected
+
+  while (retries > 0) {
     try {
       db = await pool.connect();
       console.log("Database connected");
+      return;
     } catch (error) {
-      if (error) console.log("new error:", error);
+      console.error(`Database connection failed. Retries left: ${retries - 1}`, error.message);
+      retries--;
+
+      if (retries === 0) {
+        console.error("All retries failed. Could not connect to the database.");
+        throw error;
+      }
+
+      // Wait before retrying
+      await new Promise((resolve) => setTimeout(resolve, delay));
     }
   }
 };
@@ -44,7 +55,8 @@ const getDb = async () => {
 
 const closeDb = async () => {
   if (db) {
-    await db.end();
+    await db.release();
+    db = null;
     console.log("Database connection closed");
   }
 };
