@@ -62,7 +62,6 @@ const SuperAdmin = () => {
       const user = data.user;
       if (user.role === "superAdmin") Router.push("/superAdmin");
       else if (user.role === "principal") Router.push("/principal");
-      else if (user.role === "headMaster") Router.push("/headMaster");
       else if (user.role === "teacher") Router.push("/teacher");
       else if (user.role === "student") Router.push("/student");
       else if (user.role === "parent") Router.push("/parent");
@@ -86,12 +85,6 @@ const SuperAdmin = () => {
                   onClick={() => handleLoginClick("principal")}
                 >
                   <span className="font-semibold text-white">Principal</span>
-                </button>
-                <button
-                  className="bg-teal-500 hover:bg-teal-600 px-4 py-2 rounded-lg"
-                  onClick={() => handleLoginClick("headMaster")}
-                >
-                  <span className="font-semibold text-white">HeadMaster</span>
                 </button>
                 <button
                   className="bg-teal-500 hover:bg-teal-600 px-4 py-2 rounded-lg"

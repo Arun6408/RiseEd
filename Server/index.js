@@ -20,21 +20,6 @@ const ensureDbConnection = require("./middleware/dbMiddleware");
 
 const app = express();
 
-// Global error handler
-process.on('uncaughtException', (err) => {
-  console.error('Fatal Error:', err.message);
-  if (process.env.NODE_ENV === 'production') {
-    process.exit(1);
-  }
-});
-
-process.on('unhandledRejection', (reason) => {
-  console.error('Unhandled Promise Rejection:', reason);
-  if (process.env.NODE_ENV === 'production') {
-    process.exit(1);
-  }
-});
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

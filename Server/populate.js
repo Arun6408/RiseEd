@@ -8,7 +8,7 @@ const query = `
 
 
 -- Define ENUM types
-CREATE TYPE user_role AS ENUM ('superAdmin', 'principal', 'headMaster', 'teacher', 'student', 'parent');
+CREATE TYPE user_role AS ENUM ('superAdmin', 'principal', 'teacher', 'student', 'parent');
 CREATE TYPE topic_type AS ENUM ('video', 'content', 'pdf', 'questionAndAnswers');
 CREATE TYPE message_status AS ENUM ('Seen', 'Delivered');
 CREATE TYPE answer_option AS ENUM ('A', 'B', 'C', 'D');
@@ -278,9 +278,6 @@ VALUES ('Amit Sharma', 'superAdmin', 'admin123', 'superAdmin', 40, '9876543210',
 INSERT INTO AllUsers (name, userName, password, role, age, phone, email) 
 VALUES ('Rajesh Kumar', 'principal', 'principal123', 'principal', 50, '9876543211', 'principal@example.com');
 
--- Insert Head Master
-INSERT INTO AllUsers (name, userName, password, role, age, phone, email) 
-VALUES ('Suresh Kumar', 'headMaster', 'headMaster123', 'headMaster', 50, '9876543211', 'headMaster@example.com');
 
 -- Insert 5 Teachers
 INSERT INTO AllUsers (name, userName, password, role, age, phone, email) 
