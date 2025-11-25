@@ -215,7 +215,7 @@ CREATE TABLE IF NOT EXISTS HomeworkSubmissions(
     FOREIGN KEY (homeworkId) REFERENCES Homework(homeworkId) ON DELETE CASCADE,
     FOREIGN KEY (submittedByUserId) REFERENCES AllUsers(id) ON DELETE CASCADE
 );
-    
+
 CREATE TABLE salaries (
     id SERIAL PRIMARY KEY,
     userId INT NOT NULL,
